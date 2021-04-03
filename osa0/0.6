@@ -1,1 +1,22 @@
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+palvelin-->selain: HTML-koodi
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+palvelin-->selain: spa.js
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: data.json
 
+note over selain:
+selain alkaa spa.js:n sisältämään koodia ja renderöin data.json sisällön selaimeen 
+end note
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+palvelin-->selain: HTML-koodi 201 Created
+
+new_note_spa, 
+
+note over selain:
+selain lähettää POST-pyynnön osoitteeseen new_note_spa. Se sisältää json.dataa.
+Json lähetetään xhttpForPost.send-metodilla. Vastauksena tulee 201 ja json {"message":"note created"}
+end note
