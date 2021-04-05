@@ -11,8 +11,7 @@ const Statistics = (props) => {
 
     return (
         <div>
-            <div><h2>statistics</h2></div>
-            {/* button press history: {props.allClicks.join(' ')}*/}
+            <h2>statistics</h2>
             <div>
                 <p>good: {props.good}</p>
                 <p>neutral: {props.neutral}</p>
@@ -26,7 +25,7 @@ const Statistics = (props) => {
 const Header = (props) => {
     return (
         <div>
-            <p><h1>{props.pageTitle}</h1></p>
+            <h1>{props.pageTitle}</h1>
         </div>
     )
 }
