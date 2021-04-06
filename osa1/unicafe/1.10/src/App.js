@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
-const Statistics = (props) => {
-    console.log(props.all);
+const Statistics = (props) => { 
     if (props.all === 0) {
         return (
             <div>
