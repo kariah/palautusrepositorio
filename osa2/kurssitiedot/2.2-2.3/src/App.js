@@ -2,9 +2,7 @@ import React from 'react'
 
 const Course = (props) => {
     const name = props.course.name
-    const parts = props.course.parts
-
-    console.log('%cApp.js object', 'color: #007acc;', parts);
+    const parts = props.course.parts 
 
     return (  
         <div> 
