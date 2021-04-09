@@ -1,1 +1,1 @@
-Osa2 tehtävät 2.2-2.3
+Tehtävät 2.2-2.3
