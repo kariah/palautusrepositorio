@@ -2,9 +2,6 @@ import React from 'react'
 
 const Courses = (props) => {
     const courses = props.courses
-    //const parts = props.course.parts 
-
-    console.log(courses)
 
     return (
         <div>
