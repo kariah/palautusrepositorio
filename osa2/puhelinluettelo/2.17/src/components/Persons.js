@@ -1,25 +1,6 @@
 import React from 'react'
 import personService from '../services/persons'
 
-//function showPerson({ name }) {
-
-//    console.log(name)
-
-//}
-
-
-//const Person = ({ person }) => {
-//    return (
-//        <div>
-//            <p>{person.name} {person.number}
-//                <button onClick={() => removePerson(person.id)}>Delete
-//            </button>
-//            </p>
-//        </div>
-//    )
-//}
-
-
 const Persons = (props) => {
     const showAll = props.showAll
     const persons = props.persons
@@ -30,7 +11,7 @@ const Persons = (props) => {
     const removePerson = (id) => { 
           
 
-        //TODO virheenkäsittely
+        //TODO virheenkÃ¤sittely
         personService
             .remove(id)
             .then(response => { 
