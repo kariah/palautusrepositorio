@@ -55,8 +55,7 @@ const PersonForm = (props) => {
         let personFound = null
         let dialogResult
 
-        if (newPerson.person.name !== undefined) {
-            /* personFound = (persons.find(person => person.name === newPerson.person.name) ? true : false)*/
+        if (newPerson.person.name !== undefined) { 
             personFound = (persons.find(person => person.name === newPerson.person.name))
 
             if (personFound != null) {
