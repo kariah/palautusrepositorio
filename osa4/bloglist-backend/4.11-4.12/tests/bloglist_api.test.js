@@ -144,15 +144,15 @@ test('if blog.likes is null then blog.likes is set to 0', async () => {
 test.only('blog without title and url not added ', async () => {
   const newBlog = {
     author: "Edsger W. Dijkstra 3 (test)",
-    likes: 999
+    likes: 999,
   }
 
-  await api
+  const respose = await api
     .post('/api/blogs')
     .send(newBlog)
     .expect(400)
-
-  expect(response.body).toHaveLength(initialBlogs.length) 
+    .expect('Content-Type', /application\/json/)
+ 
 })
 
 afterAll(() => {
