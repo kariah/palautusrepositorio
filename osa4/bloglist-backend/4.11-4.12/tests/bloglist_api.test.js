@@ -112,36 +112,34 @@ test('blog can be added ', async () => {
 })
 
 //Tehtävä 4.11
-test('if blog.likes is null then blog.likes is set to 0', async () => {
-  //Version 1
-  const response = await api.get('/api/blogs')
+test.only('if blog.likes is null then blog.likes is set to 0', async () => { 
+  const newBlog = {
+    title: "Test title" ,
+    author: "Edsger W. Dijkstra 3 (test)",  
+    url: "Test url"  
+  }
 
-  console.log(response.body)
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/) 
 
-  let expectedValue = 0
+    const response = await api.get('/api/blogs')
 
-  let blogsWithLikesAsNull = response.body.filter(x => x.likes === null)
-  expectedValue = blogsWithLikesAsNull.length
+    console.log(response.body)
+  
+    let testBlogs = response.body.filter(x => x.likes === null) 
 
-  let blowsWithUpdateLikes = blogsWithLikesAsNull
-    .map((objs, key) => {
-      return {
-        title: objs.title,
-        author: objs.author,
-        url: objs.url,
-        likes: 0
-      }
-    })
-
-  blogsWithLikesAsNull = blowsWithUpdateLikes.filter(x => x.likes === null)
-  expectedValue = blogsWithLikesAsNull.length
-
-  expect(expectedValue).toBe(0)
+    let expected = 0
+    if (testBlogs != undefined)
+    { expected = testBlogs.length }
+    expect(expected).toBe(0) 
 })
 
 
 //Tehtävä 4.12
-test.only('blog without title and url not added ', async () => {
+test('blog without title and url not added ', async () => {
   const newBlog = {
     author: "Edsger W. Dijkstra 3 (test)",
     likes: 999,
@@ -152,7 +150,6 @@ test.only('blog without title and url not added ', async () => {
     .send(newBlog)
     .expect(400)
     .expect('Content-Type', /application\/json/)
- 
 })
 
 afterAll(() => {
