@@ -42,6 +42,7 @@ blogsRouter.post('/', async (request, response, next) => {
   //   })
   // }
   // const user = await User.findById(decodedToken.id) 
+  
   //Tehtävä 4.23
   if (request.user === null) {
     return response.status(401).json({
