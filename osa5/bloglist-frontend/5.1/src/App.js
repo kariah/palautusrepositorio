@@ -11,14 +11,13 @@ const App = () => {
   const [password, setPassword] = useState('passu5') 
   const [user, setUser] = useState(null)
 
-  
-  useEffect(() => {  
-    blogService
-      .getAll()
-      .then(blogs => {
-      setBlogs(blogs)
-    })
-  }, []) 
+ // useEffect(() => {  
+ //   blogService
+ //     .getAll()
+ //     .then(blogs => {
+ //     setBlogs(blogs)
+ //   })
+ // }, []) 
 
   const handleLogin = async (event) => {
     event.preventDefault()
