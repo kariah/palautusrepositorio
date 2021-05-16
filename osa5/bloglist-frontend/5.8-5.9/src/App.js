@@ -124,9 +124,7 @@ const App = () => {
             })  
     }   
 
-    const updateBlog = (blogObject) => { 
-        blogFormRef.current.toggleVisibility() 
-
+    const updateBlog = (blogObject) => {   
         blogService
             .update(blogObject.id, blogObject)
             .then(returnedBlog => {
