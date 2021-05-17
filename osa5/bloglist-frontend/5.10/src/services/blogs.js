@@ -10,6 +10,8 @@ const getAll = async () => {
   const request = axios.get(baseUrl, config) 
   const response = await request  
    
+  // console.log(response.data)
+
   return response.data 
 } 
 

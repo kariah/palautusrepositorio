@@ -46,7 +46,7 @@ const App = () => {
                 .getAll()
                 .then(blogs => {
                     setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
-                })
+                }) 
 
             //find user
             userService
@@ -56,6 +56,7 @@ const App = () => {
                     setCurrentUser(currentUser[0])
                 })
         }
+ 
     }, [])
 
     const handleLogin = async (event) => {
@@ -80,7 +81,7 @@ const App = () => {
                 .getAll()
                 .then(blogs => { 
                     setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
-                })
+                }) 
 
             //find userId
             userService
