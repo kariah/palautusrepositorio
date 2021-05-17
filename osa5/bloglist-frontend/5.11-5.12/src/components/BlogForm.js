@@ -1,0 +1,67 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+
+const BlogForm = ({ createBlog,
+  currentUser,
+  newBlog,
+  setNewBlog }) => {
+
+  const addBlog = (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: newBlog.title,
+      author: newBlog.author,
+      url: newBlog.url,
+      likes: newBlog.likes,
+      user: currentUser
+    }
+
+    createBlog(blogObject)
+
+    setNewBlog({})
+
+    event.target.reset()
+  }
+
+  const handleBlogChange = (event) => {
+    const value = event.target.value
+
+    setNewBlog({
+      ...newBlog,
+      [event.target.name]: value
+    })
+  }
+
+  return (
+    <div>
+      <h2>Create new blog</h2>
+      <form onSubmit={addBlog}>
+        <div>
+            title: <input type="text" name="title" onChange={handleBlogChange} />
+        </div>
+        <div>
+             author: <input type="text" name="author" onChange={handleBlogChange} />
+        </div>
+        <div>
+             url: <input type="text" name="url" onChange={handleBlogChange} />
+        </div>
+        <div>
+            likes: <input type="number" name="likes" onChange={handleBlogChange} />
+        </div>
+        <div>
+          <button type="submit">save</button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+BlogForm.propTypes = {
+  createBlog: PropTypes.func.isRequired,
+  currentUser: PropTypes.object.isRequired,
+  newBlog: PropTypes.object.isRequired,
+  setnewBlog: PropTypes.object.isRequired
+}
+
+
+export default BlogForm
