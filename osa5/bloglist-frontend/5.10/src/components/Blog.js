@@ -51,13 +51,7 @@ const Blog = ({ blog,
     }
 
     function RemoveButton(user, currentUser) {  
-        if (blog.user === undefined)
-        {
-            return <div>
-             <button onClick={removeBlog}>remove</button>
-            </div>
-        }
-        else if (user.id === currentUser.id)
+        if (user.id === currentUser.id)
         {
             return <div>
                     <button onClick={removeBlog}>remove</button>
