@@ -17,7 +17,7 @@ const Filter = () => {
  
   return (
       <>  
-      <div>filter <input name="filter-ext" onChange={handleFilterChange} /></div> 
+      <div>filter <input name="filter-text" onChange={handleFilterChange} /></div> 
     </>
   )
 }
