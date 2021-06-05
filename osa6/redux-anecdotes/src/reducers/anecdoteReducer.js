@@ -1,3 +1,4 @@
+/* eslint-disable no-fallthrough */
 // const anecdotesAtStart = [
 //   'If it hurts, do it more often 2',
 //   'Adding manpower to a late software project makes it later!',
@@ -7,17 +8,18 @@
 //   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 // ]
 
+import anecdoteService from '../services/anecdotes'
 
 
 const getId = () => (100000 * Math.random()).toFixed(0)
 
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
-  }
-}
+// const asObject = (anecdote) => {
+//   return {
+//     content: anecdote,
+//     id: getId(),
+//     votes: 0
+//   }
+// }
 
 // const initialState = anecdotesAtStart.map(asObject) 
 
@@ -27,10 +29,10 @@ const anecdoteReducer = (state = [], action) => {
 
   switch(action.type) {
     case 'INITIALIZE_ANECDOTES':  
-      let initialAnecdotes = action.data.anecdotes  
+      let initialAnecdotes = action.data  
       return initialAnecdotes 
-    case 'NEW_ANECDOTE':
-      return [...state, action.data]
+    case 'NEW_ANECDOTE': 
+      return [...state, action.data] 
     case 'ADD_VOTE':
       const id = action.data.id
       const anecdoteToChange = state.find(n => n.id === id)
@@ -55,16 +57,23 @@ const anecdoteReducer = (state = [], action) => {
   } 
 }
 
-export const createAnecdote = (content) => {
-  return {
-    type: 'NEW_ANECDOTE',
-    data: {
-      content,
-      id: getId(),
-      votes: 0
-    }
+export const createAnecdote = (content) => {  
+   let newAnecdote =  {
+    content: content 
   }
-}
+ 
+   anecdoteService
+      .create(newAnecdote) 
+      .then(returnedAnecdote => { 
+          console.log('returnedAnecdote ', returnedAnecdote)
+         newAnecdote = returnedAnecdote
+    })
+ 
+  return {
+    type: 'NEW_ANECDOTE', 
+    data: newAnecdote
+  }  
+} 
 
 export const initializeAnecdotes = (anecdotes) => { 
   return {
@@ -72,7 +81,7 @@ export const initializeAnecdotes = (anecdotes) => {
     data: anecdotes
   }
 }
-
+ 
 export const vote = (id) => {
   console.log('id :', id)  
   
@@ -80,7 +89,6 @@ export const vote = (id) => {
     type: 'ADD_VOTE',
     data: { id }
   }
-}
-
+} 
 
 export default anecdoteReducer  

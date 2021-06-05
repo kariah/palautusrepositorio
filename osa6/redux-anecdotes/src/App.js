@@ -8,39 +8,15 @@ import { useDispatch } from 'react-redux'
 import { initializeAnecdotes } from './reducers/anecdoteReducer'
 
 const App = () => { 
-  const dispatch = useDispatch()
-  // useEffect(() => {
-  //   personService
-  //       .getAll()
-  //       .then(initialPersons => {
-  //           setPersons(initialPersons)
-  //           setShowAll(initialPersons)
-  //       })
-  // }, [])
- 
+  const dispatch = useDispatch()  
 
   useEffect(() => {
     console.log('service')
     anecdoteService
     .getAll()
     .then(initialAnecdotes => dispatch(initializeAnecdotes(initialAnecdotes)))
-  }, [dispatch])
-
-  // and this is what I have in "store.js"
-
-  // anecdoteService.getAll().then(anecdotes =>   
-  //     store.dispatch(initializeAnecdotes(anecdotes))  
-  // )
-
-  // console.log('anecdoteService')
-  // useEffect(() => {
-  //     anecdoteService
-  //       .getAll()
-  //       .then(initialAnecdotes => { 
-  //         console.log(initialAnecdotes)
-  //       })
-  // }, [])
-
+  }, [dispatch]) 
+   
   return (
     <div> 
    <h2>Anecdotes</h2>
