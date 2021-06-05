@@ -93,7 +93,7 @@ export const initializeAnecdotes = () => {
   }
 }
 
-//6.15
+//6.16
 export const createAnecdote = (content) => {  
   let data =  {
     content: content 
