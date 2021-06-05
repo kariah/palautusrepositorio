@@ -28,9 +28,8 @@ const anecdoteReducer = (state = [], action) => {
   console.log('action', action)
 
   switch(action.type) {
-    case 'INITIALIZE_ANECDOTES':  
-      let initialAnecdotes = action.data  
-      return initialAnecdotes 
+    case 'INITIALIZE_ANECDOTES':   
+      return action.data
     case 'NEW_ANECDOTE': 
       return [...state, action.data] 
     case 'ADD_VOTE':
@@ -57,30 +56,73 @@ const anecdoteReducer = (state = [], action) => {
   } 
 }
 
-export const createAnecdote = (content) => {  
-   let newAnecdote =  {
-    content: content 
-  }
+//6.14
+// export const createAnecdote = (content) => {  
+//    let newAnecdote =  {
+//     content: content 
+//   }
  
-   anecdoteService
-      .create(newAnecdote) 
-      .then(returnedAnecdote => { 
-          console.log('returnedAnecdote ', returnedAnecdote)
-         newAnecdote = returnedAnecdote
-    })
+//    anecdoteService
+//       .create(newAnecdote) 
+//       .then(returnedAnecdote => {  
+//          newAnecdote = returnedAnecdote
+//     })
  
-  return {
-    type: 'NEW_ANECDOTE', 
-    data: newAnecdote
-  }  
-} 
+//   return {
+//     type: 'NEW_ANECDOTE', 
+//     data: newAnecdote
+//   }  
+// } 
 
-export const initializeAnecdotes = (anecdotes) => { 
-  return {
-    type: 'INITIALIZE_ANECDOTES',
-    data: anecdotes
+//6.13
+// export const initializeAnecdotes = (anecdotes) => { 
+//   return {
+//     type: 'INITIALIZE_ANECDOTES',
+//     data: anecdotes
+//   }
+// }
+
+//6.15
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({
+      type: 'INITIALIZE_ANECDOTES',
+      data: anecdotes,
+    })
   }
 }
+
+//6.15
+export const createAnecdote = (content) => {  
+  let data =  {
+    content: content 
+  } 
+  return async dispatch => {
+    const newAnecdote = await anecdoteService.createNew(data) 
+    dispatch({
+      type: 'NEW_ANECDOTE',
+      data: newAnecdote,
+    })
+  }
+
+  //  let newAnecdote =  {
+  //   content: content 
+  // }
+ 
+  //  anecdoteService
+  //     .create(newAnecdote) 
+  //     .then(returnedAnecdote => {  
+  //        newAnecdote = returnedAnecdote
+  //   })
+ 
+  // return {
+  //   type: 'NEW_ANECDOTE', 
+  //   data: newAnecdote
+  // }  
+} 
+
+
  
 export const vote = (id) => {
   console.log('id :', id)  

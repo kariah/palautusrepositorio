@@ -11,7 +11,7 @@ const getAll = () => {
     return request.then(response => response.data)   
 }
 
-const create = newObject => {
+const createNew = newObject => {
     console.log('new ', newObject)
     const request = axios.post(baseUrl, newObject)
     return request.then(response => response.data)
@@ -40,7 +40,7 @@ const create = newObject => {
 
 const anecdotes = {
     getAll: getAll,
-    create: create,
+    createNew: createNew,
     // update: update,
     // remove: remove,
 }
