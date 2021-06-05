@@ -8,21 +8,24 @@ const Notification = () => {
 
   const notification = useSelector(state => state.notification)
  
+ 
   let style = {
     border: 'solid',
     padding: 10,
     borderWidth: 1
   } 
-
+ 
+  const visibilityTimeout = notification.timeInSeconds * 1000
+  
   setTimeout(() => { 
   }, 1000)
   setTimeout(() => {
     dispatch(setNotification(''))
-  }, 5000) 
+  }, visibilityTimeout) 
  
   return (
     <div style={style}>
-      {notification}  
+      {notification.message}  
     </div>
   )
 }

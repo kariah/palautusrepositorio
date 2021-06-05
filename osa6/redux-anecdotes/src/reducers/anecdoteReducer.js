@@ -10,8 +10,7 @@
 
 import anecdoteService from '../services/anecdotes'
 
-
-const getId = () => (100000 * Math.random()).toFixed(0)
+// const getId = () => (100000 * Math.random()).toFixed(0)
 
 // const asObject = (anecdote) => {
 //   return {
@@ -26,29 +25,40 @@ const getId = () => (100000 * Math.random()).toFixed(0)
 const anecdoteReducer = (state = [], action) => {
   console.log('state now: ', state)
   console.log('action', action)
+  
+  let anecdotesToSort 
 
   switch(action.type) {
     case 'INITIALIZE_ANECDOTES':   
-      return action.data
+      // TODO: Function
+      anecdotesToSort = action.data 
+      anecdotesToSort.sort(function (a, b) {
+        return a.votes - b.votes ||  a.content.localeCompare(b.content)
+      }); 
+      return anecdotesToSort.reverse() 
+
     case 'NEW_ANECDOTE': 
       return [...state, action.data] 
     case 'ADD_VOTE':
       const id = action.data.id
+      
+      console.log('id: ', id)
+      console.log('state now2: ', state)
+
       const anecdoteToChange = state.find(n => n.id === id)
       const changedAnecdote = { 
         ...anecdoteToChange, 
         votes: anecdoteToChange.votes + 1
       } 
 
-      let anecdotesToSort = state
+      anecdotesToSort = state
         .map(anecdote =>
         anecdote.id !== id ? anecdote : changedAnecdote 
       )
  
       anecdotesToSort.sort(function (a, b) {
         return a.votes - b.votes ||  a.content.localeCompare(b.content)
-      });
-
+      }); 
       return anecdotesToSort.reverse() 
 
     default:
@@ -104,32 +114,25 @@ export const createAnecdote = (content) => {
       type: 'NEW_ANECDOTE',
       data: newAnecdote,
     })
-  }
-
-  //  let newAnecdote =  {
-  //   content: content 
-  // }
- 
-  //  anecdoteService
-  //     .create(newAnecdote) 
-  //     .then(returnedAnecdote => {  
-  //        newAnecdote = returnedAnecdote
-  //   })
- 
-  // return {
-  //   type: 'NEW_ANECDOTE', 
-  //   data: newAnecdote
-  // }  
+  } 
 } 
 
 
+ //6.17
+export const vote = (anecdote) => { 
  
-export const vote = (id) => {
-  console.log('id :', id)  
-  
-  return { 
-    type: 'ADD_VOTE',
-    data: { id }
+  let data =  {
+    id: anecdote.id,
+    votes: anecdote.votes + 1 
+  } 
+ 
+  return async dispatch => {
+    const changedAnecdote = await anecdoteService.update(data)  
+    
+    dispatch({
+      type: 'ADD_VOTE',
+      data: { id: changedAnecdote.id }
+    })
   }
 } 
 

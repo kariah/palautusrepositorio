@@ -15,10 +15,10 @@ const Anecdotes = () => {
     return anecdotes.filter(anecdote => anecdote.content.includes(filter)) 
   }) 
 
-  function  handleVoteClick(anecdoteId, content) {
+  function handleVoteClick(anecdote) { 
     return function() {
-      dispatch(vote(anecdoteId))
-      dispatch(setNotification(`You voted: ${content}`))
+      dispatch(vote(anecdote))
+      dispatch(setNotification(`You voted: ${anecdote.content}`, 10))
     }
   } 
 
@@ -33,7 +33,7 @@ const Anecdotes = () => {
           </div>
           <div>
             has {anecdote.votes} 
-            <button onClick={handleVoteClick(anecdote.id, anecdote.content)}>vote</button>
+            <button onClick={handleVoteClick(anecdote)}>vote</button>
           </div>
         </div>
       )}
