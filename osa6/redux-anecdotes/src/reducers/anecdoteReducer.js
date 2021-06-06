@@ -8,7 +8,7 @@ const anecdoteReducer = (state = [], action) => {
 
   switch(action.type) {
     case 'INITIALIZE_ANECDOTES':   
-      // TODO: Function
+      // TODO: Tämä pitäisi siirtää componenttiin joten on hiukan väärässä paikassa ...
       anecdotesToSort = action.data 
       anecdotesToSort.sort(function (a, b) {
         return a.votes - b.votes ||  a.content.localeCompare(b.content)
@@ -35,8 +35,8 @@ const anecdoteReducer = (state = [], action) => {
       anecdotesToSort.sort(function (a, b) {
         return a.votes - b.votes ||  a.content.localeCompare(b.content)
       }); 
-      return anecdotesToSort.reverse() 
-
+      return anecdotesToSort.reverse()  
+   
     default:
       return state
   } 
@@ -93,6 +93,14 @@ export const createAnecdote = (content) => {
   } 
 } 
 
+// export const setNotificationTimerId = (timerId) => { 
+//     return async dispatch => { 
+//       dispatch({
+//         type: 'SET_NOTIFICATION_TIMERID',
+//         timerId
+//       })
+//     }
+// } 
 
  //6.17 ->
 export const vote = (anecdote) => {  
@@ -112,5 +120,18 @@ export const vote = (anecdote) => {
     })
   }
 } 
+
+
+
+// export const voteMsg = (notification, timer) => {
+//   return async (dispatch) => {
+//    clearTimeout(countdown);
+//    await dispatch({ type: 'VOTE_MSG', notification });
+//    const clear = null;
+//    const countdown = setTimeout(() => {
+//     dispatch({ type: 'CLR_MSG', clear });
+//    }, timer * 1000);
+//   };
+//  };
 
 export default anecdoteReducer  
