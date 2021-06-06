@@ -19,7 +19,8 @@ const App = () => {
   // }, [dispatch]) 
    
   useEffect(() => {
-    dispatch(initializeAnecdotes()) 
+    dispatch(initializeAnecdotes())    
+  
   },[dispatch]) 
 
 

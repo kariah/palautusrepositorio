@@ -11,7 +11,7 @@ const getAll = () => {
 }
 
 const createNew = async NewAnecdote => {
-    console.log('new ', NewAnecdote)
+    console.log('createNew ', NewAnecdote)
     const request = axios.post(`${baseUrl}/api/anecdotes`, NewAnecdote)
     const response = await request
     return response.data
@@ -19,12 +19,10 @@ const createNew = async NewAnecdote => {
 
 
 const update = async (updateObject) => {  
-    console.log('put ', updateObject)
+    console.log('update ', updateObject)
 
     const response = await axios.put(`${baseUrl}/${updateObject.id}`, updateObject)
-
-    console.log('resp ', response.data.changedAnecdote)
-
+ 
     return response.data.changedAnecdote
 }
 
