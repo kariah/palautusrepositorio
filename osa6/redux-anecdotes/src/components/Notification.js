@@ -1,5 +1,4 @@
-import { setNotification } from '../reducers/notificationReducer'
-import { setNotificationTimerId } from '../reducers/notificationReducer'
+import { setNotification } from '../reducers/notificationReducer' 
 // import { useDispatch, useSelector } from 'react-redux'
 import { connect } from 'react-redux'
 import React from 'react'  
@@ -32,12 +31,17 @@ const Notification = (props) => {
  
   if (props.notification.message !== null)
   {
-      let timerId = setTimeout(() => { 
+      //reset previous timer
+      let timerId = global.notificationtimerId 
+      if (timerId !== null)
+      {
+          clearTimeout(timerId)
+      }
+      timerId = setTimeout(() => { 
          props.setNotification(null, 0) 
       }, visibilityTimeout)  
       
-     global.notificationtimerId = timerId
-    //  console.log('timerid set ',  global.notificationtimerId)  
+     global.notificationtimerId = timerId 
   } 
  
   return (
@@ -49,8 +53,7 @@ const Notification = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    notification: state.notification,
-    // timeoutId: state.timeoutId
+    notification: state.notification, 
   }
 }
 
