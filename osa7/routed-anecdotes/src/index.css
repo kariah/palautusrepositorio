@@ -1,0 +1,10 @@
+
+.info {
+    color: #4800ff;
+    background: lightgrey;
+    font-size: 20px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 10px; 
+    margin-top: 10px;
+}
