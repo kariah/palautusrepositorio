@@ -8,8 +8,7 @@ import {
   useRouteMatch,
   useHistory,
 } from "react-router-dom"
-
-
+import  { resetField, useField } from './hooks'
  
 
 const Home =  ({ anecdotes }) => (
@@ -100,23 +99,23 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const history = useHistory()
+  const history = useHistory() 
 
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')    
-
-  const handleSubmit = (e) => {
+  const content = useField('text')
+  const author = useField('text')
+  const info = useField('text')
+ 
+  const handleSubmit = (e) => { 
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     }) 
 
     setTimeout(() => {
-      let info = `New with content ${content} was added` 
+      let info = `New with content ${content.value} was added` 
       props.setNotification(info)
     }, 0)
     setTimeout(() => { 
@@ -127,27 +126,37 @@ const CreateNew = (props) => {
     return <Redirect to="/anecdotes" /> 
   }
 
-  return (
-    <div>
-      <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
-        </div>
-        <div>
-          author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
-        </div>
-        <div>
-          url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
-        </div>
-        <button>create</button>
-      </form>
-    </div>
-  )
+  const resetFields = (e) => { 
+    e.preventDefault()
+    content.setValue('') 
+    author.setValue('') 
+    info.setValue('') 
+  }
  
+ 
+    return (
+      <div>
+        <h2>create a new anecdote</h2>
+        <form >
+          <div>
+            content
+            <input {...content} />
+          </div>
+          <div>
+            author
+            <input {...author} />
+          </div>
+          <div>
+            url for more info
+            <input {...info}  />
+          </div>
+          <div>
+             <button onClick={handleSubmit}>create</button>
+             <button onClick={resetFields}>reset</button>
+          </div>
+        </form>
+      </div>
+  ) 
 }
 
 const padding = {
