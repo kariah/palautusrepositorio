@@ -8,7 +8,7 @@ import {
   useRouteMatch,
   useHistory,
 } from "react-router-dom"
-import  { resetField, useField } from './hooks'
+import  { useField } from './hooks'
  
 
 const Home =  ({ anecdotes }) => (
