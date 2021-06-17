@@ -1,0 +1,24 @@
+{
+  "notes": [
+    {
+      "content": "If it hurts, do it more often",
+      "id": "47145"
+    },
+    {
+      "content": "Adding manpower to a late software project makes it later!",
+      "id": "21149"
+    } 
+  ],
+  "persons": [
+    {
+      "name": "Name1",
+      "number": "040-1235",
+      "id": "47146"
+    },
+    {
+      "name": "Name2",
+      "number": "040-1234",
+      "id": "47145"
+    } 
+  ]
+}
