@@ -21,7 +21,7 @@ export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogService.getAll()
 
-    console.log('all ', blogs)
+    console.log('all blogs ', blogs)
 
     dispatch({
       type: 'INITIALIZE_BLOGS',

@@ -7,19 +7,22 @@ import userService from './services/users'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 
 const App = (props) => {
-  // let blogs = []
-  const [blogs, setBlogs] = useState([])
+  let blogs = []
+  // const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('khtest5')
   const [password, setPassword] = useState('passu5')
   const [user, setUser] = useState(null)
   const [currentUser, setCurrentUser] = useState(null)
   const [newBlog, setNewBlog] = useState({})
   const dispatch = useDispatch()
+
+  const allBlogs = useSelector(state => state.blogs)
+  blogs = allBlogs
 
   const divStyle = {
     paddingTop: 5,
@@ -38,11 +41,15 @@ const App = (props) => {
       setUser(user)
       blogService.setToken(user.token)
 
-      blogService
-        .getAll()
-        .then(blogs => {
-          setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
-        })
+      dispatch(initializeBlogs())
+
+      // blogService
+      //   .getAll()
+      //   .then(blogs2 => {
+      //     // setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
+      //     // console.log('haku ', blogs2)
+      //     // blogs = blogs2
+      //   })
 
       // blogs = dispatch(initializeBlogs())
 
@@ -75,11 +82,14 @@ const App = (props) => {
       setUsername('')
       setPassword('')
 
-      blogService
-        .getAll()
-        .then(blogs => {
-          setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
-        })
+      dispatch(initializeBlogs())
+
+      // blogService
+      //   .getAll()
+      //   .then(blogs2 => {
+      //     //setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
+      //     // blogs = blogs2
+      //   })
 
       //blogs = dispatch(initializeBlogs())
 
@@ -161,8 +171,7 @@ const App = (props) => {
         <BlogForm createBlog={addBlog}
           currentUser={currentUser}
           newBlog={newBlog}
-          setNewBlog={setNewBlog}
-          setBlogs={setBlogs} />
+          setNewBlog={setNewBlog} />
       </Togglable>
     </div>
   )
@@ -197,9 +206,6 @@ const App = (props) => {
       </div>
     )
   }
-
-
-  // console.log('blogs ', blogs)
 
   return (
     <div>
