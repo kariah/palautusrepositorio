@@ -7,11 +7,12 @@ import userService from './services/users'
 import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import { connect } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = (props) => {
+  // let blogs = []
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('khtest5')
   const [password, setPassword] = useState('passu5')
@@ -42,6 +43,8 @@ const App = (props) => {
         .then(blogs => {
           setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
         })
+
+      // blogs = dispatch(initializeBlogs())
 
       //find user
       userService
@@ -78,6 +81,8 @@ const App = (props) => {
           setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
         })
 
+      //blogs = dispatch(initializeBlogs())
+
       //find userId
       userService
         .getAll()
@@ -100,15 +105,16 @@ const App = (props) => {
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
 
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        dispatch(setNotification(`Blog ${returnedBlog.title} by ${returnedBlog.author} added`, 10))
-      })
-      .catch(_error => {
-        dispatch(setNotification(`Add blog ${newBlog.title} failed`, 10))
-      })
+    // blogService
+    //   .create(blogObject)
+    //   .then(returnedBlog => {
+    //     setBlogs(blogs.concat(returnedBlog))
+    //     console.log('returnedBlog ', returnedBlog)
+    //     dispatch(setNotification(`Blog ${returnedBlog.title} by ${returnedBlog.author} added`, 10))
+    //   })
+    //   .catch(_error => {
+    //     dispatch(setNotification(`Add blog ${newBlog.title} failed`, 10))
+    //   })
   }
 
   const updateBlog = (blogObject) => {
@@ -131,7 +137,7 @@ const App = (props) => {
           blogService
             .getAll()
             .then(blogs => {
-              setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
+              //setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
             })
 
           dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} deleted`, 10))
@@ -155,7 +161,8 @@ const App = (props) => {
         <BlogForm createBlog={addBlog}
           currentUser={currentUser}
           newBlog={newBlog}
-          setNewBlog={setNewBlog} />
+          setNewBlog={setNewBlog}
+          setBlogs={setBlogs} />
       </Togglable>
     </div>
   )
@@ -164,7 +171,6 @@ const App = (props) => {
   if (user === null) {
     return (
       <div>
-        {/* <Notification infoMessage={infoMessage} errorMessage={errorMessage} /> */}
         <Notification />
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
@@ -191,6 +197,9 @@ const App = (props) => {
       </div>
     )
   }
+
+
+  // console.log('blogs ', blogs)
 
   return (
     <div>
