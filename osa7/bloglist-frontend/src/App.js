@@ -3,8 +3,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
-import userService from './services/users'
-import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,30 +11,33 @@ import { initializeBlogs } from './reducers/blogReducer'
 import { loginUser } from './reducers/userReducer'
 
 const App = (props) => {
-  // let blogs = []
-  // const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('khtest5')
   const [password, setPassword] = useState('passu5')
   const [user, setUser] = useState(null)
-  // const [currentUser, setCurrentUser] = useState(null)
   const [newBlog, setNewBlog] = useState({})
   const dispatch = useDispatch()
 
   let blogs = useSelector(state => state.blogs.blogs)
 
-  //message handling
-  let message = useSelector(state => state.blogs.message)
-  console.log('message 0 ', message)
-  if (message === undefined || message === null)
+
+  let state = useSelector(state => state)
+  console.log('state ', state)
+
+  //message handling - ei kovin hyvä tapa!!
+  let message = null
+  let blogsMessage = useSelector(state => state.blogs.message)
+  let usersMessage =useSelector(state => state.users.message)
+  if (blogsMessage !== undefined && blogsMessage !== null)
   {
-    message = useSelector(state => state.users.message)
-    console.log('message 1 ', message)
+    message = blogsMessage
+  }
+  else if (usersMessage !== undefined && usersMessage !== null)
+  {
+    message = usersMessage
   }//
 
   let currentUser = useSelector(state => state.users.user)
 
-  // let state = useSelector(state => state)
-  // console.log('state ', state)
 
   const divStyle = {
     paddingTop: 5,
@@ -55,7 +56,6 @@ const App = (props) => {
   }, [currentUser])
 
   useEffect(() => {
-    console.log('message 2 ', message)
     dispatch(setNotification(message, 10))
   }, [message])
 
@@ -67,24 +67,6 @@ const App = (props) => {
       blogService.setToken(user.token)
 
       dispatch(initializeBlogs())
-
-      // blogService
-      //   .getAll()
-      //   .then(blogs2 => {
-      //     // setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
-      //     // console.log('haku ', blogs2)
-      //     // blogs = blogs2
-      //   })
-
-      // blogs = dispatch(initializeBlogs())
-
-      //find user
-      // userService
-      //   .getAll()
-      //   .then(users => {
-      //     let currentUser = users.filter(x => x.username === user.username)
-      //     setCurrentUser(currentUser[0])
-      //   })
     }
   }, [])
 
@@ -95,27 +77,6 @@ const App = (props) => {
 
       setUsername('')
       setPassword('')
-
-      // dispatch(initializeBlogs())
-
-      //dispatch(initializeBlogs())
-
-      // blogService
-      //   .getAll()
-      //   .then(blogs2 => {
-      //     //setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
-      //     // blogs = blogs2
-      //   })
-
-      //blogs = dispatch(initializeBlogs())
-
-      //find userId
-      // userService
-      //   .getAll()
-      //   .then(users => {
-      //     let currentUser = users.filter(x => x.username === username)
-      //     setCurrentUser(currentUser[0].id)
-      //   })
 
     } catch (exception) {
       dispatch(setNotification('Wrong credentials', 10))
@@ -130,53 +91,7 @@ const App = (props) => {
 
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
-
-    // blogService
-    //   .create(blogObject)
-    //   .then(returnedBlog => {
-    //     setBlogs(blogs.concat(returnedBlog))
-    //     console.log('returnedBlog ', returnedBlog)
-    //     dispatch(setNotification(`Blog ${returnedBlog.title} by ${returnedBlog.author} added`, 10))
-    //   })
-    //   .catch(_error => {
-    //     dispatch(setNotification(`Add blog ${newBlog.title} failed`, 10))
-    //   })
   }
-
-  // const updateBlog = (blogObject) => {
-  //   blogService
-  //     .update(blogObject)
-  //     .then(returnedBlog => {
-  //       dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} updated`, 10))
-  //     })
-  //     .catch(_error => {
-  //       dispatch(setNotification(`Update blog ${blogObject.title} failed`, 10))
-  //     })
-  // }
-
-  // const deleteBlog = (blogObject) => {
-  //   blogService
-  //     .remove(blogObject.id)
-  //     .then(returnedStatus => {
-  //       if (returnedStatus === 204)
-  //       {
-  //         blogService
-  //           .getAll()
-  //           .then(blogs => {
-  //             //setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
-  //           })
-
-  //         dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} deleted`, 10))
-  //       }
-  //       else
-  //       {
-  //         dispatch(setNotification(`Delete blog ${blogObject.title} failed`, 10))
-  //       }
-  //     })
-  //     .catch(_error => {
-  //       dispatch(setNotification(`Delete blog ${blogObject.title} failed`, 10))
-  //     })
-  // }
 
   const blogFormRef = useRef()
 
