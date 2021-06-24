@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { createBlog, initializeBlogs } from '../reducers/blogReducer'
+import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
@@ -22,7 +22,6 @@ const BlogForm = ({ blog,  currentUser }) => {
 
     dispatch(createBlog(blogObject))
     dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} added`, 10))
-    dispatch(initializeBlogs())
 
     setNewBlog({})
 

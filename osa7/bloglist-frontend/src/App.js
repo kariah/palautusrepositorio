@@ -12,7 +12,7 @@ import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 
 const App = (props) => {
-  let blogs = []
+  // let blogs = []
   // const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('khtest5')
   const [password, setPassword] = useState('passu5')
@@ -21,8 +21,13 @@ const App = (props) => {
   const [newBlog, setNewBlog] = useState({})
   const dispatch = useDispatch()
 
-  const allBlogs = useSelector(state => state.blogs)
-  blogs = allBlogs
+  let blogs = useSelector(state => state.blogs.blogs)
+  let message = useSelector(state => state.blogs.message)
+
+  // console.log('message (App) ', message)
+  useEffect(() => {
+    dispatch(setNotification(message, 10))
+  }, [message])
 
   const divStyle = {
     paddingTop: 5,
@@ -61,6 +66,13 @@ const App = (props) => {
           setCurrentUser(currentUser[0])
         })
     }
+
+    // console.log('message (App) ', message)
+    // if (message !== undefined && message !== null)
+    // {
+    //   dispatch(setNotification(message, 10))
+    // }
+
 
   }, [])
 
@@ -127,41 +139,40 @@ const App = (props) => {
     //   })
   }
 
-  const updateBlog = (blogObject) => {
-    blogService
-      .update(blogObject)
-      .then(returnedBlog => {
-        dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} updated`, 10))
-      })
-      .catch(_error => {
-        dispatch(setNotification(`Update blog ${blogObject.title} failed`, 10))
-      })
-  }
+  // const updateBlog = (blogObject) => {
+  //   blogService
+  //     .update(blogObject)
+  //     .then(returnedBlog => {
+  //       dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} updated`, 10))
+  //     })
+  //     .catch(_error => {
+  //       dispatch(setNotification(`Update blog ${blogObject.title} failed`, 10))
+  //     })
+  // }
 
-  const deleteBlog = (blogObject) => {
-    blogService
-      .remove(blogObject.id)
-      .then(returnedStatus => {
-        if (returnedStatus === 204)
-        {
-          blogService
-            .getAll()
-            .then(blogs => {
-              //setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
-            })
+  // const deleteBlog = (blogObject) => {
+  //   blogService
+  //     .remove(blogObject.id)
+  //     .then(returnedStatus => {
+  //       if (returnedStatus === 204)
+  //       {
+  //         blogService
+  //           .getAll()
+  //           .then(blogs => {
+  //             //setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
+  //           })
 
-          dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} deleted`, 10))
-        }
-        else
-        {
-          dispatch(setNotification(`Delete blog ${blogObject.title} failed`, 10))
-        }
-      })
-      .catch(_error => {
-        dispatch(setNotification(`Delete blog ${blogObject.title} failed`, 10))
-      })
-  }
-
+  //         dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} deleted`, 10))
+  //       }
+  //       else
+  //       {
+  //         dispatch(setNotification(`Delete blog ${blogObject.title} failed`, 10))
+  //       }
+  //     })
+  //     .catch(_error => {
+  //       dispatch(setNotification(`Delete blog ${blogObject.title} failed`, 10))
+  //     })
+  // }
 
   const blogFormRef = useRef()
 
@@ -221,8 +232,6 @@ const App = (props) => {
       {blogs.map(blog =>
         <Blog key={blog.id}
           blog={blog}
-          updateBlog={updateBlog}
-          deleteBlog={deleteBlog}
           currentUser={currentUser} />
       )}
     </div>

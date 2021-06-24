@@ -1,13 +1,18 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { updateBlog, deleteBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 
 const Blog = ({ blog,
-  updateBlog,
-  deleteBlog,
   currentUser }) => {
+
+  const dispatch = useDispatch()
+
   const [blogDetailsVisible, setBlogDetailsVisible] = useState(false)
   const hideBlogDetailsWhenVisible = { display: blogDetailsVisible ? 'none' : '' }
   const showBlogDetailsWhenVisible = { display: blogDetailsVisible ? '' : 'none' }
+
 
   const blogStyle = {
     paddingTop: 10,
@@ -35,7 +40,10 @@ const Blog = ({ blog,
 
     blog.likes = blogObject.likes
 
-    updateBlog(blogObject)
+    dispatch(updateBlog(blogObject))
+    dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} - likes updated`, 10))
+
+    // dispatch(initializeBlogs())
   }
 
   const removeBlog = (event) => {
@@ -44,13 +52,51 @@ const Blog = ({ blog,
     let dialogResult = window.confirm(`Remove blog ${blog.title}?`)
 
     if (dialogResult === true) {
-      deleteBlog(blog)
-      return
+      dispatch(deleteBlog(blog))
+
+      // if (message !== undefined && message !== null)
+      // {
+      //   dispatch(setNotification(message, 10))
+      // }
+
+
+      // let test = useSelector(state => state.blogs)
+      // console.log('test ', test)
+
+      // const test = useSelector => state.blogs)
+
+      // dispatch(initializeBlogs())
+      // return null
     }
     else {
       return
     }
   }
+
+  // const deleteBlog = (blogObject) => {
+  //   blogService
+  //     .remove(blogObject.id)
+  //     .then(returnedStatus => {
+  //       if (returnedStatus === 204)
+  //       {
+  //         blogService
+  //           .getAll()
+  //           .then(blogs => {
+  //             //setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
+  //           })
+
+  //         dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} deleted`, 10))
+  //       }
+  //       else
+  //       {
+  //         dispatch(setNotification(`Delete blog ${blogObject.title} failed`, 10))
+  //       }
+  //     })
+  //     .catch(_error => {
+  //       dispatch(setNotification(`Delete blog ${blogObject.title} failed`, 10))
+  //     })
+  // }
+
 
   function RemoveButton(user, currentUser) {
     if (user.id === currentUser.id)
