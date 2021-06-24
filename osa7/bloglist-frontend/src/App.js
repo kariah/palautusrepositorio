@@ -10,6 +10,7 @@ import Togglable from './components/Togglable'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
+import { loginUser } from './reducers/userReducer'
 
 const App = (props) => {
   // let blogs = []
@@ -17,17 +18,25 @@ const App = (props) => {
   const [username, setUsername] = useState('khtest5')
   const [password, setPassword] = useState('passu5')
   const [user, setUser] = useState(null)
-  const [currentUser, setCurrentUser] = useState(null)
+  // const [currentUser, setCurrentUser] = useState(null)
   const [newBlog, setNewBlog] = useState({})
   const dispatch = useDispatch()
 
   let blogs = useSelector(state => state.blogs.blogs)
-  let message = useSelector(state => state.blogs.message)
 
-  // console.log('message (App) ', message)
-  useEffect(() => {
-    dispatch(setNotification(message, 10))
-  }, [message])
+  //message handling
+  let message = useSelector(state => state.blogs.message)
+  console.log('message 0 ', message)
+  if (message === undefined || message === null)
+  {
+    message = useSelector(state => state.users.message)
+    console.log('message 1 ', message)
+  }//
+
+  let currentUser = useSelector(state => state.users.user)
+
+  // let state = useSelector(state => state)
+  // console.log('state ', state)
 
   const divStyle = {
     paddingTop: 5,
@@ -38,11 +47,22 @@ const App = (props) => {
   }
 
   useEffect(() => {
+    if (currentUser !== null)
+    {
+      setUser(currentUser)
+      dispatch(initializeBlogs())
+    }
+  }, [currentUser])
 
+  useEffect(() => {
+    console.log('message 2 ', message)
+    dispatch(setNotification(message, 10))
+  }, [message])
+
+  useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-
       setUser(user)
       blogService.setToken(user.token)
 
@@ -59,42 +79,26 @@ const App = (props) => {
       // blogs = dispatch(initializeBlogs())
 
       //find user
-      userService
-        .getAll()
-        .then(users => {
-          let currentUser = users.filter(x => x.username === user.username)
-          setCurrentUser(currentUser[0])
-        })
+      // userService
+      //   .getAll()
+      //   .then(users => {
+      //     let currentUser = users.filter(x => x.username === user.username)
+      //     setCurrentUser(currentUser[0])
+      //   })
     }
-
-    // console.log('message (App) ', message)
-    // if (message !== undefined && message !== null)
-    // {
-    //   dispatch(setNotification(message, 10))
-    // }
-
-
   }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
-        username, password,
-      })
+      dispatch(loginUser(username, password))
 
-      // console.log('user: ', user)
-
-      blogService.setToken(user.token)
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
-
-      setUser(user)
       setUsername('')
       setPassword('')
 
-      dispatch(initializeBlogs())
+      // dispatch(initializeBlogs())
+
+      //dispatch(initializeBlogs())
 
       // blogService
       //   .getAll()
@@ -106,12 +110,12 @@ const App = (props) => {
       //blogs = dispatch(initializeBlogs())
 
       //find userId
-      userService
-        .getAll()
-        .then(users => {
-          let currentUser = users.filter(x => x.username === username)
-          setCurrentUser(currentUser[0].id)
-        })
+      // userService
+      //   .getAll()
+      //   .then(users => {
+      //     let currentUser = users.filter(x => x.username === username)
+      //     setCurrentUser(currentUser[0].id)
+      //   })
 
     } catch (exception) {
       dispatch(setNotification('Wrong credentials', 10))
@@ -186,7 +190,6 @@ const App = (props) => {
       </Togglable>
     </div>
   )
-
 
   if (user === null) {
     return (
