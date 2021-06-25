@@ -5,10 +5,12 @@ import Notification from './components/Notification'
 import blogService from './services/blogs'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
-import { loginUser } from './reducers/userReducer'
+import { loginUser, initializeUsers } from './reducers/userReducer'
+// import _ from 'lodash'
 
 const App = (props) => {
   const [username, setUsername] = useState('khtest5')
@@ -18,7 +20,7 @@ const App = (props) => {
   const dispatch = useDispatch()
 
   let blogs = useSelector(state => state.blogs.blogs)
-
+  let users = useSelector(state => state.users.users)
 
   let state = useSelector(state => state)
   console.log('state ', state)
@@ -59,6 +61,7 @@ const App = (props) => {
     dispatch(setNotification(message, 10))
   }, [message])
 
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -67,6 +70,7 @@ const App = (props) => {
       blogService.setToken(user.token)
 
       dispatch(initializeBlogs())
+      dispatch(initializeUsers())
     }
   }, [])
 
@@ -74,11 +78,11 @@ const App = (props) => {
     event.preventDefault()
     try {
       dispatch(loginUser(username, password))
-
       setUsername('')
       setPassword('')
-
-    } catch (exception) {
+      dispatch(initializeUsers())
+    }
+    catch (exception) {
       dispatch(setNotification('Wrong credentials', 10))
     }
   }
@@ -141,9 +145,18 @@ const App = (props) => {
       <Notification />
       <h2>blogs</h2>
       <div>
+        <p>{user.name} logged in</p>
+      </div>
+      <div>
         <button id='logout-button' onClick={handleLogout}>logout</button>
       </div>
-      <p>{user.name} logged in</p>
+      <div>
+        <h2>Users</h2>
+        <div>
+          <Users users={users} />
+          {/* {blogGroups.map(blog => <h2  key={blog.author}>{blog.author}</h2>)} */}
+        </div>
+      </div>
       <div>
         {blogForm()}
       </div>

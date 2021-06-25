@@ -54,49 +54,11 @@ const Blog = ({ blog,
     if (dialogResult === true) {
       dispatch(deleteBlog(blog))
 
-      // if (message !== undefined && message !== null)
-      // {
-      //   dispatch(setNotification(message, 10))
-      // }
-
-
-      // let test = useSelector(state => state.blogs)
-      // console.log('test ', test)
-
-      // const test = useSelector => state.blogs)
-
-      // dispatch(initializeBlogs())
-      // return null
     }
     else {
       return
     }
   }
-
-  // const deleteBlog = (blogObject) => {
-  //   blogService
-  //     .remove(blogObject.id)
-  //     .then(returnedStatus => {
-  //       if (returnedStatus === 204)
-  //       {
-  //         blogService
-  //           .getAll()
-  //           .then(blogs => {
-  //             //setBlogs(blogs.sort((a, b) => a.likes - b.likes).reverse())
-  //           })
-
-  //         dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} deleted`, 10))
-  //       }
-  //       else
-  //       {
-  //         dispatch(setNotification(`Delete blog ${blogObject.title} failed`, 10))
-  //       }
-  //     })
-  //     .catch(_error => {
-  //       dispatch(setNotification(`Delete blog ${blogObject.title} failed`, 10))
-  //     })
-  // }
-
 
   function RemoveButton(user, currentUser) {
     if (user.id === currentUser.id)

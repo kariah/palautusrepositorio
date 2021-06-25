@@ -57,7 +57,6 @@ const blogReducer = (state = initialState,  action) => {
   }
 }
 
-//6.15
 export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogService.getAll()
@@ -71,7 +70,6 @@ export const initializeBlogs = () => {
   }
 }
 
-//6.16
 export const createBlog = (blog) => {
   return async dispatch => {
     const newBlog = await blogService.create( {
