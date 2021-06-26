@@ -5,41 +5,34 @@ import Notification from './components/Notification'
 import blogService from './services/blogs'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import Users from './components/Users'
+import Userlist from './components/Userlist'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
-import { loginUser, initializeUsers } from './reducers/userReducer'
+import { loginUser, logoutUser, getLoggedInUser } from './reducers/userReducer'
+import { initializeUsers } from './reducers/usersReducer'
 // import _ from 'lodash'
 
 const App = (props) => {
   const [username, setUsername] = useState('khtest5')
   const [password, setPassword] = useState('passu5')
-  const [user, setUser] = useState(null)
+
+  // const [user, setUser] = useState(null)
   const [newBlog, setNewBlog] = useState({})
   const dispatch = useDispatch()
 
-  let blogs = useSelector(state => state.blogs.blogs)
-  let users = useSelector(state => state.users.users)
-
-  let state = useSelector(state => state)
-  console.log('state ', state)
-
-  //message handling - ei kovin hyvä tapa!!
-  let message = null
-  let blogsMessage = useSelector(state => state.blogs.message)
-  let usersMessage =useSelector(state => state.users.message)
-  if (blogsMessage !== undefined && blogsMessage !== null)
-  {
-    message = blogsMessage
-  }
-  else if (usersMessage !== undefined && usersMessage !== null)
-  {
-    message = usersMessage
-  }//
-
-  let currentUser = useSelector(state => state.users.user)
-
+  //message handling - kokeilu
+  // let message = null
+  // const blogsMessage = useSelector(state => state.blogs.message)
+  // const usersMessage =useSelector(state => state.users.message)
+  // if (blogsMessage !== undefined && blogsMessage !== null)
+  // {
+  //   message = blogsMessage
+  // }
+  // else if (usersMessage !== undefined && usersMessage !== null)
+  // {
+  //   message = usersMessage
+  // }//
 
   const divStyle = {
     paddingTop: 5,
@@ -49,38 +42,35 @@ const App = (props) => {
     paddingBottom: 20
   }
 
-  useEffect(() => {
-    if (currentUser !== null)
-    {
-      setUser(currentUser)
-      dispatch(initializeBlogs())
-    }
-  }, [currentUser])
+  const blogs = useSelector(state => state.blogs.blogs)
+  const users = useSelector(state => state.users)
+  const user = useSelector(state => state.user)
 
   useEffect(() => {
-    dispatch(setNotification(message, 10))
-  }, [message])
-
+    dispatch(getLoggedInUser())
+  }, [dispatch])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+    dispatch(initializeUsers())
+  }, [dispatch])
 
-      dispatch(initializeBlogs())
-      dispatch(initializeUsers())
-    }
-  }, [])
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [dispatch, user])
+
+  //test
+  const state = useSelector(state => state)
+  console.log('state ', state)
+  //test
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
       dispatch(loginUser(username, password))
+      //async wait Promise(dispatch(loginUser(username, password)))
       setUsername('')
       setPassword('')
-      dispatch(initializeUsers())
+      dispatch(setNotification('Login succeeded', 10))
     }
     catch (exception) {
       dispatch(setNotification('Wrong credentials', 10))
@@ -89,7 +79,7 @@ const App = (props) => {
 
   const handleLogout = async (event) => {
     event.preventDefault()
-    window.localStorage.removeItem('loggedBlogappUser')
+    dispatch(logoutUser())
     window.location.href = '/'
   }
 
@@ -103,7 +93,7 @@ const App = (props) => {
     <div style={divStyle}>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm createBlog={addBlog}
-          currentUser={currentUser}
+          currentUser={user}
           newBlog={newBlog}
           setNewBlog={setNewBlog} />
       </Togglable>
@@ -140,6 +130,9 @@ const App = (props) => {
     )
   }
 
+
+  // if (user !== null) {
+
   return (
     <div>
       <Notification />
@@ -153,8 +146,7 @@ const App = (props) => {
       <div>
         <h2>Users</h2>
         <div>
-          <Users users={users} />
-          {/* {blogGroups.map(blog => <h2  key={blog.author}>{blog.author}</h2>)} */}
+          <Userlist users={users} />
         </div>
       </div>
       <div>
@@ -163,10 +155,11 @@ const App = (props) => {
       {blogs.map(blog =>
         <Blog key={blog.id}
           blog={blog}
-          currentUser={currentUser} />
+          currentUser={user} />
       )}
     </div>
   )
+  // }
 
 }
 

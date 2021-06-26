@@ -14,13 +14,9 @@ const blogReducer = (state = initialState,  action) => {
   }
   case 'NEW_BLOG':
   {
-    // console.log('action 2 ', action)
-    // console.log('state now 2: ', state)
-    // console.log('state blogs 2: ', state.blogs)
-
     return {
       blogs: [...state.blogs, action.data],
-      message: null
+      // message: null
     }
   }
   case 'UPDATE_BLOG': {
@@ -40,8 +36,7 @@ const blogReducer = (state = initialState,  action) => {
       )
 
     return {
-      blogs: blogs,
-      returnedStatus: null
+      blogs: blogs
     }
   }
   case 'DELETE_BLOG':  {
@@ -61,7 +56,7 @@ export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogService.getAll()
 
-    // console.log('all blogs ', blogs)
+    console.log('all blogs (INITIALIZE_BLOGS)', blogs)
 
     dispatch({
       type: 'INITIALIZE_BLOGS',
@@ -83,6 +78,9 @@ export const createBlog = (blog) => {
       type: 'NEW_BLOG',
       data: newBlog,
     })
+
+    //voidaan käyttää paluuarvona
+    //return newBlog
   }
 }
 

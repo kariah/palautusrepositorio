@@ -1,81 +1,85 @@
 // import userService from './services/users'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
-import userService from '../services/users'
 
-const initialState = {
-  user: null,
-  message: null,
-  users: null
-}
+// const initialState = {
+//   user: null,
+//   message: null,
+//   users: null
+// }
 
-const userReducer = (state = initialState,  action) => {
+const userReducer = (state = null,  action) => {
   switch(action.type) {
-  case 'INITIALIZE_USERS':
-  {
-    const users = action.data
-    return {
-      user: [state.user],
-      users: users
-    }
-  }
   case 'LOGIN_USER':
   {
-    return {
-      user: action.data.user,
-      message: action.data.message,
-      users: action.data.users,
-    }
+    // console.log('user data ', action.data)
+    return action.data
   }
+  case 'LOGOUT':
+    return {
+      user: null
+    }
+  case 'INITIALIZE_USER':
+    console.log('user data (INITIALIZE_USER): ', action.data)
+    return action.data
   default:
     return state
   }
 }
 
-
-export const initializeUsers = () => {
+export const getLoggedInUser = () => {
   return async dispatch => {
-    const users = await userService.getAll()
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
 
-    dispatch({
-      type: 'INITIALIZE_USERS',
-      data: users,
-    })
+    if(loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      blogService.setToken(user.token)
+
+      dispatch({
+        type: 'INITIALIZE_USER',
+        data: JSON.parse(loggedUserJSON),
+      })
+    }
   }
 }
+
+
 export const loginUser = (username, password) => {
   return async dispatch => {
     const user = await loginService.login({
       username, password,
     })
 
-    console.log('user ', user)
+    // console.log('user login ', user)
 
-    let message = null
+    // let message = null
     if (user !== null)
     {
       blogService.setToken(user.token)
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
-    }
-    else
-    {
-      message = 'Login Failed'
-    }
 
-    const users = await userService.getAll()
+    }
 
     dispatch({
       type: 'LOGIN_USER',
       data: {
-        user : user,
-        message : message,
-        users: users
+        user : user
       }
     })
+
+    return user
   }
 }
 
+export const logoutUser = () => {
+  return async dispatch => {
+    window.localStorage.removeItem('loggedBlogappUser')
+    dispatch({
+      type: 'LOGOUT'
+    })
+  }
+}
 
 export default userReducer

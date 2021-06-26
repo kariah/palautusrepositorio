@@ -4,10 +4,15 @@ import React from 'react'
 
 
 const Notification = () => {
-  const dispatch = useDispatch()
-
   const notification = useSelector(state => state.notification)
 
+  if (notification.message === null)
+  {
+    return <></>
+  }
+
+
+  const dispatch = useDispatch()
   let style = { display: 'none' }
 
   if (notification.message !== null)
