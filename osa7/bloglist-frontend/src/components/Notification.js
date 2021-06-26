@@ -11,7 +11,6 @@ const Notification = () => {
     return <></>
   }
 
-
   const dispatch = useDispatch()
   let style = { display: 'none' }
 

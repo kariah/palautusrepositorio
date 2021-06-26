@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 
 // eslint-disable-next-line no-unused-vars
-const BlogForm = ({ blog,  currentUser }) => {
+const BlogForm = ({ user }) => {
   const dispatch = useDispatch()
 
   const [newBlog, setNewBlog] = useState({})
@@ -17,7 +17,7 @@ const BlogForm = ({ blog,  currentUser }) => {
       author: newBlog.author,
       url: newBlog.url,
       likes: newBlog.likes,
-      user: currentUser
+      user: user
     }
 
     dispatch(createBlog(blogObject))

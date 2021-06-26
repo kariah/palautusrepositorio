@@ -16,23 +16,7 @@ import { initializeUsers } from './reducers/usersReducer'
 const App = (props) => {
   const [username, setUsername] = useState('khtest5')
   const [password, setPassword] = useState('passu5')
-
-  // const [user, setUser] = useState(null)
-  const [newBlog, setNewBlog] = useState({})
   const dispatch = useDispatch()
-
-  //message handling - kokeilu
-  // let message = null
-  // const blogsMessage = useSelector(state => state.blogs.message)
-  // const usersMessage =useSelector(state => state.users.message)
-  // if (blogsMessage !== undefined && blogsMessage !== null)
-  // {
-  //   message = blogsMessage
-  // }
-  // else if (usersMessage !== undefined && usersMessage !== null)
-  // {
-  //   message = usersMessage
-  // }//
 
   const divStyle = {
     paddingTop: 5,
@@ -58,10 +42,10 @@ const App = (props) => {
     dispatch(initializeBlogs())
   }, [dispatch, user])
 
-  //test
+  //testng
   const state = useSelector(state => state)
   console.log('state ', state)
-  //test
+  //testing
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -71,6 +55,7 @@ const App = (props) => {
       setUsername('')
       setPassword('')
       dispatch(setNotification('Login succeeded', 10))
+      console.log('user ', user)
     }
     catch (exception) {
       dispatch(setNotification('Wrong credentials', 10))
@@ -83,19 +68,16 @@ const App = (props) => {
     window.location.href = '/'
   }
 
-  const addBlog = (blogObject) => {
-    blogFormRef.current.toggleVisibility()
-  }
+  // const addBlog = (blogObject) => {
+  //   blogFormRef.current.toggleVisibility()
+  // }
 
   const blogFormRef = useRef()
 
   const blogForm = () => (
     <div style={divStyle}>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <BlogForm createBlog={addBlog}
-          currentUser={user}
-          newBlog={newBlog}
-          setNewBlog={setNewBlog} />
+        <BlogForm user={user} />
       </Togglable>
     </div>
   )
@@ -130,15 +112,14 @@ const App = (props) => {
     )
   }
 
-
-  // if (user !== null) {
+  let logInText = user.name !== undefined ? `${user.name} logged in` : ''
 
   return (
     <div>
       <Notification />
       <h2>blogs</h2>
       <div>
-        <p>{user.name} logged in</p>
+        <p>{logInText}</p>
       </div>
       <div>
         <button id='logout-button' onClick={handleLogout}>logout</button>
@@ -155,7 +136,7 @@ const App = (props) => {
       {blogs.map(blog =>
         <Blog key={blog.id}
           blog={blog}
-          currentUser={user} />
+          user={user} />
       )}
     </div>
   )

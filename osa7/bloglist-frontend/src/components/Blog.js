@@ -5,7 +5,7 @@ import { setNotification } from '../reducers/notificationReducer'
 
 
 const Blog = ({ blog,
-  currentUser }) => {
+  user }) => {
 
   const dispatch = useDispatch()
 
@@ -35,15 +35,13 @@ const Blog = ({ blog,
       author: blog.author,
       url: blog.url,
       likes: blog.likes + 1,
-      user: currentUser
+      user: user
     }
 
     blog.likes = blogObject.likes
 
     dispatch(updateBlog(blogObject))
     dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} - likes updated`, 10))
-
-    // dispatch(initializeBlogs())
   }
 
   const removeBlog = (event) => {
@@ -60,8 +58,8 @@ const Blog = ({ blog,
     }
   }
 
-  function RemoveButton(user, currentUser) {
-    if (user.id === currentUser.id)
+  function RemoveButton(blogUser, user) {
+    if (blogUser.id === user.id)
     {
       return <div>
         <button id='remove-button' onClick={removeBlog}>remove</button>
@@ -88,7 +86,7 @@ const Blog = ({ blog,
           <div>
             <button  id='hide-button' className='hide-button' onClick={() => setBlogDetailsVisible(false)}>Hide</button>
           </div>
-          <RemoveButton user={blog.user} currentUser={currentUser} />
+          <RemoveButton blogUser={blog.user} user={user} />
         </div>
       </div>
     </div>
