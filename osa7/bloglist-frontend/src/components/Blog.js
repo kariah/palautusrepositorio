@@ -1,17 +1,26 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { updateBlog, deleteBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
+const Blog = ({ blog }) => {
 
-const Blog = ({ blog,
-  user }) => {
+  if (!blog) {
+    return null
+  }
 
   const dispatch = useDispatch()
+  const history = useHistory()
 
-  const [blogDetailsVisible, setBlogDetailsVisible] = useState(false)
-  const hideBlogDetailsWhenVisible = { display: blogDetailsVisible ? 'none' : '' }
-  const showBlogDetailsWhenVisible = { display: blogDetailsVisible ? '' : 'none' }
+  const user = useSelector(state => state.user)
+
+  console.log('blog from Route ', blog)
+  console.log('user (blog) ', user)
+
+  // const [blogDetailsVisible, setBlogDetailsVisible] = useState(false)
+  // const hideBlogDetailsWhenVisible = { display: blogDetailsVisible ? 'none' : '' }
+  // const showBlogDetailsWhenVisible = { display: blogDetailsVisible ? '' : 'none' }
 
 
   const blogStyle = {
@@ -51,14 +60,14 @@ const Blog = ({ blog,
 
     if (dialogResult === true) {
       dispatch(deleteBlog(blog))
-
+      history.push('/')
     }
     else {
       return
     }
   }
 
-  function RemoveButton(blogUser, user) {
+  function RemoveButton(blogUser) {
     if (blogUser.id === user.id)
     {
       return <div>
@@ -71,13 +80,12 @@ const Blog = ({ blog,
     }
   }
 
-
   return (
     <div style={blogStyle}>
       <div id='blog-title' className='title blog-title'>{blog.title}</div>
       <div className='author'>{blog.author}</div>
       <div>
-        <div style={hideBlogDetailsWhenVisible}>
+        {/* <div style={hideBlogDetailsWhenVisible}>
           <button id='view-button' className='view-button' onClick={() => setBlogDetailsVisible(true)}>View</button>
         </div>
         <div style={showBlogDetailsWhenVisible}>
@@ -86,7 +94,13 @@ const Blog = ({ blog,
           <div>
             <button  id='hide-button' className='hide-button' onClick={() => setBlogDetailsVisible(false)}>Hide</button>
           </div>
-          <RemoveButton blogUser={blog.user} user={user} />
+          <div>
+          <button id='view-button' className='view-button' onClick={() => setBlogDetailsVisible(true)}>View</button>
+        </div> */}
+        <div>
+          <div className='url'>{blog.url}</div>
+          <div id='likes-div' className='likes'>likes {blog.likes} <button id='update-likes-button' className='update-likes-button'  onClick={updateLikes}>like</button></div>
+          <RemoveButton blogUser={blog.user} />
         </div>
       </div>
     </div>

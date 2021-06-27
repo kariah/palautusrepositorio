@@ -9,14 +9,12 @@ const blogReducer = (state = initialState,  action) => {
   switch(action.type) {
   case 'INITIALIZE_BLOGS':
   {
-    const blogs = action.data
-    return { blogs: blogs }
+    return action.data
   }
   case 'NEW_BLOG':
   {
     return {
-      blogs: [...state.blogs, action.data],
-      // message: null
+      blogs: [...state.blogs, action.data]
     }
   }
   case 'UPDATE_BLOG': {
@@ -60,7 +58,7 @@ export const initializeBlogs = () => {
 
     dispatch({
       type: 'INITIALIZE_BLOGS',
-      data: blogs,
+      data: { blogs: blogs },
     })
   }
 }
@@ -97,21 +95,21 @@ export const updateBlog = (blog) => {
 
 export const deleteBlog = (blog) => {
   return async dispatch => {
-    const returnedStatus = await blogService.remove(blog.id)
-    let message = null
+    //const returnedStatus = await blogService.remove(blog.id)
+    // let message = null
 
-    if (returnedStatus === 204)
-    {
-      message = `Blog ${blog.title} by ${blog.author} deleted`
-    }
-    else
-    {
-      message =`Delete blog ${blog.title} failed`
-    }
+    // if (returnedStatus === 204)
+    // {
+    //   message = `Blog ${blog.title} by ${blog.author} deleted`
+    // }
+    // else
+    // {
+    //   message =`Delete blog ${blog.title} failed`
+    // }
 
     dispatch({
       type: 'DELETE_BLOG',
-      data: { blogId: blog.id, message : message }
+      data: { blogId: blog.id }
     })
   }
 }

@@ -1,17 +1,31 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
 import Notification from './components/Notification'
-import blogService from './services/blogs'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import Userlist from './components/Userlist'
+import Users from './components/Users'
+import User from './components/User'
+import Blogs from './components/Blogs'
+import Blog from './components/Blog'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { loginUser, logoutUser, getLoggedInUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
-// import _ from 'lodash'
+import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
+
+const Menu = () => {
+  const padding = {
+    paddingRight: 20
+  }
+  return (
+    <div>
+      <Link style={padding} to="/">Home</Link>
+      <Link style={padding} to="/blogs">Blogs </Link>
+      <Link style={padding} to="/users">Users </Link>
+    </div>
+  )
+}
 
 const App = (props) => {
   const [username, setUsername] = useState('khtest5')
@@ -114,8 +128,27 @@ const App = (props) => {
 
   let logInText = user.name !== undefined ? `${user.name} logged in` : ''
 
+  const userRouteMatch = useRouteMatch('/users/:id')
+  const userMatch = userRouteMatch
+    ? users.find(user => user.id === userRouteMatch.params.id)
+    : null
+
+  // console.log('userRouteMatch ', userRouteMatch)
+  // console.log('userMatch ', userMatch)
+
+  const blogRouteMatch = useRouteMatch('/blogs/:id')
+  const blogMatch = blogRouteMatch
+    ? blogs.find(blog => blog.id === blogRouteMatch.params.id)
+    : null
+
+  // console.log('blogs ', blogs)
+  // console.log('state ', state)
+  // console.log('blogRouteMatch ', blogRouteMatch)
+  // console.log('blogMatch ', blogMatch)
+
   return (
     <div>
+      <Menu/>
       <Notification />
       <h2>blogs</h2>
       <div>
@@ -124,23 +157,57 @@ const App = (props) => {
       <div>
         <button id='logout-button' onClick={handleLogout}>logout</button>
       </div>
-      <div>
-        <h2>Users</h2>
-        <div>
-          <Userlist users={users} />
-        </div>
-      </div>
-      <div>
-        {blogForm()}
-      </div>
-      {blogs.map(blog =>
-        <Blog key={blog.id}
-          blog={blog}
-          user={user} />
-      )}
+      <Switch>
+        <Route path ="/users/:id">
+          <div>
+            <h2>User</h2>
+            <div>
+              <User user={userMatch} />
+            </div>
+          </div>
+        </Route>
+        <Route path ="/users/">
+          <div>
+            <h2>Users</h2>
+            <div>
+              <Users users={users} />
+            </div>
+          </div>
+        </Route>
+        <Route path ="/blogs/:id">
+          <div>
+            <h2>Blog</h2>
+            <div>
+              <Blog blog={blogMatch} />
+            </div>
+          </div>
+        </Route>
+        <Route path ="/blogs/">
+          <div>
+            <h2>Blogs</h2>
+            <div>
+              {blogForm()}
+            </div>
+            <Blogs blogs={blogs} />
+          </div>
+        </Route>
+        {/* <Route path ="/users/:id">
+          <div>
+            <h2>Users</h2>
+            <div>
+              <Users users={users} />
+            </div>
+          </div>
+        </Route> */}
+        {/* <Route path ="/">
+          <div>
+            {blogForm()}
+          </div>
+          <Blogs blogs={blogs} />
+        </Route> */}
+      </Switch>
     </div>
   )
-  // }
 
 }
 

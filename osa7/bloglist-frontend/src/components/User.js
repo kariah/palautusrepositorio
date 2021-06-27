@@ -2,6 +2,7 @@ import React  from 'react'
 
 
 const User = ({ user }) => {
+  console.log('user from Route ', user)
   if (!user) {
     return null
   }
@@ -14,30 +15,13 @@ const User = ({ user }) => {
   }
 
   const blogs = user.blogs
-
-  //   const Courses = (props) => {
-  //     const courses = props.courses
-
-  //     return (
-  //         <div>
-  //             <div>
-  //                  {courses.map(course => <Course key={course.id} course={course} />)}
-  //             </div>
-  //         </div>
-  //     )
-  // }
-
-
-  const UserBlog = () => {
-    // const name = props.course.name
-    // const parts = props.course.parts
-
+  function Bloglist(props) {
+    const blogs = props.blogs
+    const list = blogs.map((blog) =>
+      <li key={blog.id}>{blog.title}</li>
+    )
     return (
-      <div>
-        {/* <Header name={name} />
-        <Content parts={parts} />
-        <Total parts={parts} /> */}
-      </div>
+      <ul>{list}</ul>
     )
   }
 
@@ -46,9 +30,10 @@ const User = ({ user }) => {
     <div>
       <h2>{user.name}</h2>
       <h3>Added blogs</h3>
-      <div>
+      <div><Bloglist blogs={blogs}></Bloglist></div>
+      {/* <div>
         {blogs.map(blog => <UserBlog key={blog.id} course={blog} />)}
-      </div>
+      </div>  */}
     </div>
   )
 }

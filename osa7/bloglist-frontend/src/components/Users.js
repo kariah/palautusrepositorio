@@ -4,6 +4,7 @@ import React from 'react'
 const Users = ({ users }) => {
 
   console.log('users (Users) ', users)
+
   //Testing
   // const result = _(blogs)
   //   .groupBy('author')
@@ -20,20 +21,29 @@ const Users = ({ users }) => {
     return <></>
   }
 
+  // if (users === undefined || users === null || users.blogs === undefined || users.blogs.length === 0)
+  // {
+  //   return <></>
+  // }
+
   return (
     <div>
       <table>
-        <tr>
-          <td></td>
-          <td><b>Blogs created</b></td>
-        </tr>
-        {users.map(user =>
-          <tr key={user.id}>
-            <td> {user.name} {console.log('user blogs ', user.blogs)}
-            </td>
-            <td> {user.blogs !== undefined ? user.blogs.length : '0'  }</td>
+        <thead>
+          <tr>
+            <td></td>
+            <td><b>Blogs created</b></td>
           </tr>
-        )}
+        </thead>
+        <tbody>
+          {users.map(user =>
+            <tr key={user.id}>
+              <td><a href={`/users/${user.id}`}>{user.name}</a>
+              </td>
+              <td> {user.blogs !== undefined ? user.blogs.length : '0'  }</td>
+            </tr>
+          )}
+        </tbody>
       </table>
     </div>
   )

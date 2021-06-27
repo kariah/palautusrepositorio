@@ -2,17 +2,10 @@
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 
-// const initialState = {
-//   user: null,
-//   message: null,
-//   users: null
-// }
-
 const userReducer = (state = null,  action) => {
   switch(action.type) {
   case 'LOGIN_USER':
   {
-    // console.log('user data ', action.data)
     return action.data
   }
   case 'LOGOUT':
@@ -50,9 +43,6 @@ export const loginUser = (username, password) => {
       username, password,
     })
 
-    // console.log('user login ', user)
-
-    // let message = null
     if (user !== null)
     {
       blogService.setToken(user.token)
