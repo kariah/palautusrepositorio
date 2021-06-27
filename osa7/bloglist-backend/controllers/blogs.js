@@ -1,5 +1,6 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const Comment = require('../models/comment')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
@@ -65,8 +66,40 @@ blogsRouter.post('/', async (request, response, next) => {
   response.json(savedBlog.toJSON())
 })
 
+//7.16-7.17
+blogsRouter.post('/:id/comments', async (request, response, next) => { 
+    const body = request.body 
+    const blog = await Blog.findById(request.params.id)
+
+    console.log('blog ', blog)
+    console.log('content ', body.content)
+
+
+    const comment = new Comment(
+        { 
+            content: body.content,
+            blog: blog._id,
+        })
+
+
+    console.log('comment ', comment)
+     
+    const savedComment = await comment.save()
+
+    console.log(comment)
+
+    blog.comments = blog.comments.concat(savedComment) 
+
+    const savedBlog = await blog.save()
+    request.user.blogs = request.user.blogs.concat(savedBlog._id)
+    await request.user.save()
+
+    response.json(savedBlog.toJSON()) 
+}) 
+
+
 //Tehtävä 4.23
-blogsRouter.delete('/:id', async (request, response) => { 
+blogsRouter.delete('/:id', async (request, response) => {
   if (request.user === null) {
     return response.status(401).json({
       error: 'user missing or invalid'
