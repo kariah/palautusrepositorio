@@ -20,7 +20,7 @@ blogsRouter.get('/', async (request, response) => {
     //})
    .find({}).populate('user')
 
-  response.json(blogs.map(note => note.toJSON()))
+  response.json(blogs.map(blog => blog.toJSON()))
 })
 
 blogsRouter.get('/:id', async (request, response) => {
@@ -71,9 +71,8 @@ blogsRouter.post('/:id/comments', async (request, response, next) => {
     const body = request.body 
     const blog = await Blog.findById(request.params.id)
 
-    console.log('blog ', blog)
-    console.log('content ', body.content)
-
+    console.log('blog ', blog) 
+    console.log('content ', body.content) 
 
     const comment = new Comment(
         { 
@@ -81,19 +80,18 @@ blogsRouter.post('/:id/comments', async (request, response, next) => {
             blog: blog._id,
         })
 
-
-    console.log('comment ', comment)
+     
      
     const savedComment = await comment.save()
 
-    console.log(comment)
-
     blog.comments = blog.comments.concat(savedComment) 
+
+    console.log('comments after save ', blog.comments)
 
     const savedBlog = await blog.save()
     request.user.blogs = request.user.blogs.concat(savedBlog._id)
     await request.user.save()
-
+     
     response.json(savedBlog.toJSON()) 
 }) 
 
