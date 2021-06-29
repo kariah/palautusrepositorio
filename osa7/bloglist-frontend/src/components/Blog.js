@@ -1,7 +1,7 @@
-import React, { } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { updateBlog, deleteBlog } from '../reducers/blogReducer'
+import { updateBlog, deleteBlog, addCommentToBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
 const Blog = ({ blog }) => {
@@ -9,14 +9,15 @@ const Blog = ({ blog }) => {
   if (!blog) {
     return null
   }
+  const [comment, setComment] = useState('')
 
   const dispatch = useDispatch()
   const history = useHistory()
 
   const user = useSelector(state => state.user)
 
-  console.log('blog from Route ', blog)
-  console.log('user (blog) ', user)
+  // console.log('blog from Route ', blog)
+  // console.log('user (blog) ', user)
 
   // const [blogDetailsVisible, setBlogDetailsVisible] = useState(false)
   // const hideBlogDetailsWhenVisible = { display: blogDetailsVisible ? 'none' : '' }
@@ -80,6 +81,19 @@ const Blog = ({ blog }) => {
     }
   }
 
+  const handleCommentChange = (event) => {
+    let comment = event.target.value
+    setComment(comment)
+  }
+
+  const addComment = (event) => {
+    event.preventDefault()
+    // console.log('blog (addComment) ', blog)
+    // console.log('comment ', comment)
+    dispatch(addCommentToBlog(blog, comment))
+    setComment('')
+  }
+
   return (
     <div style={blogStyle}>
       <div id='blog-title' className='title blog-title'>{blog.title}</div>
@@ -103,6 +117,19 @@ const Blog = ({ blog }) => {
           <RemoveButton blogUser={blog.user} />
         </div>
       </div>
+      <div>
+        <h3>Comments</h3>
+        <form onSubmit = {addComment}>
+                Comment:
+          <input
+            value={comment}
+            onChange={handleCommentChange}
+            id="comment"
+          />
+          <button type="submit">Add comment</button>
+        </form>
+      </div>
+      <div>List of comments here  blog.comments.map jne</div>
     </div>
   )
 }

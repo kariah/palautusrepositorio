@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 
 // eslint-disable-next-line no-unused-vars
 const BlogForm = ({ user }) => {
@@ -10,7 +10,7 @@ const BlogForm = ({ user }) => {
 
   const [newBlog, setNewBlog] = useState({})
 
-  const addBlog = (event) => {
+  const addBlog = async (event) => {
     event.preventDefault()
     const blogObject = {
       title: newBlog.title,
@@ -21,6 +21,8 @@ const BlogForm = ({ user }) => {
     }
 
     dispatch(createBlog(blogObject))
+    // console.log('addedBlog ', addedBlog)
+
     dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} added`, 10))
 
     setNewBlog({})
@@ -61,10 +63,10 @@ const BlogForm = ({ user }) => {
   )
 }
 
-BlogForm.propTypes = {
-  createBlog: PropTypes.func.isRequired,
-  // currentUser: PropTypes.object.isRequired
-}
+// BlogForm.propTypes = {
+//   //createBlog: PropTypes.func.isRequired,
+//   // currentUser: PropTypes.object.isRequired
+// }
 
 
 export default BlogForm

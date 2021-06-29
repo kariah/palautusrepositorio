@@ -45,6 +45,27 @@ const blogReducer = (state = initialState,  action) => {
       message: action.data.message
     }
   }
+  case 'ADD_COMMENT_TO_BLOG':{
+    console.log('action.data (updatedBlog) ', action.data)
+    const updatedBlog = action.data
+
+    const blogToChange = state.blogs.find(n => n.id === updatedBlog.id)
+
+    const changedBlog = {
+      ...blogToChange,
+      votes: updatedBlog.votes
+    }
+
+    const blogs = state.blogs
+      .map(blog =>
+        blog.id !== updatedBlog.id ? blog : changedBlog
+      )
+
+    return {
+      blogs: blogs
+    }
+
+  }
   default:
     return state
   }
@@ -54,7 +75,7 @@ export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogService.getAll()
 
-    console.log('all blogs (INITIALIZE_BLOGS)', blogs)
+    // console.log('all blogs (INITIALIZE_BLOGS)', blogs)
 
     dispatch({
       type: 'INITIALIZE_BLOGS',
@@ -113,5 +134,19 @@ export const deleteBlog = (blog) => {
     })
   }
 }
+
+export const addCommentToBlog = (blog, blogComment) => {
+  return async dispatch => {
+    const updatedBlog = await blogService.addComment(blog, blogComment)
+
+    console.log('updatedBlog ', updatedBlog)
+
+    dispatch({
+      type: 'ADD_COMMENT_TO_BLOG',
+      data: updatedBlog
+    })
+  }
+}
+
 
 export default blogReducer

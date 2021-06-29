@@ -44,6 +44,18 @@ const App = (props) => {
   const users = useSelector(state => state.users)
   const user = useSelector(state => state.user)
 
+
+  const userRouteMatch = useRouteMatch('/users/:id')
+  const userMatch = userRouteMatch
+    ? users.find(user => user.id === userRouteMatch.params.id)
+    : null
+
+
+  const blogRouteMatch = useRouteMatch('/blogs/:id')
+  const blogMatch = blogRouteMatch
+    ? blogs.find(blog => blog.id === blogRouteMatch.params.id)
+    : null
+
   useEffect(() => {
     dispatch(getLoggedInUser())
   }, [dispatch])
@@ -56,6 +68,7 @@ const App = (props) => {
     dispatch(initializeBlogs())
   }, [dispatch, user])
 
+
   //testng
   const state = useSelector(state => state)
   console.log('state ', state)
@@ -64,12 +77,14 @@ const App = (props) => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
+      const loggedInUser = dispatch(loginUser(username, password))
+      loggedInUser.then(user =>
+        console.log('user result: ', user.name)
+      )
       dispatch(loginUser(username, password))
-      //async wait Promise(dispatch(loginUser(username, password)))
       setUsername('')
       setPassword('')
       dispatch(setNotification('Login succeeded', 10))
-      console.log('user ', user)
     }
     catch (exception) {
       dispatch(setNotification('Wrong credentials', 10))
@@ -81,10 +96,6 @@ const App = (props) => {
     dispatch(logoutUser())
     window.location.href = '/'
   }
-
-  // const addBlog = (blogObject) => {
-  //   blogFormRef.current.toggleVisibility()
-  // }
 
   const blogFormRef = useRef()
 
@@ -128,86 +139,66 @@ const App = (props) => {
 
   let logInText = user.name !== undefined ? `${user.name} logged in` : ''
 
-  const userRouteMatch = useRouteMatch('/users/:id')
-  const userMatch = userRouteMatch
-    ? users.find(user => user.id === userRouteMatch.params.id)
-    : null
+  // const userRouteMatch = useRouteMatch('/users/:id')
+  // const userMatch = userRouteMatch
+  //   ? users.find(user => user.id === userRouteMatch.params.id)
+  //   : null
 
-  // console.log('userRouteMatch ', userRouteMatch)
-  // console.log('userMatch ', userMatch)
 
-  const blogRouteMatch = useRouteMatch('/blogs/:id')
-  const blogMatch = blogRouteMatch
-    ? blogs.find(blog => blog.id === blogRouteMatch.params.id)
-    : null
+  // const blogRouteMatch = useRouteMatch('/blogs/:id')
+  // const blogMatch = blogRouteMatch
+  //   ? blogs.find(blog => blog.id === blogRouteMatch.params.id)
+  //   : null
 
-  // console.log('blogs ', blogs)
-  // console.log('state ', state)
-  // console.log('blogRouteMatch ', blogRouteMatch)
-  // console.log('blogMatch ', blogMatch)
-
-  return (
-    <div>
-      <Menu/>
-      <Notification />
-      <h2>blogs</h2>
+  if (user !== null)
+    return (
       <div>
-        <p>{logInText}</p>
+        <Menu/>
+        <Notification />
+        <h2>blogs {user.name}</h2>
+        <div>
+          <p>{logInText}</p>
+        </div>
+        <div>
+          <button id='logout-button' onClick={handleLogout}>logout</button>
+        </div>
+        <Switch>
+          <Route path ="/users/:id">
+            <div>
+              <h2>User</h2>
+              <div>
+                <User user={userMatch} />
+              </div>
+            </div>
+          </Route>
+          <Route path ="/users/">
+            <div>
+              <h2>Users</h2>
+              <div>
+                <Users users={users} />
+              </div>
+            </div>
+          </Route>
+          <Route path ="/blogs/:id">
+            <div>
+              <h2>Blog</h2>
+              <div>
+                <Blog blog={blogMatch} />
+              </div>
+            </div>
+          </Route>
+          <Route path ="/blogs/">
+            <div>
+              <h2>Blogs</h2>
+              <div>
+                {blogForm()}
+              </div>
+              <Blogs blogs={blogs} />
+            </div>
+          </Route>
+        </Switch>
       </div>
-      <div>
-        <button id='logout-button' onClick={handleLogout}>logout</button>
-      </div>
-      <Switch>
-        <Route path ="/users/:id">
-          <div>
-            <h2>User</h2>
-            <div>
-              <User user={userMatch} />
-            </div>
-          </div>
-        </Route>
-        <Route path ="/users/">
-          <div>
-            <h2>Users</h2>
-            <div>
-              <Users users={users} />
-            </div>
-          </div>
-        </Route>
-        <Route path ="/blogs/:id">
-          <div>
-            <h2>Blog</h2>
-            <div>
-              <Blog blog={blogMatch} />
-            </div>
-          </div>
-        </Route>
-        <Route path ="/blogs/">
-          <div>
-            <h2>Blogs</h2>
-            <div>
-              {blogForm()}
-            </div>
-            <Blogs blogs={blogs} />
-          </div>
-        </Route>
-        {/* <Route path ="/users/:id">
-          <div>
-            <h2>Users</h2>
-            <div>
-              <Users users={users} />
-            </div>
-          </div>
-        </Route> */}
-        {/* <Route path ="/">
-          <div>
-            {blogForm()}
-          </div>
-          <Blogs blogs={blogs} />
-        </Route> */}
-      </Switch>
-    </div>
-  )
+    )
 
 }
 
