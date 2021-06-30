@@ -126,7 +126,7 @@ export const addCommentToBlog = (blog, blogComment) => {
   return async dispatch => {
     const updatedBlog = await blogService.addComment(blog, blogComment)
 
-    console.log('updatedBlog ', updatedBlog)
+    //console.log('updatedBlog ', updatedBlog)
 
     dispatch({
       type: 'ADD_COMMENT_TO_BLOG',
