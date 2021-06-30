@@ -18,7 +18,10 @@ blogsRouter.get('/', async (request, response) => {
     //  username: 1,
     //  name: 1
     //})
-   .find({}).populate('user')
+        .find({}).populate('user')
+        .find({}).populate('comments')
+
+    console.log('blogs ', blogs)
 
   response.json(blogs.map(blog => blog.toJSON()))
 })
