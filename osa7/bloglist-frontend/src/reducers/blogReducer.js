@@ -38,11 +38,9 @@ const blogReducer = (state = initialState,  action) => {
     }
   }
   case 'DELETE_BLOG':  {
-    const blogs = state.blogs.filter(n => n.id !== action.data.blogId)
-
+    const blogs = state.blogs.filter(n => n.id !== action.data)
     return {
-      blogs: blogs,
-      message: action.data.message
+      blogs: blogs
     }
   }
   case 'ADD_COMMENT_TO_BLOG':{
@@ -115,21 +113,11 @@ export const updateBlog = (blog) => {
 
 export const deleteBlog = (blog) => {
   return async dispatch => {
-    //const returnedStatus = await blogService.remove(blog.id)
-    // let message = null
-
-    // if (returnedStatus === 204)
-    // {
-    //   message = `Blog ${blog.title} by ${blog.author} deleted`
-    // }
-    // else
-    // {
-    //   message =`Delete blog ${blog.title} failed`
-    // }
+    await blogService.remove(blog.id)
 
     dispatch({
       type: 'DELETE_BLOG',
-      data: { blogId: blog.id }
+      data:  blog.id
     })
   }
 }

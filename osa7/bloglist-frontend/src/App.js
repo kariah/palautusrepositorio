@@ -13,18 +13,23 @@ import { initializeBlogs } from './reducers/blogReducer'
 import { loginUser, logoutUser, getLoggedInUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
-import { Button } from 'react-bootstrap'
+import { Button, Nav } from 'react-bootstrap'
 
 
 const Menu = () => {
-  const padding = {
-    paddingRight: 20
-  }
   return (
     <div>
-      <Link style={padding} to="/">Home</Link>
-      <Link style={padding} to="/blogs">Blogs </Link>
-      <Link style={padding} to="/users">Users </Link>
+      <Nav className="justify-content-center" variant="pills">
+        <Nav.Item>
+          <Nav.Link href="/home">Home</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link  href="/blogs">Blogs</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link  href="/users">Users</Nav.Link>
+        </Nav.Item>
+      </Nav>
     </div>
   )
 }
@@ -74,8 +79,8 @@ const App = (props) => {
   }, [dispatch, user])
 
   //testng
-  const state = useSelector(state => state)
-  console.log('state ', state)
+  // const state = useSelector(state => state)
+  // console.log('state ', state)
   //testing
 
   const handleLogin = async (event) => {
@@ -87,13 +92,12 @@ const App = (props) => {
       //   //console.log('user result: ', user.name)
       // )
       dispatch(loginUser(username, password))
-      dispatch(loginUser(username, password))
       setUsername('')
       setPassword('')
       dispatch(setNotification('Login succeeded', 10))
     }
     catch (exception) {
-      dispatch(setNotification('Wrong credentials', 10))
+      dispatch(setNotification('Wrong credentials', 10, true))
     }
   }
 
@@ -152,7 +156,7 @@ const App = (props) => {
         <Notification />
         <h2>blogs {user.name}</h2>
         <div>
-          <p>{logInText}</p>
+          <p><b>{logInText}</b></p>
         </div>
         <div>
           <Button id='logout-button' onClick={handleLogout}>logout</Button>

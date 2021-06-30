@@ -1,7 +1,7 @@
 import { setNotification } from '../reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
-
+import { Alert } from 'react-bootstrap'
 
 const Notification = () => {
   const notification = useSelector(state => state.notification)
@@ -12,16 +12,29 @@ const Notification = () => {
   }
 
   const dispatch = useDispatch()
-  let style = { display: 'none' }
+  // let style = { display: 'none' }
 
-  if (notification.message !== null)
-  {
-    style = {
-      border: 'solid',
-      padding: 10,
-      borderWidth: 1
-    }
-  }
+  // if (notification.message !== null)
+  // {
+  // if (!notification.isError)
+  // {
+  //   style = {
+  //     border: 'solid',
+  //     padding: 10,
+  //     borderWidth: 1,
+  //   }
+  // }
+  // else
+  // {
+  //   style = {
+  //     border: 'solid',
+  //     padding: 10,
+  //     borderWidth: 1,
+  //     backgroundColor: 'red',
+  //     color: 'white'
+  //   }
+  //}
+  // }
 
   const visibilityTimeout = notification.timeInSeconds * 1000
 
@@ -29,12 +42,25 @@ const Notification = () => {
     dispatch(setNotification(null))
   }, visibilityTimeout)
 
-
-  return (
-    <div style={style}>
-      {notification.message}
-    </div>
-  )
+  if (!notification.isError)
+  {
+    return (
+      <Alert variant='success'>
+        <div>
+          {notification.message}
+        </div>
+      </Alert>
+    )
+  }
+  else
+  {
+    return (
+      <Alert variant='danger'>
+        <div>
+          {notification.message}
+        </div>
+      </Alert>)
+  }
 }
 
 export default Notification

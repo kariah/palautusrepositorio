@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { updateBlog, deleteBlog, addCommentToBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
-import { Button } from 'react-bootstrap'
+import { Button, ListGroup } from 'react-bootstrap'
 
 const Blog = ({ blog }) => {
 
@@ -16,18 +16,6 @@ const Blog = ({ blog }) => {
   const history = useHistory()
 
   const user = useSelector(state => state.user)
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    borderWidth: 1,
-    paddingBottom: 5,
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
-    border: '1px solid #cfcab4'
-  }
 
   const updateLikes = (event) => {
     event.preventDefault()
@@ -46,9 +34,9 @@ const Blog = ({ blog }) => {
       blog.likes = blogObject.likes
 
       dispatch(updateBlog(blogObject))
-      dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} - likes updated`, 10))
+      dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} likes updated`, 10))
     } catch (e) {
-      dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} - update like failed`, 10))
+      dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} update like failed`, 10, true))
     }
   }
 
@@ -66,7 +54,7 @@ const Blog = ({ blog }) => {
         return
       }
     } catch (e) {
-      dispatch(setNotification(`Remove blog ${blog.title} failed`, 10))
+      dispatch(setNotification(`Remove blog ${blog.title} failed`, 10, true))
     }
   }
 
@@ -95,25 +83,25 @@ const Blog = ({ blog }) => {
       dispatch(addCommentToBlog(blog, comment))
       setComment('')
     } catch (e) {
-      dispatch(setNotification(`Add comment to blog ${blog.title} failed`, 10))
+      dispatch(setNotification(`Add comment to blog ${blog.title} failed`, 10, true))
     }
   }
 
   return (
-    <div style={blogStyle}>
+    <div>
       <div id='blog-title' className='title blog-title'>{blog.title}</div>
       <div className='author'>{blog.author}</div>
       <div>
         <div>
           <div className='url'>{blog.url}</div>
-          <div id='likes-div' className='likes'>likes {blog.likes} <button id='update-likes-button' className='update-likes-button'  onClick={updateLikes}>like</button></div>
+          <div id='likes-div' className='likes'>likes {blog.likes} <Button id='update-likes-button' className='update-likes-button'  onClick={updateLikes}>like</Button></div>
           <RemoveButton blogUser={blog.user} />
         </div>
       </div>
       <div>
-        <h3>Comments</h3>
+        <h4>Comments</h4>
         <form onSubmit = {addComment}>
-                Comment:
+                Comment
           <input
             value={comment}
             onChange={handleCommentChange}
@@ -122,7 +110,10 @@ const Blog = ({ blog }) => {
           <Button type="submit">Add comment</Button>
         </form>
       </div>
-      <div>List of comments here  blog.comments.map jne</div>
+      <ListGroup>
+        {blog.comments.map((comment) =>
+          <ListGroup.Item key={comment.id}>{comment.content}</ListGroup.Item>)}
+      </ListGroup>
     </div>
   )
 }

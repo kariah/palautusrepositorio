@@ -33,3 +33,14 @@ code {
     padding: 10px;
     margin-bottom: 10px;
 }
+ 
+.btn, input
+{
+  margin: 2px;
+}
+
+.btn-primary {
+  color: #000;
+  background-color: #00ff62;
+  border-color: #33ff00;
+}

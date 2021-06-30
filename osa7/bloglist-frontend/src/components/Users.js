@@ -3,8 +3,6 @@ import { Table } from 'react-bootstrap'
 
 const Users = ({ users }) => {
 
-  console.log('users (Users) ', users)
-
   if (users === null)
   {
     return <></>
@@ -12,10 +10,10 @@ const Users = ({ users }) => {
 
   return (
     <div>
-      <Table striped bordered hover variant="dark" responsive>
+      <Table striped bordered hover size="sm" responsive>
         <thead>
           <tr>
-            <td></td>
+            <td>User</td>
             <td><b>Blogs created</b></td>
           </tr>
         </thead>

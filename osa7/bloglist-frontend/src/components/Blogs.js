@@ -12,7 +12,7 @@ const Blogs = ({ blogs, user }) => {
   }
 
   return (
-    <Table striped bordered hover variant="dark" responsive>
+    <Table striped bordered hover size="sm" responsive>
       <thead>
         <tr>
           <td>Blog name</td>

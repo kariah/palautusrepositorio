@@ -8,13 +8,14 @@ const notificationReducer = (state = '', action) => {
   }
 }
 
-export const setNotification = (message, timeInSeconds = 10) => {
+export const setNotification = (message, timeInSeconds = 10, isError = false) => {
   return async dispatch => {
     dispatch({
       type: 'SET_NOTIFICATION',
       data: {
         message: message,
-        timeInSeconds: timeInSeconds
+        timeInSeconds: timeInSeconds,
+        isError: isError
       }
     })
   }
