@@ -16,14 +16,6 @@ const Blog = ({ blog }) => {
 
   const user = useSelector(state => state.user)
 
-  // console.log('blog from Route ', blog)
-  // console.log('user (blog) ', user)
-
-  // const [blogDetailsVisible, setBlogDetailsVisible] = useState(false)
-  // const hideBlogDetailsWhenVisible = { display: blogDetailsVisible ? 'none' : '' }
-  // const showBlogDetailsWhenVisible = { display: blogDetailsVisible ? '' : 'none' }
-
-
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -48,10 +40,15 @@ const Blog = ({ blog }) => {
       user: user
     }
 
-    blog.likes = blogObject.likes
+    try {
 
-    dispatch(updateBlog(blogObject))
-    dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} - likes updated`, 10))
+      blog.likes = blogObject.likes
+
+      dispatch(updateBlog(blogObject))
+      dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} - likes updated`, 10))
+    } catch (e) {
+      dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} - update like failed`, 10))
+    }
   }
 
   const removeBlog = (event) => {
@@ -59,12 +56,16 @@ const Blog = ({ blog }) => {
 
     let dialogResult = window.confirm(`Remove blog ${blog.title}?`)
 
-    if (dialogResult === true) {
-      dispatch(deleteBlog(blog))
-      history.push('/')
-    }
-    else {
-      return
+    try {
+      if (dialogResult === true) {
+        dispatch(deleteBlog(blog))
+        history.push('/')
+      }
+      else {
+        return
+      }
+    } catch (e) {
+      dispatch(setNotification(`Remove blog ${blog.title} failed`, 10))
     }
   }
 
@@ -88,10 +89,13 @@ const Blog = ({ blog }) => {
 
   const addComment = (event) => {
     event.preventDefault()
-    // console.log('blog (addComment) ', blog)
-    // console.log('comment ', comment)
-    dispatch(addCommentToBlog(blog, comment))
-    setComment('')
+    try
+    {
+      dispatch(addCommentToBlog(blog, comment))
+      setComment('')
+    } catch (e) {
+      dispatch(setNotification(`Add comment to blog ${blog.title} failed`, 10))
+    }
   }
 
   return (

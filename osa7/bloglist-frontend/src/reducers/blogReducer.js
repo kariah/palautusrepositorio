@@ -98,8 +98,7 @@ export const createBlog = (blog) => {
       data: newBlog,
     })
 
-    //voidaan käyttää paluuarvona
-    //return newBlog
+    return newBlog
   }
 }
 

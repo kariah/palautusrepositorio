@@ -4,7 +4,6 @@ import { setNotification } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
 // import PropTypes from 'prop-types'
 
-// eslint-disable-next-line no-unused-vars
 const BlogForm = ({ user }) => {
   const dispatch = useDispatch()
 

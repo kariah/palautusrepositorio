@@ -7,14 +7,16 @@ const User = ({ user }) => {
     return null
   }
 
-  if (!user.blogs === 0) {
-    <div>
-      <h2>{user.name}</h2>
-      <h3>User has no blogs</h3>
-    </div>
+  const blogs = user.blogs
+
+  if (blogs.length === 0) {
+    return (
+      <div>
+        <h2>{user.name}</h2>
+        <h3>User has no blogs</h3>
+      </div>)
   }
 
-  const blogs = user.blogs
   function Bloglist(props) {
     const blogs = props.blogs
     const list = blogs.map((blog) =>
@@ -30,7 +32,7 @@ const User = ({ user }) => {
     <div>
       <h2>{user.name}</h2>
       <h3>Added blogs</h3>
-      <div><Bloglist blogs={blogs}></Bloglist></div>
+      <div><Bloglist blogs={blogs}></Bloglist>{console.log('blogs (user) ', blogs)}</div>
       {/* <div>
         {blogs.map(blog => <UserBlog key={blog.id} course={blog} />)}
       </div>  */}

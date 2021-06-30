@@ -65,9 +65,11 @@ const App = (props) => {
   }, [dispatch])
 
   useEffect(() => {
-    dispatch(initializeBlogs())
+    if (user !== null)
+    {
+      dispatch(initializeBlogs())
+    }
   }, [dispatch, user])
-
 
   //testng
   const state = useSelector(state => state)
@@ -77,10 +79,12 @@ const App = (props) => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const loggedInUser = dispatch(loginUser(username, password))
-      loggedInUser.then(user =>
-        console.log('user result: ', user.name)
-      )
+      //testing
+      //const loggedInUser = dispatch(loginUser(username, password))
+      // loggedInUser.then(user =>
+      //   //console.log('user result: ', user.name)
+      // )
+      dispatch(loginUser(username, password))
       dispatch(loginUser(username, password))
       setUsername('')
       setPassword('')
@@ -138,17 +142,6 @@ const App = (props) => {
   }
 
   let logInText = user.name !== undefined ? `${user.name} logged in` : ''
-
-  // const userRouteMatch = useRouteMatch('/users/:id')
-  // const userMatch = userRouteMatch
-  //   ? users.find(user => user.id === userRouteMatch.params.id)
-  //   : null
-
-
-  // const blogRouteMatch = useRouteMatch('/blogs/:id')
-  // const blogMatch = blogRouteMatch
-  //   ? blogs.find(blog => blog.id === blogRouteMatch.params.id)
-  //   : null
 
   if (user !== null)
     return (
