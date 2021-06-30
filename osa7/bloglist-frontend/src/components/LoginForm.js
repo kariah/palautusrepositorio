@@ -9,8 +9,8 @@ import loginService from '../services/login'
 
 
 const LoginForm = () => {
-  const [username, setUsername] = useState('khtest5')
-  const [password, setPassword] = useState('passu5')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
   const dispatch = useDispatch()
 
