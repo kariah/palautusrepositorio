@@ -3,14 +3,16 @@ import React, { useState, useEffect, useRef } from 'react'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import LoginForm from './components/LoginForm'
 import Users from './components/Users'
 import User from './components/User'
 import Blogs from './components/Blogs'
 import Blog from './components/Blog'
 import { useDispatch, useSelector } from 'react-redux'
-import { setNotification } from './reducers/notificationReducer'
+// import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
-import { loginUser, logoutUser, getLoggedInUser } from './reducers/userReducer'
+// import { loginUser, logoutUser, getLoggedInUser } from './reducers/userReducer'
+import { logoutUser, getLoggedInUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
 import { Button, Nav } from 'react-bootstrap'
@@ -78,29 +80,6 @@ const App = (props) => {
     }
   }, [dispatch, user])
 
-  //testng
-  // const state = useSelector(state => state)
-  // console.log('state ', state)
-  //testing
-
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    try {
-      //testing
-      //const loggedInUser = dispatch(loginUser(username, password))
-      // loggedInUser.then(user =>
-      //   //console.log('user result: ', user.name)
-      // )
-      dispatch(loginUser(username, password))
-      setUsername('')
-      setPassword('')
-      dispatch(setNotification('Login succeeded', 10))
-    }
-    catch (exception) {
-      dispatch(setNotification('Wrong credentials', 10, true))
-    }
-  }
-
   const handleLogout = async (event) => {
     event.preventDefault()
     dispatch(logoutUser())
@@ -119,31 +98,7 @@ const App = (props) => {
 
   if (user === null) {
     return (
-      <div className="container">
-        <Notification />
-        <h2>Login</h2>
-        <form onSubmit={handleLogin}>
-          <div>
-                        username
-            <input id='username'
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-                        password
-            <input  id='password'
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <Button  id='login-button' type="submit">login</Button>
-        </form>
-      </div>
+      <LoginForm></LoginForm>
     )
   }
 

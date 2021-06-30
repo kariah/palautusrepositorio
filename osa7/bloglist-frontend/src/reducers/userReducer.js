@@ -1,5 +1,5 @@
 // import userService from './services/users'
-import loginService from '../services/login'
+// import loginService from '../services/login'
 import blogService from '../services/blogs'
 
 
@@ -37,12 +37,32 @@ export const getLoggedInUser = () => {
   }
 }
 
-export const loginUser = (username, password) => {
-  return async dispatch => {
-    const user = await loginService.login({
-      username, password,
-    })
+//Tämä oli väärin alkuperäisessä palautuksessa!
+// export const loginUser = (username, password) => {
+//   return async dispatch => {
+//     const user = await loginService.login({
+//       username, password,
+//     })
 
+//     if (user !== null)
+//     {
+//       blogService.setToken(user.token)
+//       window.localStorage.setItem(
+//         'loggedBlogappUser', JSON.stringify(user)
+//       )
+//     }
+
+//     dispatch({
+//       type: 'LOGIN_USER',
+//       data: user,
+//     })
+
+//     return user
+//   }
+// }
+
+export const loginUser = (user) => {
+  return async dispatch => {
     if (user !== null)
     {
       blogService.setToken(user.token)
@@ -55,11 +75,8 @@ export const loginUser = (username, password) => {
       type: 'LOGIN_USER',
       data: user,
     })
-
-    return user
   }
 }
-
 
 export const logoutUser = () => {
   return async dispatch => {
