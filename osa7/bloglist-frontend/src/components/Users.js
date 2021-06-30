@@ -1,34 +1,18 @@
 import React from 'react'
-// import _, {  } from 'lodash'
+import { Table } from 'react-bootstrap'
 
 const Users = ({ users }) => {
 
   console.log('users (Users) ', users)
-
-  //Testing
-  // const result = _(blogs)
-  //   .groupBy('author')
-  //   .map((author, id) => ({
-  //     author: id,
-  //     blogCount: _.countBy(author, 'author')
-  //   }))
-  //   .value()
-
-  // console.log(result)
 
   if (users === null)
   {
     return <></>
   }
 
-  // if (users === undefined || users === null || users.blogs === undefined || users.blogs.length === 0)
-  // {
-  //   return <></>
-  // }
-
   return (
     <div>
-      <table>
+      <Table striped bordered hover variant="dark" responsive>
         <thead>
           <tr>
             <td></td>
@@ -44,7 +28,7 @@ const Users = ({ users }) => {
             </tr>
           )}
         </tbody>
-      </table>
+      </Table>
     </div>
   )
 }

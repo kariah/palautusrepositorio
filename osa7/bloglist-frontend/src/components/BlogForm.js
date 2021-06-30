@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
+import { Button } from 'react-bootstrap'
 // import PropTypes from 'prop-types'
 
 const BlogForm = ({ user }) => {
@@ -19,14 +20,17 @@ const BlogForm = ({ user }) => {
       user: user
     }
 
-    dispatch(createBlog(blogObject))
-    // console.log('addedBlog ', addedBlog)
+    try
+    {
+      dispatch(createBlog(blogObject))
+      dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} added`, 10))
 
-    dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} added`, 10))
+      setNewBlog({})
 
-    setNewBlog({})
-
-    event.target.reset()
+      event.target.reset()
+    } catch (e) {
+      dispatch(setNotification(`Blog ${blogObject.title} by ${blogObject.author} add failed`, 10))
+    }
   }
 
   const handleBlogChange = (event) => {
@@ -55,7 +59,7 @@ const BlogForm = ({ user }) => {
             likes: <input id='likes' type="number" name="likes" onChange={handleBlogChange} />
         </div>
         <div>
-          <button  id='save-button' className='submit-form' type="submit">save</button>
+          <Button  id='save-button' className='submit-form' type="submit">save</Button>
         </div>
       </form>
     </div>

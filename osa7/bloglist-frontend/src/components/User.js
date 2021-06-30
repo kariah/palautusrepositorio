@@ -32,10 +32,7 @@ const User = ({ user }) => {
     <div>
       <h2>{user.name}</h2>
       <h3>Added blogs</h3>
-      <div><Bloglist blogs={blogs}></Bloglist>{console.log('blogs (user) ', blogs)}</div>
-      {/* <div>
-        {blogs.map(blog => <UserBlog key={blog.id} course={blog} />)}
-      </div>  */}
+      <div><Bloglist blogs={blogs}></Bloglist>{console.log('blogs (user) ', blogs)}</div> 
     </div>
   )
 }

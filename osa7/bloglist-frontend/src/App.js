@@ -13,6 +13,8 @@ import { initializeBlogs } from './reducers/blogReducer'
 import { loginUser, logoutUser, getLoggedInUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
+import { Button } from 'react-bootstrap'
+
 
 const Menu = () => {
   const padding = {
@@ -113,7 +115,7 @@ const App = (props) => {
 
   if (user === null) {
     return (
-      <div>
+      <div className="container">
         <Notification />
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
@@ -135,7 +137,7 @@ const App = (props) => {
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button  id='login-button' type="submit">login</button>
+          <Button  id='login-button' type="submit">login</Button>
         </form>
       </div>
     )
@@ -145,7 +147,7 @@ const App = (props) => {
 
   if (user !== null)
     return (
-      <div>
+      <div className="container">
         <Menu/>
         <Notification />
         <h2>blogs {user.name}</h2>
@@ -153,7 +155,7 @@ const App = (props) => {
           <p>{logInText}</p>
         </div>
         <div>
-          <button id='logout-button' onClick={handleLogout}>logout</button>
+          <Button id='logout-button' onClick={handleLogout}>logout</Button>
         </div>
         <Switch>
           <Route path ="/users/:id">

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { updateBlog, deleteBlog, addCommentToBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import { Button } from 'react-bootstrap'
 
 const Blog = ({ blog }) => {
 
@@ -73,7 +74,7 @@ const Blog = ({ blog }) => {
     if (blogUser.id === user.id)
     {
       return <div>
-        <button id='remove-button' onClick={removeBlog}>remove</button>
+        <Button id='remove-button' onClick={removeBlog}>remove</Button>
       </div>
     }
     else
@@ -103,18 +104,6 @@ const Blog = ({ blog }) => {
       <div id='blog-title' className='title blog-title'>{blog.title}</div>
       <div className='author'>{blog.author}</div>
       <div>
-        {/* <div style={hideBlogDetailsWhenVisible}>
-          <button id='view-button' className='view-button' onClick={() => setBlogDetailsVisible(true)}>View</button>
-        </div>
-        <div style={showBlogDetailsWhenVisible}>
-          <div className='url'>{blog.url}</div>
-          <div id='likes-div' className='likes'>likes {blog.likes} <button id='update-likes-button' className='update-likes-button'  onClick={updateLikes}>like</button></div>
-          <div>
-            <button  id='hide-button' className='hide-button' onClick={() => setBlogDetailsVisible(false)}>Hide</button>
-          </div>
-          <div>
-          <button id='view-button' className='view-button' onClick={() => setBlogDetailsVisible(true)}>View</button>
-        </div> */}
         <div>
           <div className='url'>{blog.url}</div>
           <div id='likes-div' className='likes'>likes {blog.likes} <button id='update-likes-button' className='update-likes-button'  onClick={updateLikes}>like</button></div>
@@ -130,7 +119,7 @@ const Blog = ({ blog }) => {
             onChange={handleCommentChange}
             id="comment"
           />
-          <button type="submit">Add comment</button>
+          <Button type="submit">Add comment</Button>
         </form>
       </div>
       <div>List of comments here  blog.comments.map jne</div>
