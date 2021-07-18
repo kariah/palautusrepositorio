@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server')
 const { ApolloServerPluginSchemaReporting } = require('apollo-server-core/dist/plugin/schemaReporting')
-// const { v1: uuid } = require('uuid')
+const { v1: uuid } = require('uuid')
 
 let authors = [
   {
@@ -91,15 +91,15 @@ let books = [
 const typeDefs = gql`
   type Author {
     name: String!
-    born: Int!,
-    id: String!,
+    born: Int
+    id: String!
     bookCount: Int!
   }
 
   type Book {
     title: String!
-    published: Int!,
-    author: String!,
+    published: Int!
+    author: String!
     id: String!
     genres: [String!]
   }  
@@ -110,7 +110,16 @@ const typeDefs = gql`
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
   }
-`  
+
+  type Mutation {
+    addBook(
+      title: String!
+      author: String
+      published: Int!
+      genres: [String!]
+    ): Book 
+  }
+`   
 
 const resolvers = {
   Query: {
@@ -135,8 +144,29 @@ const resolvers = {
   },  
    Author: {
     bookCount: (root) => books.filter(b => b.author === root.name).length
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      if (books.find(b => b.title === args.title)) {
+        throw new UserInputError('Title must be unique', {
+          invalidArgs: args.title,
+        })
+      }
+
+      const book = { ...args, id: uuid() }   
+      books = books.concat(book)
+ 
+      //If author needed to add
+      if (!authors.find(a => a.name === args.author)) { 
+        const author = { ...args, name: args.author, id: uuid() }   
+        authors = authors.concat(author) 
+      } 
+
+      return book
+    },
   } 
 } 
+ 
 
 const server = new ApolloServer({
   typeDefs,
