@@ -111,17 +111,6 @@ const typeDefs = gql`
   }
 `  
 
-  // type AuthorsAndBookCount {
-  //   name: String!,
-  //   bookCount:  Int!
-  // }
-
-// type booksByAuthor {
-//   street: String!
-//   city: String! 
-// }
-// booksCount: Int!, 
-
 const resolvers = {
   Query: {
     booksCount: () => books.length,
@@ -132,33 +121,11 @@ const resolvers = {
     allAuthors: (root) => {  
       return authors 
     } 
-  }, 
-  // Author: {
-  //   bookCount: (books) => 11 
-  // } 
+  },  
    Author: {
     bookCount: (root) => books.filter(b => b.author === root.name).length
   } 
-}
-
-// Author: {
-//   bookCount = books.filter(b => b.author === authors.name).length
-// },
-
-// const booksByAuthor = books.find(p => p.name === args.name)
-// if (!person) {
-//   return null
-// }
-// return authors.name 
-
-// Author: {
-//   address: (root) => {
-//     return { 
-//       name: root.street,
-//       city: root.city
-//     }
-//   }
-// },
+} 
 
 const server = new ApolloServer({
   typeDefs,
