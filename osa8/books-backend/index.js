@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServerPluginSchemaReporting } = require('apollo-server-core/dist/plugin/schemaReporting')
 // const { v1: uuid } = require('uuid')
 
 let authors = [
@@ -106,7 +107,7 @@ const typeDefs = gql`
   type Query {
     booksCount: Int!,
     authorsCount: Int!
-    allBooks: [Book!]!
+    allBooks(author: String!): [Book!]!
     allAuthors: [Author!]!
   }
 `  
@@ -115,12 +116,17 @@ const resolvers = {
   Query: {
     booksCount: () => books.length,
     authorsCount: () => authors.length,
-    allBooks: (root) => { 
-      return books 
+    // allBooks: (root, args) => { 
+    //   return books 
+    // }, 
+    allBooks: (root, args) => {    
+      //return books.filter(a => a.author === args.author)
+      return books.filter(
+        book => book.author === args.author)
     }, 
     allAuthors: (root) => {  
-      return authors 
-    } 
+      return authors  
+    }  
   },  
    Author: {
     bookCount: (root) => books.filter(b => b.author === root.name).length
