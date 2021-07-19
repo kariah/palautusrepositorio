@@ -9,9 +9,13 @@ import { ALL_BOOKS } from './queries'
 
 const App = () => {
   const resultAuthors = useQuery(ALL_AUTHORS)
+  // const resultAuthors = useQuery(ALL_AUTHORS, {
+  //   pollInterval: 2000
+  // })
+
   const resultBooks = useQuery(ALL_BOOKS)
+
   const [page, setPage] = useState('authors')
- 
   
   if (resultAuthors.loading || resultBooks.loading)  {
     return <div>loading...</div>

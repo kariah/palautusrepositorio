@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { CREATE_BOOK, ALL_BOOKS } from '../queries'
@@ -12,10 +13,9 @@ const NewBook = (props) => {
   const [ createBook ] = useMutation(CREATE_BOOK, {
     refetchQueries: [ { query: ALL_BOOKS } ],
     onError: (error) => {
-      console.log(error.graphQLErrors[0].message)
-      // setError(error.graphQLErrors[0].message)
+      console.log(error.graphQLErrors[0].message) 
     }
-  })
+  }) 
   if (!props.show) {
     return null
   }
