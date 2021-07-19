@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Select from 'react-select'
 import { useMutation } from '@apollo/client'
 
 import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries'
@@ -7,25 +8,28 @@ const Authors = (props) => {
   const [name, setName] = useState('')
   const [birthyear, setBirthyear] = useState('')
   
+  const setError = props.setError
   // const [ changeBirthyear, result ] = useMutation(EDIT_AUTHOR)
 
-  const [ changeBirthyear, result ] = useMutation(EDIT_AUTHOR, {
+  const [ changeBirthyear, result ] = useMutation(EDIT_AUTHOR, { 
     refetchQueries: [ { query: ALL_AUTHORS } ],
     onError: (error) => {
       console.log(error.graphQLErrors[0].message) 
     }
   }) 
 
-  useEffect(() => {
-    if (result.data && result.data.born === null) {
+  useEffect(() => { 
+    console.log('result.data ', result.data)
+    if (result.data && result.data.editAuthor === null) {
       console.log('author not found')
+      setError('Author not found')
     }
   }, [result.data])  // eslint-disable-line 
 
   if (!props.show) {
     return null
   }
-  const authors = props.authors
+  const authors = props.authors 
 
   const submit = async (event) => {
     event.preventDefault()
@@ -35,7 +39,7 @@ const Authors = (props) => {
 
     setName('')
     setBirthyear('')
-  }
+  } 
 
   return (
     <div>
@@ -71,11 +75,18 @@ const Authors = (props) => {
           />
         </div>
         <div>born
-        <input
+        <select value={birthyear}  onChange={({ target }) => setBirthyear(parseInt(target.value))}>
+            <option selected value="">Valitse</option>
+            <option value="1980">1980</option>
+            <option value="1981">1981</option>
+            <option value="1982">1982</option>
+      </select>
+ 
+        {/* <input
             type='number'
             value={birthyear}
             onChange={({ target }) => setBirthyear(parseInt(target.value))}
-          />
+          /> */}
         </div>
         <div><button type='submit'>Update author</button></div>
       </div>  
