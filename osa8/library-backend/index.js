@@ -157,71 +157,59 @@ const resolvers = {
   Query: {
     booksCount: () => Book.collection.countDocuments(),
     authorsCount: () => Author.collection.countDocuments(),
-    allBooks: (root, args) => {    
-      let booksToFilter = books
-      if (args.author)
-      {
-        booksToFilter = booksToFilter.filter(book => book.author === args.author)
-      }
+    allBooks: async (root, args) => {    
+      // let booksToFilter = await Book.find()   
+      // if (args.author)
+      // {
+      //   booksToFilter = booksToFilter.filter(book => book.author === args.author) 
+      // }
+      // if (args.genre)
+      // {
+      //   booksToFilter = booksToFilter.filter(book => book.genres.includes(args.genre))   
+      // }  
+      // return booksToFilter 
+
       if (args.genre)
+      {  
+          return await Book.find( { genres: { $in: [ args.genre ] } } ) 
+      }
+      else
       {
-        booksToFilter = booksToFilter.filter(book => book.genres.includes(args.genre))   
-      } 
-      
-      return booksToFilter 
+          return await Book.find()
+      }
     }, 
-    allAuthors: (root) => {  
-      return authors  
+    allAuthors: async (root) => {    
+      return Author.find()
     }  
   },  
-   Author: {
-    bookCount: (root) => books.filter(b => b.author === root.name).length
+  Author: {
+    bookCount: async (root) => { 
+      const booksByAuthor = await Book.find({author: root.id}) 
+      // console.log('booksByAuthor: ', booksByAuthor)
+      // console.log('bookCount: ', booksByAuthor.length)
+      return booksByAuthor.length
+    }
   },
-  Mutation: {
-    // addBook: (root, args) => {
-    //   if (books.find(b => b.title === args.title)) {
-    //     throw new UserInputError('Title must be unique', {
-    //       invalidArgs: args.title,
-    //     })
-    //   }
-
-    //   const book = { ...args, id: uuid() }   
-    //   books = books.concat(book)
- 
-    //   //If author needed to add
-    //   if (!authors.find(a => a.name === args.author)) { 
-    //     const author = { ...args, name: args.author, id: uuid() }   
-    //     authors = authors.concat(author) 
-    //   } 
-
-    //   return book
-    // },
-
+  Mutation: { 
     addBook: async (root, args, context) => {
       const book = new Book({ ...args })
-
-      // const currentUser = context.currentUser
-  
-      // if (!currentUser) {
-      //   throw new AuthenticationError("not authenticated")
-      // }
-  
-      try {
-        let author = new Author({ ...args, name: args.author })
-
-        //If author needed to add
-        addedAuthor = await Author.find({ name: args.author }) 
  
-        if (addedAuthor.length === 0) {  
-          // author = { ...args, name: args.author, id: uuid() }   
-          //authors = authors.concat(author) 
-          author = await author.save() 
+      try { 
+        let author = await Author.findOne ({ name: args.author }) 
+       
+        if (!author) {   
+          author = new Author({ ...args, name: args.author })
+          await author.save() 
+          book.author = author
+          console.log('author uusi ', author)
         } 
- 
-        book.author = author
-        await book.save()
-        //currentUser.friends = currentUser.friends.concat(person)
-        //await currentUser.save()
+        else
+        { 
+          book.author = author
+          console.log('author ok ', author)
+        }
+        
+        await book.save() 
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
@@ -231,24 +219,22 @@ const resolvers = {
       return book
     },
 
-    editAuthor: (root, args) => {
-      const author = authors.find(a => a.name === args.name)
-      if (!author) {
-        return null
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name })
+      author.born = args.setBornTo
+
+      try {
+        await author.save()
+        return author
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
       }
-  
-      const updatedAuthor = { ...author, born: args.setBornTo }
-      authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
-      return updatedAuthor
     }  
   } 
 } 
- 
-
-// const server = new ApolloServer({
-//   typeDefs,
-//   resolvers,
-// })
+  
 const server = new ApolloServer({
   typeDefs,
   resolvers,
