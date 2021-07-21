@@ -96,11 +96,11 @@ const resolvers = {
 
       if (args.genre)
       {  
-          return await Book.find( { genres: { $in: [ args.genre ] } } ) 
+          return await Book.find( { genres: { $in: [ args.genre ] } } ).populate('author', { name: 1 }) 
       }
       else
       {
-          return await Book.find()
+          return await Book.find().populate('author', { name: 1 })
       }
     }, 
     allAuthors: async (root) => {    
@@ -145,10 +145,18 @@ const resolvers = {
     },
 
     editAuthor: async (root, args, context) => {
+      // console.log('context ', context)
+      console.log('test')
+      console.log('context ', context)
+
       const currentUser = context.currentUser
+
+      console.log('currentUser ', currentUser)
+
       if (!currentUser) {
         throw new AuthenticationError("not authenticated")
       }
+
       const author = await Author.findOne({ name: args.name })
       author.born = args.setBornTo
 
@@ -195,21 +203,23 @@ const resolvers = {
   
 const server = new ApolloServer({
   typeDefs,
-  resolvers,
+  resolvers, 
   context: async ({ req }) => {
+
     const auth = req ? req.headers.authorization : null
+
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
-      const decodedToken = jwt.verify(
+       const decodedToken = jwt.verify(
         auth.substring(7), JWT_SECRET
       )
+
       const currentUser = await User
-      .findById(decodedToken.id)
-      //.populate('friends')
+      .findById(decodedToken.id) 
       return { currentUser }
     }
   }
 })
-
+ 
 server.listen().then(({ url }) => {
   console.log(`Server ready at ${url}`)
 })
