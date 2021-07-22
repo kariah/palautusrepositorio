@@ -120,8 +120,8 @@ const Authors = (props) => {
               />
             </div>
             <div>born
-            <select  defaultValue={'DEFAULT'}  value={birthyear}  onChange={({ target }) => setBirthyear(parseInt(target.value))}>
-                <option value="DEFAULT" >Valitse</option>
+            <select  defaultValue={birthyear} onChange={({ target }) => setBirthyear(parseInt(target.value))}>
+                <option value="Valitse" >Valitse</option>
                 <option value="1980">1980</option>
                 <option value="1981">1981</option>
                 <option value="1982">1982</option>

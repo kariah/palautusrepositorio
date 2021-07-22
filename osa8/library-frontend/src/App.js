@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
-import { useQuery } from '@apollo/client'
+import { useQuery, useApolloClient } from '@apollo/client'
 
 import { ALL_AUTHORS } from './queries'
 import { ALL_BOOKS } from './queries'
@@ -28,6 +28,7 @@ const App = () => {
 
   const [errorMessage, setErrorMessage] = useState(null)
   const [token, setToken] = useState(null)
+  const client = useApolloClient()
 
   const notify = (message) => {
     setErrorMessage(message)
@@ -35,26 +36,34 @@ const App = () => {
       setErrorMessage(null)
     }, 10000)
   }
-   
+  
+  useEffect(() => {
+    const localStorageToken = window.localStorage.getItem('library-user-token') 
+    if (localStorageToken !== null)
+    {
+      setToken(localStorageToken) 
+    }
+  }, [])
+
   const [page, setPage] = useState('authors')
   
   if (resultAuthors.loading || resultBooks.loading)  {
     return <div>loading...</div>
   }
   
-  // let loggedInVisibility = {} 
-  // if (!token) 
-  // {
-  //   loggedInVisibility = { display: 'none' }
-  // }
+  console.log('token ', token)
+
+  const logout = () => {
+    setToken(null)
+    localStorage.clear()
+    client.resetStore()
+  }
 
 
   const LoggingButtons = () => { 
     if (!token) {
-      return ( 
-      
+      return (  
           <button onClick={() => setPage('login')}>login</button> 
-      
       )
     }
     else
@@ -62,7 +71,7 @@ const App = () => {
       return ( 
        <>
           <button onClick={() => setPage('add')}>add book</button>
-          <button>logout</button>
+          <button  onClick={logout}>logout</button>
        </> 
       )
     }
