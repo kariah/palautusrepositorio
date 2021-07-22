@@ -105,7 +105,14 @@ const resolvers = {
     }, 
     allAuthors: async (root) => {    
       return Author.find()
-    }  
+    },
+    me: (root, args, context) => {
+      const currentUser = context.currentUser
+      if (!currentUser) {
+        throw new AuthenticationError("not authenticated")
+      }
+      return currentUser
+    }
   },  
   Author: {
     bookCount: async (root) => { 
@@ -144,14 +151,8 @@ const resolvers = {
       return book
     },
 
-    editAuthor: async (root, args, context) => {
-      // console.log('context ', context)
-      console.log('test')
-      console.log('context ', context)
-
-      const currentUser = context.currentUser
-
-      console.log('currentUser ', currentUser)
+    editAuthor: async (root, args, context) => { 
+      const currentUser = context.currentUser 
 
       if (!currentUser) {
         throw new AuthenticationError("not authenticated")
