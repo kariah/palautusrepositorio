@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Select from 'react-select'
 import { useMutation } from '@apollo/client'
 
 import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries'
@@ -7,9 +6,18 @@ import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries'
 const Authors = (props) => {
   const [name, setName] = useState('')
   const [birthyear, setBirthyear] = useState('')
+  const isUserLoggedIn = props.isUserLoggedIn
   
-  const setError = props.setError
-  // const [ changeBirthyear, result ] = useMutation(EDIT_AUTHOR)
+  let loggedInVisibility = {} 
+  if (!isUserLoggedIn)
+  {
+    loggedInVisibility = { display: 'none' }
+  }
+
+  // console.log('isUserLoggedIn ', isUserLoggedIn)
+  // console.log('loggedInVisibility ', loggedInVisibility)
+
+  const setError = props.setError 
 
   const [ changeBirthyear, result ] = useMutation(EDIT_AUTHOR, { 
     refetchQueries: [ { query: ALL_AUTHORS } ],
@@ -19,7 +27,7 @@ const Authors = (props) => {
   }) 
 
   useEffect(() => { 
-    console.log('result.data ', result.data)
+    // console.log('result.data ', result.data)
     if (result.data && result.data.editAuthor === null) {
       console.log('author not found')
       setError('Author not found')
@@ -39,7 +47,43 @@ const Authors = (props) => {
 
     setName('')
     setBirthyear('')
-  } 
+  }  
+
+  // const UpdateAuthorVisibility = () => { 
+  //   if (!isUserLoggedIn) {
+  //     return ( 
+  //      <></> 
+  //     )
+  //   }
+  //   else
+  //   {
+  //     return ( 
+      //   <div>
+      //    <form onSubmit={submit}>
+      //     <div>
+      //       <h3>Set birthyear</h3>
+      //       <div>name
+      //       <input
+      //           type='text'
+      //           value={name}
+      //           onChange={({ target }) => setName(target.value)}
+      //         />
+      //       </div>
+      //       <div>born
+      //       <select  defaultValue={'DEFAULT'}  value={birthyear}  onChange={({ target }) => setBirthyear(parseInt(target.value))}>
+      //           <option value="DEFAULT" >Valitse</option>
+      //           <option value="1980">1980</option>
+      //           <option value="1981">1981</option>
+      //           <option value="1982">1982</option>
+      //     </select> 
+      //       </div>
+      //       <div><button type='submit'>Update author</button></div>
+      //     </div>  
+      // </form>
+      // </div>
+  //     )
+  //   }
+  // }
 
   return (
     <div>
@@ -64,33 +108,33 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <form onSubmit={submit}>
-      <div>
-        <h3>Set birthyear</h3>
-        <div>name
-        <input
-            type='text'
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
-        </div>
-        <div>born
-        <select value={birthyear}  onChange={({ target }) => setBirthyear(parseInt(target.value))}>
-            <option selected value="">Valitse</option>
-            <option value="1980">1980</option>
-            <option value="1981">1981</option>
-            <option value="1982">1982</option>
-      </select>
- 
-        {/* <input
-            type='number'
-            value={birthyear}
-            onChange={({ target }) => setBirthyear(parseInt(target.value))}
-          /> */}
-        </div>
-        <div><button type='submit'>Update author</button></div>
-      </div>  
-      </form>
+      <div style={loggedInVisibility}>
+         <form onSubmit={submit}>
+          <div>
+            <h3>Set birthyear</h3>
+            <div>name
+            <input
+                type='text'
+                value={name}
+                onChange={({ target }) => setName(target.value)}
+              />
+            </div>
+            <div>born
+            <select  defaultValue={'DEFAULT'}  value={birthyear}  onChange={({ target }) => setBirthyear(parseInt(target.value))}>
+                <option value="DEFAULT" >Valitse</option>
+                <option value="1980">1980</option>
+                <option value="1981">1981</option>
+                <option value="1982">1982</option>
+          </select> 
+            </div>
+            <div><button type='submit'>Update author</button></div>
+          </div>  
+        </form>
+      </div>
+    
+
+
+
     </div>
   )
 }
