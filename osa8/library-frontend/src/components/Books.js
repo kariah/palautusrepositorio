@@ -1,32 +1,32 @@
 /* eslint-disable react/prop-types */
 
 import React, { useState, useEffect } from 'react'
-// import { useLazyQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import { useQuery } from '@apollo/client'
 import { ME } from '../queries'
-
+import { ALL_BOOKS_BY_GENRE } from '../queries'
 
 const Books = (props) => {
   const [books, setBooks] = useState('')  
-  // const [getBooks, result] = useLazyQuery(ALL_BOOKS) 
+  const [getBooks, resultBooks] = useLazyQuery(ALL_BOOKS_BY_GENRE) 
   const [genre, setGenre] = useState('')
   
   const isUserLoggedIn = props.isUserLoggedIn
   const resultMe = useQuery(ME, { 
     skip: !isUserLoggedIn
   })
-
-  // console.log('resultMe ', resultMe)
  
-  // const showPerson = (name) => {
-  //   getPerson({ variables: { nameToSearch: name } })
-  // }
+  //testaa
+  const showBooks = (genre) => { 
+    getBooks({ variables: { genre: genre } })
+  }
 
-  // useEffect(() => {
-  //   if (result.data) {
-  //     setPerson(result.data.findPerson)
-  //   }
-  // }, [result])
+  useEffect(() => {
+    if (resultBooks.data) {
+      console.log('resultBooks.data.allBooks ', resultBooks.data.allBooks)
+      setBooks(resultBooks.data.allBooks)
+    }
+  }, [resultBooks])
   
   const filtering = props.filtering
   
@@ -88,13 +88,13 @@ const Books = (props) => {
       </table>
       {/*  TODO: Voisi muodostua dynaamisesti! */}
       <div>
-        <button onClick={() => setGenre('refactoring')}>refactoring</button>
-        <button onClick={() => setGenre('agile')}>agile</button>
-        <button onClick={() => setGenre('patterns')}>patterns</button>
-        <button onClick={() => setGenre('design')}>design</button>
-        <button onClick={() => setGenre('crime')}>crime</button>
-        <button onClick={() => setGenre('classic')}>classic</button>
-        <button onClick={() => setGenre('')}>allgenres</button>
+        <button onClick={() => showBooks('refactoring')}>refactoring</button>
+        <button onClick={() => showBooks('agile')}>agile</button>
+        <button onClick={() => showBooks('patterns')}>patterns</button>
+        <button onClick={() => showBooks('design')}>design</button>
+        <button onClick={() => showBooks('crime')}>crime</button>
+        <button onClick={() =>showBooks('classic')} >classic</button>
+        <button onClick={() => showBooks('')}>allgenres</button>
       </div>
     </div>
   )
