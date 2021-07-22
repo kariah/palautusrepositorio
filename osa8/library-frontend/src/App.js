@@ -7,6 +7,7 @@ import { useQuery, useApolloClient } from '@apollo/client'
 
 import { ALL_AUTHORS } from './queries'
 import { ALL_BOOKS } from './queries'
+import { ME } from './queries'
 
 const Notify = ({errorMessage}) => {
   if ( !errorMessage ) {
@@ -24,7 +25,8 @@ const App = () => {
   // const resultAuthors = useQuery(ALL_AUTHORS, {
   //   pollInterval: 2000
   // })
-  const resultBooks = useQuery(ALL_BOOKS)
+  const resultBooks = useQuery(ALL_BOOKS) 
+  // const resultMe = useQuery(ME)
 
   const [errorMessage, setErrorMessage] = useState(null)
   const [token, setToken] = useState(null)
@@ -37,6 +39,7 @@ const App = () => {
     }, 10000)
   }
   
+
   useEffect(() => {
     const localStorageToken = window.localStorage.getItem('library-user-token') 
     if (localStorageToken !== null)
@@ -49,16 +52,14 @@ const App = () => {
   
   if (resultAuthors.loading || resultBooks.loading)  {
     return <div>loading...</div>
-  }
+  } 
   
-  console.log('token ', token)
-
   const logout = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
+    window.location.href = '/'
   }
-
 
   const LoggingButtons = () => { 
     if (!token) {
@@ -71,6 +72,7 @@ const App = () => {
       return ( 
        <>
           <button onClick={() => setPage('add')}>add book</button>
+          <button onClick={() => setPage('recommended_books')}>recommended</button>
           <button  onClick={logout}>logout</button>
        </> 
       )
@@ -114,6 +116,8 @@ const App = () => {
   }
 
 
+  const isUserLoggedIn = (token === null ? false  : true) 
+
   return (
     <div>
        <Notify errorMessage={errorMessage} />
@@ -124,11 +128,14 @@ const App = () => {
       </div>
 
       <Authors
-        show={page === 'authors'} authors={resultAuthors.data.allAuthors} setError={notify} isUserLoggedIn={(token === null ? false  : true)}
+        show={page === 'authors'} authors={resultAuthors.data.allAuthors} setError={notify} isUserLoggedIn={isUserLoggedIn}
       />
 
       <Books
-        show={page === 'books'} books={resultBooks.data.allBooks}   
+        show={page === 'books'} books={resultBooks.data.allBooks} filtering='all_books' isUserLoggedIn={isUserLoggedIn}
+      /> 
+       <Books
+        show={page === 'recommended_books'} books={resultBooks.data.allBooks} filtering='recommended_books' isUserLoggedIn={isUserLoggedIn}
       /> 
       <LoggedInUserFunctions></LoggedInUserFunctions>
       <LogInVisibility></LogInVisibility>
