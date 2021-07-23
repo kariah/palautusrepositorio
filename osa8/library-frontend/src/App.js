@@ -7,7 +7,6 @@ import { useQuery, useApolloClient } from '@apollo/client'
 
 import { ALL_AUTHORS } from './queries'
 import { ALL_BOOKS } from './queries'
-import { ME } from './queries'
 
 const Notify = ({errorMessage}) => {
   if ( !errorMessage ) {
@@ -25,8 +24,7 @@ const App = () => {
   // const resultAuthors = useQuery(ALL_AUTHORS, {
   //   pollInterval: 2000
   // })
-  const resultBooks = useQuery(ALL_BOOKS) 
-  // const resultMe = useQuery(ME)
+  const resultBooks = useQuery(ALL_BOOKS)  
 
   const [errorMessage, setErrorMessage] = useState(null)
   const [token, setToken] = useState(null)
