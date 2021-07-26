@@ -11,9 +11,9 @@ const Author = require('./models/author')
 const Book = require('./models/book')
 const User = require('./models/user')
 
-const JWT_SECRET = '7bihDTVK93ljVUBc2MWW'
+const JWT_SECRET = '...'
 
-const MONGODB_URI = 'mongodb+srv://fullstack:3fXMiNhiDLZGqYxT@cluster0.hjz9y.mongodb.net/library?retryWrites=true'
+const MONGODB_URI = 'mongodb+srv:.....'
 
 console.log('connecting to', MONGODB_URI)
 
