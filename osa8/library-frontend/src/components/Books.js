@@ -8,8 +8,7 @@ import { ALL_BOOKS_BY_GENRE } from '../queries'
 
 const Books = (props) => {
   const [books, setBooks] = useState('')  
-  const [getBooks, resultBooks] = useLazyQuery(ALL_BOOKS_BY_GENRE) 
-  const [genre, setGenre] = useState('')
+  const [getBooks, resultBooks] = useLazyQuery(ALL_BOOKS_BY_GENRE)  
   
   const isUserLoggedIn = props.isUserLoggedIn
   const resultMe = useQuery(ME, { 

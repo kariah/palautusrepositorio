@@ -28,7 +28,8 @@ query {
         name
       },
       title,
-      published 
+      published,
+      id
     }
  }
 `
@@ -54,7 +55,8 @@ export const CREATE_BOOK = gql`
           name
         }, 
         title,
-        published 
+        published,
+        id
     }
   }
 ` 
@@ -76,3 +78,16 @@ export const LOGIN = gql`
     }
   }
 `
+
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      author {
+        name
+      },
+      title,
+      published,
+      id
+    }
+  }
+  `
