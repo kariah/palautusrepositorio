@@ -11,9 +11,9 @@ const Author = require('./models/author')
 const Book = require('./models/book')
 const User = require('./models/user')
 
-const JWT_SECRET = '...'
+const JWT_SECRET = '7bihDTVK93ljVUBc2MWW'
 
-const MONGODB_URI = '....'
+const MONGODB_URI = 'mongodb+srv://fullstack:3fXMiNhiDLZGqYxT@cluster0.hjz9y.mongodb.net/library?retryWrites=true'
 
 console.log('connecting to', MONGODB_URI)
 
@@ -92,8 +92,7 @@ const resolvers = {
     Query: {
         booksCount: () => Book.collection.countDocuments(),
         authorsCount: () => Author.collection.countDocuments(),
-        allBooks: async (root, args) => {
-
+        allBooks: async (root, args) => { 
             if (args.genre) {
                 return await Book.find({ genres: { $in: [args.genre] } }).populate('author', { name: 1 })
             }
@@ -102,7 +101,7 @@ const resolvers = {
             }
         },
         allAuthors: async (root) => {
-            return Author.find()
+            return Author.find().populate('books')
         },
         me: (root, args, context) => {
             const currentUser = context.currentUser
@@ -114,11 +113,15 @@ const resolvers = {
     },
     Author: {
         bookCount: async (root) => {
-            const booksByAuthor = await Book.find({ author: root.id })
-            // console.log('booksByAuthor: ', booksByAuthor)
-            // console.log('bookCount: ', booksByAuthor.length)
-            return booksByAuthor.length
-        }
+            console.log('root ', root)
+            return root.books.length
+
+            // const booksByAuthor = await Book.find({ author: root.id }) 
+            // console.log('booksByAuthor ', booksByAuthor)
+            // console.log('root.book ', root)
+ 
+            // return booksByAuthor.length
+        } 
     },
     Mutation: {
         addBook: async (root, args, context) => {
@@ -130,16 +133,27 @@ const resolvers = {
             const book = new Book({ ...args })
 
             try {
-                let author = await Author.findOne({ name: args.author })
+                let author = await Author.findOne({ name: args.author }) 
 
-                if (!author) {
-                    author = new Author({ ...args, name: args.author })
-                    await author.save()
-                }
-
-                book.author = author
-
-                await book.save()
+                if (!author) {    
+                    author = new Author({ ...args, name: args.author, books: book })  
+                    book.author = author  
+                } 
+                else
+                {    
+                    book.author = author  
+                    if (author.books === undefined || author.books === null)
+                    { 
+                        author.books = [book] 
+                    }
+                    else
+                    {  
+                        author.books = author.books.concat(book) 
+                    }   
+                } 
+                 
+                await book.save() 
+                await author.save() 
             } catch (error) {
                 throw new UserInputError(error.message, {
                     invalidArgs: args,
