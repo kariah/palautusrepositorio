@@ -1,0 +1,17 @@
+{
+  "name": "typescript_exercises",
+  "version": "1.0.0",
+  "description": "TypeScript tehtävät (Osa 9)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ts-node": "ts-node" 
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^16.4.5",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  }
+}
