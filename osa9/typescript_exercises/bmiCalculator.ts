@@ -1,11 +1,11 @@
-type Result = string
+type BMIResult = string
 
-const calculateBmi = (height: number, weight: number) : Result => {
+const calculateBmi = (height: number, weight: number) : BMIResult => {
    
   const heightAsMeters = height / 100
   const bmi = weight / heightAsMeters / heightAsMeters
 
-//   console.log('bmi ', bmi) 
+  console.log('bmi ', bmi) 
  
 // Underweight (Severe thinness)	< 16.0	 
 // Underweight (Moderate thinness)	16.0 – 16.9	 
