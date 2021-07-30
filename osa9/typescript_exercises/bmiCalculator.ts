@@ -1,11 +1,12 @@
+// const { exec } = require("child_process");
+​
 type BMIResult = string
 
-const calculateBmi = (height: number, weight: number) : BMIResult => {
-   
+const calculateBmi = (height: number, weight: number) : BMIResult => { 
   const heightAsMeters = height / 100
   const bmi = weight / heightAsMeters / heightAsMeters
 
-  console.log('bmi ', bmi) 
+//   console.log('bmi ', bmi) 
  
 // Underweight (Severe thinness)	< 16.0	 
 // Underweight (Moderate thinness)	16.0 – 16.9	 
@@ -52,9 +53,15 @@ const calculateBmi = (height: number, weight: number) : BMIResult => {
 }
 
 try {
-    console.log(calculateBmi(180, 74))
+    const args = process.argv.slice(2)
+    console.log('args: ', args)
 
+    const height : number = +args[0]
+    const weight : number = +args[1]
+    console.log(calculateBmi(height, weight)) 
+    
+    //console.log(calculateBmi(180, 74)) 
 } catch (e) {
-  console.log('Something went wrong, error message: ', e.message);
+    console.log('Something went wrong, error message: ', e.message);
 }
  
