@@ -65,3 +65,4 @@ try {
     console.log('Something went wrong, error message: ', e.message);
 }
  
+export { calculateBmi };
