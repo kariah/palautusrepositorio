@@ -68,7 +68,7 @@ const calculateExercises  = (target: number, excerciseHoursInPeriod:number[]) : 
 }
 
 try {  
-    let target : number = null
+    let target : number = 0
     const excerciseHoursInPeriod : number[] = new Array()
 
     for (let i = 0; i < process.argv.length; i++) {
