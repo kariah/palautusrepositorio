@@ -1,5 +1,3 @@
-// 'use strict'
-
 interface ExcerciseCalculationResult {
     periodLength: number,
     trainingDays: number,
@@ -15,23 +13,23 @@ const calculateExercises  = (target: number, excerciseHoursInPeriod:number[]) : 
     // console.log('target 2 ', target)
     // console.log('excerciseHoursInPeriod 2 ', excerciseHoursInPeriod) 
 
-     const sumOfTrainingHours =  excerciseHoursInPeriod.reduce((a, b) => a + b, 0)
-     const trainingDays = excerciseHoursInPeriod.filter(x => x > 0).length
+     const sumOfTrainingHours =  excerciseHoursInPeriod.reduce((a, b) => a + b, 0);
+     const trainingDays = excerciseHoursInPeriod.filter(x => x > 0).length;
 
 
-     let averageTrainingHours = 0
+     let averageTrainingHours = 0;
      if (trainingDays > 0)
      {
-        averageTrainingHours = sumOfTrainingHours / trainingDays
+        averageTrainingHours = sumOfTrainingHours / trainingDays;
     }
     else
     {
-        averageTrainingHours = 0
+        averageTrainingHours = 0;
     }
 
-     let rating = 0
-     let ratingDescription = 'Not enough exercises!'
-     let averageTrainingHoursComparedToTarget = averageTrainingHours - target
+     let rating = 0;
+     let ratingDescription = 'Not enough exercises!';
+     const averageTrainingHoursComparedToTarget = averageTrainingHours - target;
 
     //  console.log('excerciseHoursInPeriod ', excerciseHoursInPeriod)
     //  console.log('averageTrainingHours ', averageTrainingHours)
@@ -40,21 +38,21 @@ const calculateExercises  = (target: number, excerciseHoursInPeriod:number[]) : 
       if (averageTrainingHoursComparedToTarget < 0)
       {
         rating = 1,
-        ratingDescription = "Below target, could be better"
+        ratingDescription = "Below target, could be better";
       }
       else if (averageTrainingHoursComparedToTarget >= 0 && averageTrainingHoursComparedToTarget < 1)
       {
         rating = 2,
-        ratingDescription = "Near target or litle over the target, well done!"
+        ratingDescription = "Near target or litle over the target, well done!";
       }
       else if (averageTrainingHoursComparedToTarget >= 1)
       {
-        rating = 3
-        ratingDescription = "A lot over the target, excellent!"
+        rating = 3;
+        ratingDescription = "A lot over the target, excellent!";
       }
 
 
-      let exerciseCalculationResult = {
+      const exerciseCalculationResult = {
         periodLength: excerciseHoursInPeriod.length,
         trainingDays:  trainingDays,
         success: false,
@@ -62,14 +60,14 @@ const calculateExercises  = (target: number, excerciseHoursInPeriod:number[]) : 
         ratingDescription: ratingDescription,
         target: target,
         average: averageTrainingHours
-      }
+      };
 
-    return exerciseCalculationResult
-}
+    return exerciseCalculationResult;
+};
 
 try {  
-    let target : number = 0
-    const excerciseHoursInPeriod : number[] = new Array()
+    let target  = 0;
+    const excerciseHoursInPeriod : number[] = [];
 
     for (let i = 0; i < process.argv.length; i++) {
         // 0 -> C:\Users\T430\fso2021-kurssi\Osa9\typescript_exercises\node_modules\ts-node\dist\bin.js
@@ -78,14 +76,14 @@ try {
         //Starting for argv2
         if (i > 1)
         {   
-            console.log(i + ' --> ' + (process.argv[i]))
+            console.log(i + ' --> ' + (process.argv[i]));
             if (i === 2)
             {
-                target = parseInt(process.argv[i])
+                target = parseInt(process.argv[i]);
             }
             else
             {
-                excerciseHoursInPeriod.push(parseFloat(process.argv[i]))
+                excerciseHoursInPeriod.push(parseFloat(process.argv[i]));
             }
         }
     }
@@ -93,9 +91,10 @@ try {
     // console.log('target ', target)
     // console.log('excerciseHoursInPeriod ', excerciseHoursInPeriod)  
 
-    console.log(calculateExercises(target,excerciseHoursInPeriod))
+    console.log(calculateExercises(target,excerciseHoursInPeriod));
  
 
 } catch (e) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   console.log('Something went wrong, error message: ', e.message);
 }

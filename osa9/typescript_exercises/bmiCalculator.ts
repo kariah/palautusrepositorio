@@ -1,10 +1,8 @@
-// const { exec } = require("child_process");
-​
-type BMIResult = string
+type BMIResult = string;
 
 const calculateBmi = (height: number, weight: number) : BMIResult => { 
-  const heightAsMeters = height / 100
-  const bmi = weight / heightAsMeters / heightAsMeters
+  const heightAsMeters = height / 100;
+  const bmi = weight / heightAsMeters / heightAsMeters;
 
 //   console.log('bmi ', bmi) 
  
@@ -17,51 +15,52 @@ const calculateBmi = (height: number, weight: number) : BMIResult => {
 // Obese (Class II)	35.0 – 39.9 
 // Obese (Class III)	≥ 40.0  
 
-   let bmiResultText = ''
+   let bmiResultText = '';
 
    switch (true) {
     case (bmi <= 16): 
-        bmiResultText = 'Underweight (Severe thinness)'
-        break
+        bmiResultText = 'Underweight (Severe thinness)';
+        break;
     case (bmi >= 16 && bmi < 17): 
-        bmiResultText = 'Underweight (Moderate thinness)'
-        break
+        bmiResultText = 'Underweight (Moderate thinness)';
+        break;
     case (bmi >= 17 && bmi < 18.5):
-        bmiResultText = 'Underweight (Mild thinness)'
-        break
+        bmiResultText = 'Underweight (Mild thinness)';
+        break;
     case (bmi >= 18.5 && bmi < 25):
-        bmiResultText = 'Normal range (healthy weight)'
-        break
+        bmiResultText = 'Normal range (healthy weight)';
+        break;
     case (bmi >= 25 && bmi < 30):
-        bmiResultText = 'Overweight (Pre-obese)'
-        break
+        bmiResultText = 'Overweight (Pre-obese)';
+        break;
     case (bmi >= 30 && bmi < 35):
-        bmiResultText = 'Obese (Class I)'
-        break
+        bmiResultText = 'Obese (Class I)';
+        break;
     case (bmi >= 35 && bmi < 40):
-        bmiResultText = 'Obese (Class II)'
-        break
+        bmiResultText = 'Obese (Class II)';
+        break;
     case (bmi >= 40):
-        bmiResultText = 'Obese (Class II)'
-        break
+        bmiResultText = 'Obese (Class II)';
+        break;
     default: 
-        bmiResultText = 'Not Defined'
-        break
+        bmiResultText = 'Not Defined';
+        break;
     }
    
-    return bmiResultText 
-}
+    return bmiResultText; 
+};
 
 try {
-    const args = process.argv.slice(2)
-    console.log('args: ', args)
+    const args = process.argv.slice(2);
+    console.log('args: ', args);
 
-    const height : number = +args[0]
-    const weight : number = +args[1]
-    console.log(calculateBmi(height, weight)) 
+    const height : number = +args[0];
+    const weight : number = +args[1];
+    console.log(calculateBmi(height, weight)); 
     
     //console.log(calculateBmi(180, 74)) 
 } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     console.log('Something went wrong, error message: ', e.message);
 }
  
