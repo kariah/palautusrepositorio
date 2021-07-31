@@ -2,9 +2,7 @@ type BMIResult = string;
 
 const calculateBmi = (height: number, weight: number) : BMIResult => { 
   const heightAsMeters = height / 100;
-  const bmi = weight / heightAsMeters / heightAsMeters;
-
-//   console.log('bmi ', bmi) 
+  const bmi = weight / heightAsMeters / heightAsMeters; 
  
 // Underweight (Severe thinness)	< 16.0	 
 // Underweight (Moderate thinness)	16.0 – 16.9	 
@@ -50,18 +48,17 @@ const calculateBmi = (height: number, weight: number) : BMIResult => {
     return bmiResultText; 
 };
 
-try {
-    const args = process.argv.slice(2);
-    console.log('args: ', args);
+//     const args = process.argv.slice(2); 
 
-    const height : number = +args[0];
-    const weight : number = +args[1];
-    console.log(calculateBmi(height, weight)); 
+//     const height : number = +args[0];
+//     const weight : number = +args[1];
+
+//     //console.log(calculateBmi(height, weight)); 
     
-    //console.log(calculateBmi(180, 74)) 
-} catch (e) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    console.log('Something went wrong, error message: ', e.message);
-}
+//     //console.log(calculateBmi(180, 74)) 
+// } catch (e) {
+//     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+//     console.log('Something went wrong, error message: ', e.message);
+// }
  
 export { calculateBmi };
