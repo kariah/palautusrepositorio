@@ -48,14 +48,15 @@ const calculateBmi = (height: number, weight: number) : BMIResult => {
     return bmiResultText; 
 };
 
-//     const args = process.argv.slice(2); 
+//Tehtävä 9.3
+    // const args = process.argv.slice(2); 
+ 
+    // const height : number = +args[0];
+    // const weight : number = +args[1];
 
-//     const height : number = +args[0];
-//     const weight : number = +args[1];
-
-//     //console.log(calculateBmi(height, weight)); 
+    // console.log(calculateBmi(height, weight)); 
     
-//     //console.log(calculateBmi(180, 74)) 
+    // console.log(calculateBmi(180, 74));
 // } catch (e) {
 //     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 //     console.log('Something went wrong, error message: ', e.message);

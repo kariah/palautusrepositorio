@@ -8,13 +8,13 @@ interface ExcerciseCalculationResult {
     average: number
   }
 
-const calculateExercises  = (target: number, excerciseHoursInPeriod:number[]) : ExcerciseCalculationResult => {
+const calculateExercises  = (target: number, dailyExercises:number[]) : ExcerciseCalculationResult => {
 
     // console.log('target 2 ', target)
-    // console.log('excerciseHoursInPeriod 2 ', excerciseHoursInPeriod) 
+    // console.log('dailyExercises 2 ', dailyExercises) 
 
-     const sumOfTrainingHours =  excerciseHoursInPeriod.reduce((a, b) => a + b, 0);
-     const trainingDays = excerciseHoursInPeriod.filter(x => x > 0).length;
+     const sumOfTrainingHours =  dailyExercises.reduce((a, b) => a + b, 0);
+     const trainingDays = dailyExercises.filter(x => x > 0).length;
 
 
      let averageTrainingHours = 0;
@@ -31,7 +31,7 @@ const calculateExercises  = (target: number, excerciseHoursInPeriod:number[]) : 
      let ratingDescription = 'Not enough exercises!';
      const averageTrainingHoursComparedToTarget = averageTrainingHours - target;
 
-    //  console.log('excerciseHoursInPeriod ', excerciseHoursInPeriod)
+    //  console.log('dailyExercises ', dailyExercises)
     //  console.log('averageTrainingHours ', averageTrainingHours)
     //  console.log('averageTrainingHoursComparedToTarget ', averageTrainingHoursComparedToTarget)
 
@@ -53,7 +53,7 @@ const calculateExercises  = (target: number, excerciseHoursInPeriod:number[]) : 
 
 
       const exerciseCalculationResult = {
-        periodLength: excerciseHoursInPeriod.length,
+        periodLength: dailyExercises.length,
         trainingDays:  trainingDays,
         success: false,
         rating: rating,
@@ -65,36 +65,37 @@ const calculateExercises  = (target: number, excerciseHoursInPeriod:number[]) : 
     return exerciseCalculationResult;
 };
 
-try {  
-    let target  = 0;
-    const excerciseHoursInPeriod : number[] = [];
+//Tehtävä 9.3
+// try {  
+    // let target  = 0;
+    // const dailyExercises : number[] = [];
 
-    for (let i = 0; i < process.argv.length; i++) {
-        // 0 -> C:\Users\T430\fso2021-kurssi\Osa9\typescript_exercises\node_modules\ts-node\dist\bin.js
-        // 1 -> C:\Users\T430\fso2021-kurssi\osa9\typescript_exercises\exerciseCalculator.ts  
+    // for (let i = 0; i < process.argv.length; i++) {
+    //     // 0 -> C:\Users\T430\fso2021-kurssi\Osa9\typescript_exercises\node_modules\ts-node\dist\bin.js
+    //     // 1 -> C:\Users\T430\fso2021-kurssi\osa9\typescript_exercises\exerciseCalculator.ts  
 
-        //Starting for argv2
-        if (i > 1)
-        {   
-            console.log(i + ' --> ' + (process.argv[i]));
-            if (i === 2)
-            {
-                target = parseInt(process.argv[i]);
-            }
-            else
-            {
-                excerciseHoursInPeriod.push(parseFloat(process.argv[i]));
-            }
-        }
-    }
+    //     //Starting for argv2
+    //     if (i > 1)
+    //     {   
+    //         console.log(i + ' --> ' + (process.argv[i]));
+    //         if (i === 2)
+    //         { 
+    //             target = parseInt(process.argv[i]);
+    //         }
+    //         else
+    //         {
+    //             dailyExercises.push(parseFloat(process.argv[i]));
+    //         }
+    //     }
+    // }
 
-    // console.log('target ', target)
-    // console.log('excerciseHoursInPeriod ', excerciseHoursInPeriod)  
+    //  console.log('target ', target);
+    //  console.log('dailyExercises ', dailyExercises); 
 
-    console.log(calculateExercises(target,excerciseHoursInPeriod));
- 
+// } catch (e) {
+//   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+//   console.log('Something went wrong, error message: ', e.message);
+// }
 
-} catch (e) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  console.log('Something went wrong, error message: ', e.message);
-}
+
+export { calculateExercises };
