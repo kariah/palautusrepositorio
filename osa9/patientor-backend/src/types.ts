@@ -20,4 +20,12 @@ export interface Diagnose {
     gender: string;
     occupation: string;
   } 
+
+  export interface NewPatient { 
+    name: string; 
+    dateOfBirth: string;
+    ssn: string;
+    gender: string;
+    occupation: string;
+  } 
  
