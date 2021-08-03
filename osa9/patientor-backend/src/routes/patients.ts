@@ -1,32 +1,25 @@
-import express from 'express';   
-import patientService from  '../services/patientService'; 
-import cors from 'cors';
-// import patients from '../../data/patients';
+import express from 'express';
+import patientService from '../services/patientService';
+import cors from 'cors'; 
+import utils from '../utils'; 
 
 const router = express.Router();
 const app = express();
 app.use(cors());
 
-router.get('/', (_req, res) => {  
+router.get('/', (_req, res) => {
   res.send(patientService.getNonSensitiveEntries());
 });
 
 router.post('/', (_req, res) => {
-  //res.send('Saving a patient!');
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const { name, dateOfBirth, ssn, gender, occupation } = _req.body;
-  // const newPatient = patientService.addPatient()
-  //   name,
-  //   dateOfBirth,
-  //   ssn,
-  //   gender,
-  //   occupation
-  // );
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const entry =  _req.body;
-  const newPatient = patientService.addPatient(entry); 
-  res.json(newPatient);
+  try {  
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const newPatient = utils.toNewPatient(_req.body);
+    const addePatient = patientService.addPatient(newPatient);
+    res.json(addePatient);
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
 });
 
 export default router;
