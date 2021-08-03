@@ -1,5 +1,4 @@
-import diagnoses from '../../data/diagnoses';
-// import diagnoseData from '../../data/diagnoses';
+import diagnoses from '../../data/diagnoses'; 
 
 import { Diagnose } from '../types';
  
