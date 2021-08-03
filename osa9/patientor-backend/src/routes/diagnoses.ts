@@ -1,7 +1,10 @@
 import express from 'express';   
 import diagnoseService from  '../services/diagnoseService';
+import cors from 'cors';
 
 const router = express.Router();
+const app = express();
+app.use(cors());
 
 router.get('/', (_req, res) => {
 
