@@ -1,7 +1,7 @@
 import express from 'express';
 import patientService from '../services/patientService';
 import cors from 'cors'; 
-import utils from '../utils'; 
+import toNewPatient from '../utils'; 
 
 const router = express.Router();
 const app = express();
@@ -14,7 +14,7 @@ router.get('/', (_req, res) => {
 router.post('/', (_req, res) => {
   try {  
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const newPatient = utils.toNewPatient(_req.body);
+    const newPatient = toNewPatient(_req.body);
     const addePatient = patientService.addPatient(newPatient);
     res.json(addePatient);
   } catch (e) {

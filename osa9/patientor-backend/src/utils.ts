@@ -1,36 +1,37 @@
 import { NewPatient, Gender } from './types';
 
-//toinen tapa
-// type Fields = { name : unknown, ssn: unknown, dateOfBirth: unknown, gender: unknown, occupation: unknown };
+type Fields =  { name : unknown, ssn: unknown, dateOfBirth: unknown, gender: unknown, occupation: unknown };
 
-// const toNewPatient = ({ name, ssn, dateOfBirth, gender, occupation } : Fields): NewPatient => { 
+const toNewPatient = ({  name, ssn, dateOfBirth, gender, occupation } : Fields): NewPatient => {
+
+  const newPatient: NewPatient = {
+    name: parseName(name),
+        ssn: parseSsn(ssn),
+        dateOfBirth: parseDateOfBirth(dateOfBirth),
+        gender: parseGender(gender),
+        occupation: parseOccupation(occupation),
+  };
+
+  return newPatient;
+};
+
+
+//Toinen tapa
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
+// const toNewPatient = (object: any): NewPatient => {
+
+//     console.log('object ', object);
+
 //     const newPatient: NewPatient = {
-//         name: parseName(name),
-//         ssn: parseSsn(ssn),
-//         dateOfBirth: parseDateOfBirth(dateOfBirth),
-//         gender: parseGender(gender),
-//         occupation: parseOccupation(occupation),
+//         name: parseName(object.name),
+//         ssn: parseSsn(object.ssn),
+//         dateOfBirth: parseDateOfBirth(object.dateOfBirth),
+//         gender: parseGender(object.gender),
+//         occupation: parseOccupation(object.occupation), 
 //     };
 
 //     return newPatient;
 // };
-
-
-//eslint-disable-next-line @typescript-eslint/no-explicit-any
-const toNewPatient = (object: any): NewPatient => {
-
-    console.log('object ', object);
-
-    const newPatient: NewPatient = {
-        name: parseName(object.name),
-        ssn: parseSsn(object.ssn),
-        dateOfBirth: parseDateOfBirth(object.dateOfBirth),
-        gender: parseGender(object.gender),
-        occupation: parseOccupation(object.occupation), 
-    };
-
-    return newPatient;
-};
  
 
 const parseName = (name: unknown): string => {
@@ -81,6 +82,4 @@ const isDate = (date: string): boolean => {
 };
 
 
-export default {
-    toNewPatient
-};
+export default toNewPatient;
