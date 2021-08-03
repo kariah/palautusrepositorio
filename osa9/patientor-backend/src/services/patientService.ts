@@ -7,11 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const getEntries = () : Patient[] => {
   return patients;
-};
-
-// const getNonSensitivePatients = (): NonSensitivePatient[] => {
-//   return patients;
-// };
+}; 
 
 const getNonSensitiveEntries = (): NonSensitivePatient [] => {
   return patients.map(({ id, name,  dateOfBirth, gender, occupation }) => ({
