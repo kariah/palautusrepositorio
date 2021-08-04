@@ -48,11 +48,23 @@ const parseOccupation = (occupation: unknown): string => {
     return occupation;
 };
 
-const parseSsn = (ssn: unknown): string => {
-    if (!ssn || !isString(ssn)) {
+const parseSsn = (ssn: unknown): string => { 
+    if (!ssn || !isString(ssn) || !isSsn(ssn)) {
         throw new Error('Incorrect or missing ssn');
-    }
+    } 
     return ssn;
+};
+
+const isSsn = (ssn: string): boolean => {
+    let isValid = ssn.includes('-');
+ 
+    if (isValid)
+    {
+        isValid = ssn.length === 11? true : false;
+    }
+
+    //TODO: ja lisää muuta tarkistusta ..
+    return isValid;
 };
 
 const parseDateOfBirth = (dateOfBirth: unknown): string => {
@@ -78,8 +90,11 @@ const isString = (text: unknown): text is string => {
 };
 
 const isDate = (date: string): boolean => {
+    console.log('date ', Date.parse(date));
+
     return Boolean(Date.parse(date));
 };
+
 
 
 export default toNewPatient;
