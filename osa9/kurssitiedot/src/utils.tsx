@@ -7,12 +7,20 @@
 
   interface CourseExtentedPartBase extends CoursePartBase { 
     description: string;
-  }
+  } 
+
+  interface CourseSpecialPartBase extends CourseExtentedPartBase { 
+    requirements: Array<string>;
+  } 
 
   interface CourseNormalPart extends CourseExtentedPartBase {
     type: "normal";
+  } 
+
+  interface CourseSpecialPart extends CourseSpecialPartBase {
+    type: "special";
   }
-  interface CourseProjectPart extends CoursePartBase {
+    interface CourseProjectPart extends CoursePartBase {
     type: "groupProject"; 
     groupProjectCount: number;
   }
@@ -22,6 +30,6 @@
     exerciseSubmissionLink: string;
   }
 
-  type CoursePart = CourseNormalPart | CourseProjectPart | CourseSubmissionPart;
+  type CoursePart = CourseNormalPart | CourseSpecialPart | CourseProjectPart | CourseSubmissionPart;
 
   export default CoursePart

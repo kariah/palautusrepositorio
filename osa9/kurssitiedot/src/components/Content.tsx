@@ -4,41 +4,33 @@ import CoursePart from '../utils';
 const Content = ({ courseParts }: { courseParts: Array<CoursePart> }) => ( 
     <> 
         {courseParts.map(coursePart => 
-        <Part key={coursePart.name} coursePart={coursePart}  />)}
+        <p key={coursePart.name}>
+            <b>{coursePart.name} {coursePart.exerciseCount}</b>
+            <Part coursePart={coursePart}  />
+        </p> 
+     )}
     </> 
-);
+); 
 
 const Part = ({ coursePart }: { coursePart: CoursePart }) => ( 
     <> 
        {(() => { 
           switch(coursePart.type) {
-             case "normal":  
-                return <div><b>{coursePart.name}</b>
-                        <div>
-                            <p>{coursePart.exerciseCount}</p> 
-                        </div>
-                        <div>
-                            <p>{coursePart.description}</p> 
-                        </div>
-                        </div> ;
+            case "normal":  
+                return <div>{coursePart.description}</div>;  
               case "groupProject":  
-              return <div><b>{coursePart.name}</b>
-                      <div>
-                          <p>{coursePart.exerciseCount}</p> 
-                      </div>
-                      <div>
-                          {/* <p>{coursePart.description}</p>  */}
-                      </div>
-                      </div> ; 
+                 return <div>project exercises {coursePart.groupProjectCount}</div>;  
             case "submission":  
-            return <div><b>{coursePart.name}</b>
-                    <div>
-                        <p>{coursePart.exerciseCount}</p> 
-                    </div>
-                    <div>
-                        <p>{coursePart.description}</p> 
-                    </div>
-                    </div> ;
+                return <div>submit to {coursePart.exerciseSubmissionLink}</div>;  
+            case "special":  
+                return <div>
+                            <ul>
+                            {coursePart.requirements.map(r => 
+                                <li key={r}>
+                                    {r}  
+                                </li>)}
+                            </ul>
+                        </div>;
             default: 
                 return assertNever(coursePart) 
                 // const _exhaustiveCheck: never = coursePart.type;
