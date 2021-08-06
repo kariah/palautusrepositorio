@@ -10,6 +10,7 @@ const toNewPatient = ({  name, ssn, dateOfBirth, gender, occupation } : Fields):
         dateOfBirth: parseDateOfBirth(dateOfBirth),
         gender: parseGender(gender),
         occupation: parseOccupation(occupation),
+        entries: []
   };
 
   return newPatient;
@@ -94,7 +95,5 @@ const isDate = (date: string): boolean => {
 
     return Boolean(Date.parse(date));
 };
-
-
 
 export default toNewPatient;
