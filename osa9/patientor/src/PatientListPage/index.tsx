@@ -14,8 +14,10 @@ import HealthRatingBar from "../components/HealthRatingBar";
 import { useStateValue } from "../state";
 
 const PatientListPage = () => {
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients }, dispatch] = useStateValue(); 
 
+  console.log("useStateValue (list): ", useStateValue());
+  
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | undefined>();
   const history = useHistory() ;
@@ -41,10 +43,10 @@ const PatientListPage = () => {
     }
   };
   
-  const handlePatientClick = (patientId:string) => {  
+  const handlePatientClick = (id:string) => {  
     // console.log('patientId ', patientId);
 
-    const url = `patients/${patientId}?`;
+    const url = `patients/${id}?`;
     history.push(url); 
     return <Redirect to={url} />; 
   };

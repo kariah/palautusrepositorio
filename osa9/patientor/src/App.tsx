@@ -25,16 +25,13 @@ const App = () => {
       }
     };
     void fetchPatientList();
-  }, [dispatch]);
-
-
+  }, [dispatch]); 
   
   // const match = useRouteMatch('/patients/:id');
   // //console.log('match ', match); 
   // const patient = match 
   //   ? patients.find(anecdote => patient.id === Number(match.params.id)) 
-  //   : null; 
-
+  //   : null;  
 
   return (
     <div className="App">
@@ -50,7 +47,7 @@ const App = () => {
             </Route>
           </Switch> 
           <Switch>
-            <Route path="/patients/:id"  component={PatientDetailsPage}> 
+            <Route path="/patients/:id" component={PatientDetailsPage}> 
             </Route>
           </Switch> 
         </Container>

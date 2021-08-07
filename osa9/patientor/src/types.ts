@@ -20,7 +20,7 @@ export interface Patient {
 } 
 
 export interface MatchParams {
-   params: {id: string };
+   params: { id: string };
 }
  
 
