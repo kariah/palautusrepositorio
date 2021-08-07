@@ -8,12 +8,12 @@ import { useStateValue } from "./state";
 import { Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
+import PatientDetailsPage from "./PatientDetailsPage";
 
 const App = () => {
   const [, dispatch] = useStateValue();
   React.useEffect(() => {
-    void axios.get<void>(`${apiBaseUrl}/ping`);
-
+    void axios.get<void>(`${apiBaseUrl}/ping`); 
     const fetchPatientList = async () => {
       try {
         const { data: patientListFromApi } = await axios.get<Patient[]>(
@@ -27,6 +27,15 @@ const App = () => {
     void fetchPatientList();
   }, [dispatch]);
 
+
+  
+  // const match = useRouteMatch('/patients/:id');
+  // //console.log('match ', match); 
+  // const patient = match 
+  //   ? patients.find(anecdote => patient.id === Number(match.params.id)) 
+  //   : null; 
+
+
   return (
     <div className="App">
       <Router>
@@ -37,10 +46,13 @@ const App = () => {
           </Button>
           <Divider hidden />
           <Switch>
-            <Route path="/">
-              <PatientListPage />
+            <Route exact path="/" component={PatientListPage}> 
             </Route>
-          </Switch>
+          </Switch> 
+          <Switch>
+            <Route path="/patients/:id"  component={PatientDetailsPage}> 
+            </Route>
+          </Switch> 
         </Container>
       </Router>
     </div>

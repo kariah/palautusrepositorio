@@ -17,4 +17,10 @@ export interface Patient {
   gender: Gender;
   ssn?: string;
   dateOfBirth?: string;
+} 
+
+export interface MatchParams {
+   params: {id: string };
 }
+ 
+

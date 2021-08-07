@@ -1,4 +1,8 @@
 import React from "react";
+import { 
+  Redirect, 
+  useHistory,
+} from "react-router-dom";
 import axios from "axios";
 import { Container, Table, Button } from "semantic-ui-react";
 
@@ -14,6 +18,7 @@ const PatientListPage = () => {
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | undefined>();
+  const history = useHistory() ;
 
   const openModal = (): void => setModalOpen(true);
 
@@ -21,7 +26,7 @@ const PatientListPage = () => {
     setModalOpen(false);
     setError(undefined);
   };
-
+ 
   const submitNewPatient = async (values: PatientFormValues) => {
     try {
       const { data: newPatient } = await axios.post<Patient>(
@@ -35,7 +40,15 @@ const PatientListPage = () => {
       setError(e.response?.data?.error || 'Unknown error');
     }
   };
+  
+  const handlePatientClick = (patientId:string) => {  
+    // console.log('patientId ', patientId);
 
+    const url = `patients/${patientId}?`;
+    history.push(url); 
+    return <Redirect to={url} />; 
+  };
+ 
   return (
     <div className="App">
       <Container textAlign="center">
@@ -53,7 +66,7 @@ const PatientListPage = () => {
         <Table.Body>
           {Object.values(patients).map((patient: Patient) => (
             <Table.Row key={patient.id}>
-              <Table.Cell>{patient.name}</Table.Cell>
+              <Table.Cell><a onClick={() => handlePatientClick(patient.id)}>{patient.name}</a></Table.Cell>
               <Table.Cell>{patient.gender}</Table.Cell>
               <Table.Cell>{patient.occupation}</Table.Cell>
               <Table.Cell>
