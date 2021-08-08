@@ -8,7 +8,7 @@ import { apiBaseUrl } from "../constants";
 import { Container } from "semantic-ui-react";
 // import { useStateValue } from "../state";
 // import { MatchParams } from "../types";
-import { useStateValue } from "../state";
+import { useStateValue, setPatient } from "../state";
 
 const PatientDetailsPage = () => {
     const [{ patients, patient }, dispatch] = useStateValue(); 
@@ -38,7 +38,8 @@ const PatientDetailsPage = () => {
             const { data: patientFromApi } = await axios.get<Patient>(
               `${apiBaseUrl}/patients//${id}?`
             );
-            dispatch({ type: "SET_PATIENT", payload: patientFromApi });
+            // dispatch({ type: "SET_PATIENT", payload: patientFromApi });
+            dispatch(setPatient(patientFromApi));
           } catch (e) {
             console.error(e);
           }

@@ -1,20 +1,17 @@
-import React from 'react';
+import React from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { Button, Divider, Header, Container } from "semantic-ui-react";
 
-import { apiBaseUrl } from "./constants"; 
+import { apiBaseUrl } from "./constants";
+import { useStateValue } from "./state";
 import { Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
 import PatientDetailsPage from "./PatientDetailsPage";
-import { useStateValue, setPatientList } from "./state";
-// import { useDispatch } from 'react-redux';
-// import { useEffect } from "react"; 
 
 const App = () => {
   const [, dispatch] = useStateValue();
-
   React.useEffect(() => {
     void axios.get<void>(`${apiBaseUrl}/ping`); 
     const fetchPatientList = async () => {
@@ -22,15 +19,19 @@ const App = () => {
         const { data: patientListFromApi } = await axios.get<Patient[]>(
           `${apiBaseUrl}/patients`
         );
-        // dispatch({ type: "SET_PATIENT_LIST", payload: patientListFromApi });
-        dispatch(setPatientList(patientListFromApi));
+        dispatch({ type: "SET_PATIENT_LIST", payload: patientListFromApi });
       } catch (e) {
         console.error(e);
       }
     };
     void fetchPatientList();
   }, [dispatch]); 
-    
+  
+  // const match = useRouteMatch('/patients/:id');
+  // //console.log('match ', match); 
+  // const patient = match 
+  //   ? patients.find(anecdote => patient.id === Number(match.params.id)) 
+  //   : null;  
 
   return (
     <div className="App">
