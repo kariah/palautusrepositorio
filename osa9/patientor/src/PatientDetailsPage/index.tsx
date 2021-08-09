@@ -3,15 +3,15 @@ import { useParams,//useRouteMatch
 } from "react-router-dom";
 
 import axios from "axios";
-import { Patient, Entry } from "../types";
+import { Patient, Entry, Diagnose } from "../types";
 import { apiBaseUrl } from "../constants";
 import { Container, Divider } from "semantic-ui-react";
 // import { useStateValue } from "../state";
 // import { MatchParams } from "../types";
-import { useStateValue, setPatient } from "../state";
+import { useStateValue, setPatient, setDiagnosesList } from "../state";
  
 const PatientDetailsPage = () => {
-    const [{ patients, patient }, dispatch] = useStateValue(); 
+    const [{ patients, patient, diagnoses }, dispatch] = useStateValue(); 
         
     // console.log("useStateValue (details): ", useStateValue());
     console.log('patient (state) ', patient);
@@ -31,15 +31,24 @@ const PatientDetailsPage = () => {
     React.useEffect(() => { 
         const fetchPatient = async () => {
           try {
+
             console.log('patient (state) -> fetch ', patient); 
-            console.log('patientFromUrl -> fetch ', patientFromUrl);   
+            console.log('patientFromUrl -> fetch ', patientFromUrl);
+
             const { data: patientFromApi } = await axios.get<Patient>(
               `${apiBaseUrl}/patients//${id}?`
+            );
+
+            const { data: diagnosesFromApi } = await axios.get<Array<Diagnose>>(
+              `${apiBaseUrl}/diagnoses/`
             );
             // dispatch({ type: "SET_PATIENT", payload: patientFromApi });  
             //Muutettu tehtävässä 9.18 --> 
 
+            console.log('diagnosesFromApi ', diagnosesFromApi);
+
             dispatch(setPatient(patientFromApi));
+            dispatch(setDiagnosesList(diagnosesFromApi));
           } catch (e) {
             console.error(e);
           }
@@ -51,6 +60,39 @@ const PatientDetailsPage = () => {
         } 
       }, [dispatch]);
  
+     
+    console.log('diagnoses', diagnoses);
+ 
+  
+    // esimerkki: diagnoses[code]?.name 
+    const DiagnosesList = ( diagnoseCodes: { diagnoseCodes?: string[] | undefined }) => ( 
+      <>  
+        {
+          console.log('diagnoseCodes ', diagnoseCodes) 
+        }
+        {
+          console.log('diagnoses ', diagnoses) 
+        }
+        <div>diagnooseja</div> 
+
+        {/* <div>
+          {diagnoseCodes?.map(c =>
+            <div key={c}>
+              {entry.date} {entry.description}
+              <div>
+                <ul>
+                  {entry.diagnosisCodes?.map(c =>
+                    <li key={c}>
+                      {c}
+                    </li>)}
+                </ul>
+              </div>
+              <PatientEntry entry={entry} />
+            </div>
+          )}
+        </div> */}
+      </>  
+    );
 
     const GenderIcon = () => {
         switch (patient?.gender) {
@@ -66,8 +108,9 @@ const PatientDetailsPage = () => {
     console.log('patient.entries ', patient?.entries);
 
     const PatientEntry = ({ entry }: { entry: Entry }) => ( 
-      <>  
-         {(() => { 
+      <>   
+        return <DiagnosesList diagnoseCodes={entry.diagnosisCodes}></DiagnosesList>
+         {/* {(() => { 
             switch(entry.type) {
               case "HealthCheck":  
                 return <div></div>; 
@@ -78,7 +121,7 @@ const PatientDetailsPage = () => {
               default: 
                   return assertNever(entry);  
           }
-          })()} 
+          })()}  */}
       </>  
   );
    
@@ -118,10 +161,10 @@ const PatientDetailsPage = () => {
     );
 };
 
-const assertNever = (value: never): never => {
-  throw new Error(
-    `Unhandled discriminated union member: ${JSON.stringify(value)}`
-  );
-};
+// const assertNever = (value: never): never => {
+//   throw new Error(
+//     `Unhandled discriminated union member: ${JSON.stringify(value)}`
+//   );
+// };
 
 export default PatientDetailsPage;
