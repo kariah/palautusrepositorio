@@ -16,12 +16,12 @@ const patients: Array<Patient> = [
                 specialist: 'MD House',
                 diagnosisCodes: ['S62.5'],
                 description:
-                  "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
+                    "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
                 discharge: {
-                  date: '2015-01-16',
-                  criteria: 'Thumb has healed.',
+                    date: '2015-01-16',
+                    criteria: 'Thumb has healed.',
                 }
-              }
+            }
         ]
     },
     {
@@ -39,12 +39,12 @@ const patients: Array<Patient> = [
             employerName: 'HyPD',
             diagnosisCodes: ['Z57.1', 'Z74.3', 'M51.2'],
             description:
-              'Patient mistakenly found himself in a nuclear plant waste site without protection gear. Very minor radiation poisoning. ',
+                'Patient mistakenly found himself in a nuclear plant waste site without protection gear. Very minor radiation poisoning. ',
             sickLeave: {
-              startDate: '2019-08-05',
-              endDate: '2019-08-28'
+                startDate: '2019-08-05',
+                endDate: '2019-08-28'
             }
-          }]
+        }]
     },
     {
         "id": "d27736ec-f723-11e9-8f0b-362b9e155667",
@@ -53,45 +53,45 @@ const patients: Array<Patient> = [
         "ssn": "250470-555L",
         "gender": "male",
         "occupation": "Technician",
-        "entries": [ {
+        "entries": [{
             id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb1',
             date: '2015-01-02',
             type: 'Hospital',
             specialist: 'MD House',
             diagnosisCodes: ['S62.5'],
             description:
-              "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
+                "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
             discharge: {
-              date: '2015-01-16',
-              criteria: 'Thumb has healed.',
+                date: '2015-01-16',
+                criteria: 'Thumb has healed.',
             }
-          },
-          {
+        },
+        {
             id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb1',
             date: '2015-01-02',
             type: 'Hospital',
             specialist: 'MD House',
             diagnosisCodes: ['S62.5'],
             description:
-              "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
+                "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
             discharge: {
-              date: '2015-01-16',
-              criteria: 'Thumb has healed.',
+                date: '2015-01-16',
+                criteria: 'Thumb has healed.',
             }
-          },
-          {
+        },
+        {
             id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb1',
             date: '2015-01-02',
             type: 'Hospital',
             specialist: 'MD House',
             diagnosisCodes: ['S62.5'],
             description:
-              "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
+                "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
             discharge: {
-              date: '2015-01-16',
-              criteria: 'Thumb has healed.',
+                date: '2015-01-16',
+                criteria: 'Thumb has healed.',
             }
-          }]
+        }]
     },
     {
         "id": "d2773822-f723-11e9-8f0b-362b9e155667",
@@ -104,32 +104,32 @@ const patients: Array<Patient> = [
     },
     {
         "id": "d2773c6e-f723-11e9-8f0b-362b9e155667",
-        "name": "Matti Luukkainen",
+        "name": "xMatti Luukkainen",
         "dateOfBirth": "1971-04-09",
         "ssn": "090471-8890",
         "gender": "male",
         "occupation": "Digital evangelist",
         "entries": [
-          {
-            id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb1',
-            date: '2015-01-02',
-            type: 'HealthCheck',
-            specialist: 'MD House',
-            diagnosisCodes: ['S62.5'],
-            description:
-              "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
-            healthCheckRating: 0,
-          },
-          {
-            id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb1',
-            date: '2015-01-03',
-            type: 'HealthCheck',
-            specialist: 'MD House',
-            diagnosisCodes: ['S62.5'],
-            description:
-              "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
-            healthCheckRating: 0,
-          }
+            {
+                id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb1',
+                date: '2015-01-02',
+                type: 'HealthCheck',
+                specialist: 'MD House',
+                diagnosisCodes: ['S62.5'],
+                description:
+                    "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
+                healthCheckRating: 0,
+            },
+            {
+                id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb1',
+                date: '2015-01-03',
+                type: 'HealthCheck',
+                specialist: 'MD House',
+                diagnosisCodes: ['S62.5'],
+                description:
+                    "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
+                healthCheckRating: 0,
+            }
         ]
     }
 ];
