@@ -1,5 +1,6 @@
 import React from "react";
-import { useParams,//useRouteMatch 
+import {
+  useParams,//useRouteMatch 
 } from "react-router-dom";
 
 import axios from "axios";
@@ -9,108 +10,97 @@ import { Container, Divider } from "semantic-ui-react";
 // import { useStateValue } from "../state";
 // import { MatchParams } from "../types";
 import { useStateValue, setPatient, setDiagnosesList } from "../state";
- 
+
 const PatientDetailsPage = () => {
-    const [{ patients, patient, diagnoses }, dispatch] = useStateValue(); 
-        
-    // console.log("useStateValue (details): ", useStateValue());
-    console.log('patient (state) ', patient);
+  const [{ patients, patient, diagnoses }, dispatch] = useStateValue();
 
-    //Testailtu
-    //const match: MatchParams | null = useRouteMatch('/patients/:id'); 
-    //console.log('match id ', match?.params.id);
-    
-    // const patient: Patient | null | undefined = match
-    //     ? Object.values(patients).find((patient: Patient) => patient.id === match.params.id)
-    //     : null;
+  // console.log("useStateValue (details): ", useStateValue());
+  console.log('patient (state) ', patient);
 
-    const { id } = useParams<{ id: string }>();
-    // console.log(' patient id ', id); 
-    const patientFromUrl: Patient | null | undefined = Object.values(patients).find((patient: Patient) => patient.id === id); 
- 
-    React.useEffect(() => { 
-        const fetchPatient = async () => {
-          try {
+  //Testailtu
+  //const match: MatchParams | null = useRouteMatch('/patients/:id'); 
+  //console.log('match id ', match?.params.id);
 
-            console.log('patient (state) -> fetch ', patient); 
-            console.log('patientFromUrl -> fetch ', patientFromUrl);
+  // const patient: Patient | null | undefined = match
+  //     ? Object.values(patients).find((patient: Patient) => patient.id === match.params.id)
+  //     : null;
 
-            const { data: patientFromApi } = await axios.get<Patient>(
-              `${apiBaseUrl}/patients//${id}?`
-            );
+  const { id } = useParams<{ id: string }>();
+  // console.log(' patient id ', id); 
+  const patientFromUrl: Patient | null | undefined = Object.values(patients).find((patient: Patient) => patient.id === id);
 
-            const { data: diagnosesFromApi } = await axios.get<Array<Diagnose>>(
-              `${apiBaseUrl}/diagnoses/`
-            );
-            // dispatch({ type: "SET_PATIENT", payload: patientFromApi });  
-            //Muutettu tehtävässä 9.18 --> 
+  React.useEffect(() => {
+    const fetchPatient = async () => {
+      try {
 
-            console.log('diagnosesFromApi ', diagnosesFromApi);
+        console.log('patient (state) -> fetch ', patient);
+        console.log('patientFromUrl -> fetch ', patientFromUrl);
 
-            dispatch(setPatient(patientFromApi));
-            dispatch(setDiagnosesList(diagnosesFromApi));
-          } catch (e) {
-            console.error(e);
-          }
-        };
-        
-        if (patient === null || patientFromUrl?.id !== patient?.id)
-        {
-            void fetchPatient();
-        } 
-      }, [dispatch]);
- 
-     
-    console.log('diagnoses', diagnoses);
- 
-  
-    // esimerkki: diagnoses[code]?.name 
-    const DiagnosesList = ( diagnoseCodes: { diagnoseCodes?: string[] | undefined }) => ( 
-      <>  
-        {
-          console.log('diagnoseCodes ', diagnoseCodes) 
-        }
-        {
-          console.log('diagnoses ', diagnoses) 
-        }
-        <div>diagnooseja</div> 
+        const { data: patientFromApi } = await axios.get<Patient>(
+          `${apiBaseUrl}/patients//${id}?`
+        );
 
-        {/* <div>
-          {diagnoseCodes?.map(c =>
-            <div key={c}>
-              {entry.date} {entry.description}
-              <div>
-                <ul>
-                  {entry.diagnosisCodes?.map(c =>
-                    <li key={c}>
-                      {c}
-                    </li>)}
-                </ul>
-              </div>
-              <PatientEntry entry={entry} />
-            </div>
-          )}
-        </div> */}
-      </>  
-    );
+        const { data: diagnosesFromApi } = await axios.get<Array<Diagnose>>(
+          `${apiBaseUrl}/diagnoses/`
+        );
+        // dispatch({ type: "SET_PATIENT", payload: patientFromApi });  
+        //Muutettu tehtävässä 9.18 --> 
 
-    const GenderIcon = () => {
-        switch (patient?.gender) {
-            case 'female':
-                return <i className="venus big icon"></i>;
-            case 'male':
-                return <i className="mars big icon"></i>;
-            default:
-                return <i className="genderless big icon"></i>;
-        }
+        console.log('diagnosesFromApi ', diagnosesFromApi);
+
+        dispatch(setPatient(patientFromApi));
+        dispatch(setDiagnosesList(diagnosesFromApi));
+      } catch (e) {
+        console.error(e);
+      }
     };
 
-    console.log('patient.entries ', patient?.entries);
+    if (patient === null || patientFromUrl?.id !== patient?.id) {
+      void fetchPatient();
+    }
+  }, [dispatch]); 
+ 
+  const DiagnosesList = ({ diagnosisCodes }: { diagnosisCodes?: string[] | undefined }) => ( 
+    <>
+      {
+        console.log('diagnoseCodes ', diagnosisCodes)
+      } 
+      <div>
+      <ul>
+      {diagnosisCodes?.map((code: string) => (
+        <li key={code}>
+           {code} {diagnoses[code]?.name}  
+        </li>
+      ))}
+      </ul>
+      </div>
+    </>
+  );
+ 
+  const GenderIcon = () => {
+    switch (patient?.gender) {
+      case 'female':
+        return <i className="venus big icon"></i>;
+      case 'male':
+        return <i className="mars big icon"></i>;
+      default:
+        return <i className="genderless big icon"></i>;
+    }
+  };
 
-    const PatientEntry = ({ entry }: { entry: Entry }) => ( 
-      <>   
-        return <DiagnosesList diagnoseCodes={entry.diagnosisCodes}></DiagnosesList>
-         {/* {(() => { 
+  console.log('patient.entries ', patient?.entries); 
+   
+  const PatientEntry = ({ entry }: { entry: Entry }) => (
+    <> 
+      <DiagnosesList diagnosisCodes={entry.diagnosisCodes}></DiagnosesList>
+      {/* <ul>
+      {entry.diagnosisCodes?.map((code) => (
+        <li key={code}>
+           {code} {diagnoses[code]?.name}  
+        </li>
+      ))}
+      </ul> */}
+      {/* {(() => { 
             switch(entry.type) {
               case "HealthCheck":  
                 return <div></div>; 
@@ -122,43 +112,33 @@ const PatientDetailsPage = () => {
                   return assertNever(entry);  
           }
           })()}  */}
-      </>  
+    </>
   );
-   
+ 
 
-  
-
-    return (
-        <div className="App">
-            <Container textAlign="left">
-                <h3>{patient?.name}<GenderIcon></GenderIcon></h3>
-                <Divider></Divider> 
-                <div>SSN: {patient?.ssn}</div>
-                <div>Date of Birth: {patient?.dateOfBirth}</div>
-                <div>Occupation: {patient?.occupation}</div>
-                <Divider></Divider> 
-                <div>
-                  <h4>entries</h4>
-                  <div>
-                    {patient?.entries.map(entry =>
-                      <div key={entry.id}>
-                        {entry.date} {entry.description}
-                        <div>
-                          <ul>
-                            {entry.diagnosisCodes?.map(c =>
-                              <li key={c}>
-                                {c}
-                              </li>)}
-                          </ul>
-                        </div>
-                        <PatientEntry entry={entry} />
-                      </div>
-                    )}
-                  </div>
-                </div>
-            </Container>
+  return (
+    <div className="App">
+      <Container textAlign="left">
+        <h3>{patient?.name}<GenderIcon></GenderIcon></h3>
+        <Divider></Divider>
+        <div>SSN: {patient?.ssn}</div>
+        <div>Date of Birth: {patient?.dateOfBirth}</div>
+        <div>Occupation: {patient?.occupation}</div>
+        <Divider></Divider>
+        <div>
+          <h4>entries</h4>
+          <div>
+            {patient?.entries.map(entry =>
+              <div key={entry.id}>
+                {entry.date} {entry.description}
+                <PatientEntry entry={entry} />
+              </div>
+            )}
+          </div>
         </div>
-    );
+      </Container>
+    </div>
+  );
 };
 
 // const assertNever = (value: never): never => {
