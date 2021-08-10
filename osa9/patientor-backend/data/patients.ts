@@ -60,7 +60,7 @@ const patients: Array<Patient> = [
             specialist: 'MD House',
             diagnosisCodes: ['S62.5'],
             description:
-                "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
+                "Healing time appr. 1 weeks. patient doesn't remember how he got the injury.",
             discharge: {
                 date: '2015-01-16',
                 criteria: 'Thumb has healed.',
@@ -71,7 +71,7 @@ const patients: Array<Patient> = [
             date: '2015-01-02',
             type: 'Hospital',
             specialist: 'MD House',
-            diagnosisCodes: ['S62.5'],
+            diagnosisCodes: ['Z57.1', 'Z74.3', 'M51.2'],
             description:
                 "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
             discharge: {
@@ -80,13 +80,13 @@ const patients: Array<Patient> = [
             }
         },
         {
-            id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb1',
+            id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb2',
             date: '2015-01-02',
             type: 'Hospital',
             specialist: 'MD House',
-            diagnosisCodes: ['S62.5'],
+            diagnosisCodes: ['S62.59'],
             description:
-                "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
+                "Healing time appr. 3 weeks. patient doesn't remember how he got the injury.",
             discharge: {
                 date: '2015-01-16',
                 criteria: 'Thumb has healed.',
@@ -104,14 +104,14 @@ const patients: Array<Patient> = [
     },
     {
         "id": "d2773c6e-f723-11e9-8f0b-362b9e155667",
-        "name": "xMatti Luukkainen",
+        "name": "Matti Luukkainen",
         "dateOfBirth": "1971-04-09",
         "ssn": "090471-8890",
         "gender": "male",
         "occupation": "Digital evangelist",
         "entries": [
             {
-                id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb1',
+                id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb4',
                 date: '2015-01-02',
                 type: 'HealthCheck',
                 specialist: 'MD House',
@@ -121,11 +121,11 @@ const patients: Array<Patient> = [
                 healthCheckRating: 0,
             },
             {
-                id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb1',
+                id: 'd811e46d-70b3-4d90-b090-4535c7cf8fb5',
                 date: '2015-01-03',
                 type: 'HealthCheck',
                 specialist: 'MD House',
-                diagnosisCodes: ['S62.5'],
+                diagnosisCodes: ['Z57.1', 'Z74.3', 'M51.2'],
                 description:
                     "Healing time appr. 2 weeks. patient doesn't remember how he got the injury.",
                 healthCheckRating: 0,
