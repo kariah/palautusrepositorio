@@ -6,7 +6,7 @@ import {
 import axios from "axios";
 import { Patient, Entry, Diagnose } from "../types";
 import { apiBaseUrl } from "../constants";
-import { Container, Divider } from "semantic-ui-react";
+import { Container, Divider, Card } from "semantic-ui-react";
 // import { useStateValue } from "../state";
 // import { MatchParams } from "../types";
 import { useStateValue, setPatient, setDiagnosesList } from "../state";
@@ -88,33 +88,39 @@ const PatientDetailsPage = () => {
     }
   };
 
-  console.log('patient.entries ', patient?.entries); 
+  const EntryIcon = ({ entryType }: { entryType: string }) => {
+    switch (entryType) {
+      case 'HealthCheck':
+        return <i className="stethoscope big icon"></i>;
+      case 'OccupationalHealthcare':
+        return <i className="user md big icon"></i>;
+      case 'Hospital':
+        return <i className="hospital outline big icon"></i>;
+      default:
+        return <i className="genderless big icon"></i>;
+    }
+  };
+
+  //console.log('patient.entries ', patient?.entries); 
    
-  const PatientEntry = ({ entry }: { entry: Entry }) => (
-    <> 
-      <DiagnosesList diagnosisCodes={entry.diagnosisCodes}></DiagnosesList>
-      {/* <ul>
-      {entry.diagnosisCodes?.map((code) => (
-        <li key={code}>
-           {code} {diagnoses[code]?.name}  
-        </li>
-      ))}
-      </ul> */}
-      {/* {(() => { 
-            switch(entry.type) {
-              case "HealthCheck":  
-                return <div></div>; 
-              case "OccupationalHealthcare":  
-                return <div></div>; 
-              case "Hospital":  
-                  return <div></div>; 
-              default: 
-                  return assertNever(entry);  
-          }
-          })()}  */}
+  const EntryDetails = ({ entry }: { entry: Entry }) => (
+    <>
+      {(() => {
+        switch (entry.type) {
+          case "HealthCheck":
+            return <div></div>;
+          case "OccupationalHealthcare":
+            return <div></div>;
+          case "Hospital":
+            return <div></div>;
+          default:
+            return assertNever(entry);
+        }
+      })()}
+      <DiagnosesList diagnosisCodes={entry.diagnosisCodes}></DiagnosesList> 
     </>
   );
- 
+
 
   return (
     <div className="App">
@@ -125,26 +131,31 @@ const PatientDetailsPage = () => {
         <div>Date of Birth: {patient?.dateOfBirth}</div>
         <div>Occupation: {patient?.occupation}</div>
         <Divider></Divider>
-        <div>
+        <Container textAlign="left">
           <h4>entries</h4>
-          <div>
-            {patient?.entries.map(entry =>
-              <div key={entry.id}>
-                {entry.date} {entry.description}
-                <PatientEntry entry={entry} />
-              </div>
-            )}
-          </div>
-        </div>
+          {patient?.entries.map(entry =>
+            <Card key={entry.id} fluid>
+              <Card.Content>
+                <div>
+                  <b>{entry.date}</b><EntryIcon entryType={entry.type}></EntryIcon>
+                </div>
+                <div>
+                  <i>{entry.description}</i>
+                </div>
+                <EntryDetails entry={entry} />
+              </Card.Content>
+            </Card>
+          )}
+        </Container>
       </Container>
     </div>
   );
 };
 
-// const assertNever = (value: never): never => {
-//   throw new Error(
-//     `Unhandled discriminated union member: ${JSON.stringify(value)}`
-//   );
-// };
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
 
 export default PatientDetailsPage;
