@@ -1,4 +1,10 @@
-import { NewPatient, Gender } from './types';
+import { 
+    NewPatient, 
+    Gender, 
+    // Entry,
+    NewEntry,
+    NewHealthCheckEntry,  
+} from './types';
 
 type Fields =  { name : unknown, ssn: unknown, dateOfBirth: unknown, gender: unknown, occupation: unknown };
 
@@ -33,8 +39,50 @@ const toNewPatient = ({  name, ssn, dateOfBirth, gender, occupation } : Fields):
 
 //     return newPatient;
 // };
+
+// type PatientEntryFields =  { type: unknown, description: unknown };
+
+const toNewPatientEntry = (entry: NewEntry): NewEntry => { 
+//const toNewPatientEntry = (entry: NewHealthCheckEntry): NewHealthCheckEntry => { 
+
+    console.log('type ', parseType(entry.type));
+
+    // const newHealthHealthCheckEntry: NewEntry = { 
+    //     return toNewHealthHealthCheckEntry(entry);
+    // };
+    // return newHealthHealthCheckEntry;
+
+
+    //return toNewHealthCheckEntry(entry);
+    
+    switch (parseType(entry.type)) {
+        case 'HealthCheck': 
+            return toNewHealthHealthCheckEntry(entry);
+            // const newHealthHealthCheckEntry: NewEntry = { 
+            //     type: "HealthCheck", 
+            //     description: parseDescription(description) 
+            // };
+            // return newHealthHealthCheckEntry;
+        // case 'OccupationalHealthcare': 
+        // case 'Hospital': 
+        default:  
+          //TODO: assert
+          return toNewHealthHealthCheckEntry(entry);
+      }  
+};
+
+
+const toNewHealthHealthCheckEntry = (entry: NewHealthCheckEntry): NewHealthCheckEntry => { 
+ 
+    const newHealthHealthCheckEntry: NewEntry = { 
+        type: "HealthCheck",
+        description: parseDescription(entry.description) 
+    };
+    return newHealthHealthCheckEntry;
+};
  
 
+//Patient parsing
 const parseName = (name: unknown): string => {
     if (!name || !isString(name)) {
         throw new Error('Incorrect or missing name');
@@ -96,4 +144,23 @@ const isDate = (date: string): boolean => {
     return Boolean(Date.parse(date));
 };
 
-export default toNewPatient;
+//Entry parsing
+const parseType = (type: unknown): string => {
+    if (!type || !isString(type)) {
+        throw new Error('Incorrect or missing type');
+    }
+    return type;
+};
+
+const parseDescription = (description: unknown): string => {
+    if (!description || !isString(description)) {
+        throw new Error('Incorrect or missing description');
+    }
+    return description;
+};
+
+
+export {
+    toNewPatient,
+    toNewPatientEntry
+};
