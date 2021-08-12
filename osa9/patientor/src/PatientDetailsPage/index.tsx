@@ -4,7 +4,7 @@ import {
 } from "react-router-dom";
 
 import axios from "axios";
-import { Patient, Entry, Diagnose } from "../types";
+import { Patient, Entry, Diagnose, HealthCheckRating } from "../types";
 import { apiBaseUrl } from "../constants";
 import { Container, Divider, Card } from "semantic-ui-react";
 // import { useStateValue } from "../state";
@@ -101,6 +101,21 @@ const PatientDetailsPage = () => {
     }
   };
 
+  const HealthCheckRatingIcon = ({ rating }: { rating: HealthCheckRating }) => {
+    switch (rating) {
+      case HealthCheckRating.Healthy:
+        return <i className="heart small green icon"></i>;
+      case HealthCheckRating.LowRisk:
+        return <i className="heart small yellow icon"></i>;
+      case HealthCheckRating.HighRisk:
+        return <i className="heart small blue icon"></i>;
+      case HealthCheckRating.CriticalRisk:
+          return <i className="heart small red icon"></i>;
+      default:
+        return <></>;
+    }
+  };
+
   //console.log('patient.entries ', patient?.entries); 
    
   const EntryDetails = ({ entry }: { entry: Entry }) => (
@@ -108,11 +123,16 @@ const PatientDetailsPage = () => {
       {(() => {
         switch (entry.type) {
           case "HealthCheck":
-            return <div></div>;
+            return <div><HealthCheckRatingIcon rating={entry.healthCheckRating}></HealthCheckRatingIcon></div>;
           case "OccupationalHealthcare":
-            return <div></div>;
+            return <div>
+                <div>employername: {entry.employerName}</div>
+                <div>sickleave start: {entry.sickLeave.startDate} - end: {entry.sickLeave.endDate}</div>
+            </div>;
           case "Hospital":
-            return <div></div>;
+            return <div>
+             <div>discharge date: {entry.discharge.date} - start: {entry.discharge.criteria}</div>
+             </div>;
           default:
             return assertNever(entry);
         }
@@ -141,8 +161,10 @@ const PatientDetailsPage = () => {
                 </div>
                 <div>
                   <i>{entry.description}</i>
+                </div> 
+                <div>
+                  <EntryDetails entry={entry} />
                 </div>
-                <EntryDetails entry={entry} />
               </Card.Content>
             </Card>
           )}
