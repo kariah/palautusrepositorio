@@ -1,9 +1,14 @@
 import { 
     NewPatient, 
     Gender, 
-    // Entry,
-    NewEntry,
+    Entry,
+    NewEntry, 
+    HealthCheckEntry,
     NewHealthCheckEntry,  
+    OccupationalHealthcareEntry,
+    NewOccupationalHealthcareEntry, 
+    HospitalEntry,
+    NewHospitalEntry,  
 } from './types';
 
 type Fields =  { name : unknown, ssn: unknown, dateOfBirth: unknown, gender: unknown, occupation: unknown };
@@ -39,46 +44,79 @@ const toNewPatient = ({  name, ssn, dateOfBirth, gender, occupation } : Fields):
 
 //     return newPatient;
 // };
-
-// type PatientEntryFields =  { type: unknown, description: unknown };
-
-const toNewPatientEntry = (entry: NewEntry): NewEntry => { 
-//const toNewPatientEntry = (entry: NewHealthCheckEntry): NewHealthCheckEntry => { 
-
-    console.log('type ', parseType(entry.type));
-
-    // const newHealthHealthCheckEntry: NewEntry = { 
-    //     return toNewHealthHealthCheckEntry(entry);
-    // };
-    // return newHealthHealthCheckEntry;
-
-
-    //return toNewHealthCheckEntry(entry);
-    
-    switch (parseType(entry.type)) {
-        case 'HealthCheck': 
-            return toNewHealthHealthCheckEntry(entry);
-            // const newHealthHealthCheckEntry: NewEntry = { 
-            //     type: "HealthCheck", 
-            //     description: parseDescription(description) 
-            // };
-            // return newHealthHealthCheckEntry;
-        // case 'OccupationalHealthcare': 
-        // case 'Hospital': 
-        default:  
-          //TODO: assert
-          return toNewHealthHealthCheckEntry(entry);
-      }  
-};
-
-
-const toNewHealthHealthCheckEntry = (entry: NewHealthCheckEntry): NewHealthCheckEntry => { 
  
-    const newHealthHealthCheckEntry: NewEntry = { 
-        type: "HealthCheck",
-        description: parseDescription(entry.description) 
+
+const toNewPatientEntry = (entry: Entry): NewEntry => {  
+
+    // console.log('type ', parseType(entry.type)); 
+
+    switch (entry.type) {
+        case 'HealthCheck': 
+            return toNewHealthCheckEntry(entry); 
+        case 'OccupationalHealthcare': 
+            return toNewOccupationalHealthcareEntry(entry);
+        case 'Hospital': 
+            return toNewHospitalEntry(entry);
+        default:  
+            return assertNever(entry);
+      }  
+}; 
+
+const assertNever = (value: never): never => {
+    throw new Error(
+      `Unhandled discriminated union member: ${JSON.stringify(value)}`
+    );
+  };
+
+
+//Voisi mennä myös tällä tavalla
+// const toNewHealthCheckEntry = (entry: HealthCheckEntry): NewHealthCheckEntry => { 
+//     entry.healthCheckRating = ParseHealthCheckRating ..
+//     return entry; 
+// };  
+const toNewHealthCheckEntry = (entry: HealthCheckEntry): NewHealthCheckEntry => {
+       
+     const newHealthHealthCheckEntry: NewEntry = { 
+        type: "HealthCheck", 
+        healthCheckRating: entry.healthCheckRating,
+
+        //Base
+        date: parseEntryDate(entry.date),
+        specialist: parseSpecialist(entry.specialist),
+        description: parseDescription(entry.description),  
+        diagnosisCodes: parseDiagnosisCodes(entry.diagnosisCodes)  
     };
     return newHealthHealthCheckEntry;
+}; 
+
+const toNewOccupationalHealthcareEntry = (entry: OccupationalHealthcareEntry): NewOccupationalHealthcareEntry => {   
+    const newOccupationalHealthcareEntry: NewOccupationalHealthcareEntry = { 
+        type: "OccupationalHealthcare",
+        employerName: parseEmployerName(entry.employerName),
+        sickLeave: parseSickLeave(entry.sickLeave),
+
+        //Base
+        date: parseEntryDate(entry.date),
+        specialist: parseSpecialist(entry.specialist),
+        description: parseDescription(entry.description),   
+        diagnosisCodes: parseDiagnosisCodes(entry.diagnosisCodes)
+    };
+
+    return newOccupationalHealthcareEntry;
+};
+ 
+const toNewHospitalEntry = (entry: HospitalEntry): NewHospitalEntry => {  
+    const newHospitalEntry: NewHospitalEntry = { 
+        type: "Hospital", 
+        discharge: parseDischarge(entry.discharge),
+        
+        //Base
+        date: parseEntryDate(entry.date),
+        specialist: parseSpecialist(entry.specialist),
+        description: parseDescription(entry.description),
+        diagnosisCodes: parseDiagnosisCodes(entry.diagnosisCodes)  
+    };
+    return newHospitalEntry;
 };
  
 
@@ -143,14 +181,15 @@ const isDate = (date: string): boolean => {
 
     return Boolean(Date.parse(date));
 };
+  
 
 //Entry parsing
-const parseType = (type: unknown): string => {
-    if (!type || !isString(type)) {
-        throw new Error('Incorrect or missing type');
-    }
-    return type;
-};
+// const parseType = (type: unknown): string => {
+//     if (!type || !isString(type)) {
+//         throw new Error('Incorrect or missing type');
+//     }
+//     return type;
+// };
 
 const parseDescription = (description: unknown): string => {
     if (!description || !isString(description)) {
@@ -159,6 +198,59 @@ const parseDescription = (description: unknown): string => {
     return description;
 };
 
+const parseEntryDate = (date: unknown): string => {
+    if (!date || !isString(date) || !isDate(date)) {
+        throw new Error('Incorrect or missing entry date: ' + date);
+    }
+    return date;
+};
+
+const parseSpecialist = (specialist: unknown): string => {
+    if (!specialist || !isString(specialist)) {
+        throw new Error('Incorrect or missing specialist');
+    }
+    return specialist;
+}; 
+
+const parseEmployerName = (employerName: unknown): string => {
+    if (!employerName || !isString(employerName)) {
+        throw new Error('Incorrect or missing employerName');
+    }
+    return employerName;
+};
+
+const parseSickLeave = (sickLeave: {
+    startDate: string;
+    endDate: string;
+    }): {
+        startDate: string;
+        endDate: string;
+    } => {
+    if ( !isString(sickLeave.startDate) || !isString(sickLeave.endDate)) {
+        throw new Error('Incorrect or missing sickLeave');
+    }
+    return sickLeave;
+};
+
+const parseDischarge = (discharge: {
+    date: string;
+    criteria: string;
+    }): {
+        date: string;
+        criteria: string;
+    } => {
+    if ( !isString(discharge.date) || !isString(discharge.criteria)) {
+        throw new Error('Incorrect or missing sickLeave');
+    }
+    return discharge;
+};
+
+const parseDiagnosisCodes = (diagnosisCodes?: string[]): string[] | undefined => {
+    if (diagnosisCodes && !Array.isArray(diagnosisCodes)) {
+        throw new Error('Incorrect or missing diagnosisCodes');
+    }
+    return diagnosisCodes;
+};
 
 export {
     toNewPatient,

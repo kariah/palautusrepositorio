@@ -37,17 +37,17 @@ export interface NewPatient {
 }
 
 
-export interface NewBaseEntry {
-    description: string;
-    // date: string;
-    // specialist: string;
-    // diagnosisCodes?: Array<Diagnose['code']>;
-}
+// export interface NewBaseEntry {
+//     description: string;
+//     // date: string;
+//     // specialist: string;
+//     // diagnosisCodes?: Array<Diagnose['code']>;
+// }
 
-export interface NewHealthCheckEntry extends NewBaseEntry {
-    type: "HealthCheck";
-    // healthCheckRating: HealthCheckRating;
-}
+// export interface NewHealthCheckEntry extends NewBaseEntry {
+//     type: "HealthCheck";
+//     // healthCheckRating: HealthCheckRating;
+// }
 
 // export interface NewOccupationalHealthcareEntry extends NewBaseEntry {
 //     type: 'OccupationalHealthcare',
@@ -81,7 +81,7 @@ interface BaseEntry {
     date: string;
     specialist: string;
     diagnosisCodes?: Array<Diagnose['code']>;
-}
+} 
 
 export interface HealthCheckEntry extends BaseEntry {
     type: "HealthCheck";
@@ -118,18 +118,19 @@ export type Entry =
     | HealthCheckEntry;
 
 
-// export type NewEntry =
-//     | NewHospitalEntry
-//     | NewOccupationalHealthcareEntry
-//     | NewHealthCheckEntry;
-
 //Testiä varten
-export type NewEntry =
-| NewHealthCheckEntry; 
+// export type NewEntry =
+// | NewHealthCheckEntry; 
 
-export type _NewHealthCheckEntry = Omit<HealthCheckEntry, "id">;
+export type NewHealthCheckEntry = Omit<HealthCheckEntry, "id">;
 export type NewOccupationalHealthcareEntry = Omit<OccupationalHealthcareEntry, "id">;
 export type NewHospitalEntry = Omit<HospitalEntry, "id">;
+
+export type NewEntry =
+    | NewHospitalEntry
+    | NewOccupationalHealthcareEntry
+    | NewHealthCheckEntry;
+
 
 
 

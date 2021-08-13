@@ -40,13 +40,11 @@ const addEntry = (id: string, entry: NewEntry): NewEntry => {
     };
 
     const patient = patients.find(patient => patient.id === id);
-    // const entries = patient?.entries;
- 
-    console.log('patient ', patient);
-    // console.log('patient.entries ', entries);
+    patient?.entries.push(newEntry); 
+
+    console.log('patient (with new entry)', patient); 
     console.log('newEntry ', newEntry);
-    
-    //entries?.push(newEntry);
+     
     return newEntry; 
 };
 
