@@ -32,9 +32,7 @@ const PatientListPage = () => {
       const { data: newPatient } = await axios.post<Patient>(
         `${apiBaseUrl}/patients`,
         values
-      );
-      // dispatch({ type: "ADD_PATIENT", payload: newPatient });
-       //Muutettu tehtävässä 9.18 -->
+      ); 
       dispatch(addPatient(newPatient));
       closeModal();
     } catch (e) {

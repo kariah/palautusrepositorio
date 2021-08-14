@@ -1,15 +1,15 @@
 import React from 'react';
 import { Modal, Segment } from 'semantic-ui-react';
-import AddPatientForm, { PatientFormValues } from './AddPatientEntryForm';
+import AddPatientForm, { PatientEntryFormValues } from './AddPatientEntryForm';
 
 interface Props {
   modalOpen: boolean;
   onClose: () => void;
-  onSubmit: (values: PatientFormValues) => void;
+  onSubmit: (values: PatientEntryFormValues) => void;
   error?: string;
 }
 
-const AddPatientModal = ({ modalOpen, onClose, onSubmit, error }: Props) => (
+const AddPatientEntryModal = ({ modalOpen, onClose, onSubmit, error }: Props) => (
   <Modal open={modalOpen} onClose={onClose} centered={false} closeIcon>
     <Modal.Header>Add a new patient</Modal.Header>
     <Modal.Content>
@@ -19,4 +19,4 @@ const AddPatientModal = ({ modalOpen, onClose, onSubmit, error }: Props) => (
   </Modal>
 );
 
-export default AddPatientModal;
+export default AddPatientEntryModal;

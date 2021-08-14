@@ -36,8 +36,8 @@ export const reducer = (state: State, action: Action): State => {
         }
       };
      case "SET_DIAGNOSES_LIST":
-        console.log('state', state);
-        console.log('test SET_DIAGNOSES_LIST ', action.payload);
+        // console.log('state', state);
+        // console.log('test SET_DIAGNOSES_LIST ', action.payload);
    
         return {
           ...state,
@@ -50,8 +50,8 @@ export const reducer = (state: State, action: Action): State => {
           }
         };
     case "SET_PATIENT": 
-      console.log('state', state);
-      console.log('test SET_PATIENT', action.payload);
+      // console.log('state', state);
+      // console.log('test SET_PATIENT', action.payload);
 
       //return [...state, action.data]  
       return {

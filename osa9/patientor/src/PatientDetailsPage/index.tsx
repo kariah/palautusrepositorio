@@ -4,20 +4,19 @@ import {
 } from "react-router-dom";
 
 import axios from "axios";
-import { Patient, Entry, Diagnose} from "../types";
+import { Patient, Entry, Diagnose } from "../types";
 import { apiBaseUrl } from "../constants";
 import { Container, Divider, Card, Button } from "semantic-ui-react";
 import { useStateValue, setPatient, setDiagnosesList } from "../state";
-import { PatientFormValues } from "../AddPatientEntryModal/AddPatientEntryForm";
+import { PatientEntryFormValues } from "../AddPatientEntryModal/AddPatientEntryForm";
 import HealthCheckRatingIcon from "../components/HealthCheckRatingIcon";
 import EntryIcon from "../components/EntryIcon";
 import AddPatientEntryModal from "../AddPatientEntryModal";
 import GenderIcon from "../components/GenderIcon";
 
 const PatientDetailsPage = () => {
-  const [{ patients, patient, diagnoses }, dispatch] = useStateValue();
-
-  console.log('patient (state) ', patient);
+  const [{ patients, patient, diagnoses }, dispatch] = useStateValue(); 
+  // console.log('patient (state) ', patient);
 
   //Testailtu
   //const match: MatchParams | null = useRouteMatch('/patients/:id'); 
@@ -28,13 +27,13 @@ const PatientDetailsPage = () => {
   //     : null;
 
   const { id } = useParams<{ id: string }>();
-  const patientFromUrl: Patient | null | undefined = Object.values(patients).find((patient: Patient) => patient.id === id);
-
+  const patientByParameter: Patient | null | undefined = Object.values(patients).find((patient: Patient) => patient.id === id);
+  
   React.useEffect(() => {
     const fetchPatient = async () => {
       try {
         console.log('patient (state) -> fetch ', patient);
-        console.log('patientFromUrl -> fetch ', patientFromUrl);
+        console.log('patientFromUrl -> fetch ', patientByParameter);
 
         const { data: patientFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients//${id}?`
@@ -43,8 +42,6 @@ const PatientDetailsPage = () => {
         const { data: diagnosesFromApi } = await axios.get<Array<Diagnose>>(
           `${apiBaseUrl}/diagnoses/`
         );
-        // dispatch({ type: "SET_PATIENT", payload: patientFromApi });  
-        //Muutettu tehtävässä 9.18 -->  
         dispatch(setPatient(patientFromApi));
         dispatch(setDiagnosesList(diagnosesFromApi));
       } catch (e) {
@@ -52,7 +49,9 @@ const PatientDetailsPage = () => {
       }
     };
 
-    if (patient === null || patientFromUrl?.id !== patient?.id) {
+    console.log('fetch?'); 
+    if (patient === null || patientByParameter?.id !== patient?.id) {
+      console.log('fetch!');
       void fetchPatient();
     }
   }, [dispatch]);
@@ -70,7 +69,7 @@ const PatientDetailsPage = () => {
       </div>
     </>
   );
- 
+
   const EntryDetails = ({ entry }: { entry: Entry }) => (
     <>
       {(() => {
@@ -102,28 +101,53 @@ const PatientDetailsPage = () => {
 
   const closeModal = (): void => {
     setModalOpen(false);
-    setError(undefined);
+    setError(undefined);  
   };
 
-  const submitNewPatient = async (values: PatientFormValues) => {
-    try {
-      const { data: newPatient } = await axios.post<Patient>(
-        `${apiBaseUrl}/patients`,
-        values
-      );
+  //const submitNewPatientEntry = async (id:string, values: PatientEntryFormValues) => { 
+  // const submitNewPatientEntry = async (values: PatientEntryFormValues) => {  
+  //   try {
+  //     const { data: newPatientEntry } = await axios.post<Entry>(
+  //       `${apiBaseUrl}/patients`,
+  //       values
+  //     );
 
-      console.log('submit new patient ', newPatient);
-      //dispatch(addPatient(newPatient));
-      closeModal();
-    } catch (e) {
-      console.error(e.response?.data || 'Unknown Error');
-      // setError(e.response?.data?.error || 'Unknown error');
-    }
-  };
+  //     console.log('submit new patient entry ', newPatientEntry);
+  //     //dispatch(addPatient(newPatient));
+  //     closeModal();
+  //   } catch (e) {
+  //     console.error(e.response?.data || 'Unknown Error');
+  //     // setError(e.response?.data?.error || 'Unknown error');
+  //   }
+  // };
+ 
+  function submitNewPatientEntry (patient: Patient | null | undefined) { 
+    return async (values: PatientEntryFormValues) => {
+      console.log('submit id ', id);
 
+      try {
+        //http://localhost:3001/api/patients/d2773c6e-f723-11e9-8f0b-362b9e155667/entries
+        const { data: newPatientEntry } = await axios.post<Entry>(
+          `${apiBaseUrl}/patients/${id}/entries`,
+          values
+        );
+
+        // console.log('submit new patient entry ', newPatientEntry); 
+        // console.log('patient', patient);
+        // console.log('patient.entries 1 ', patient?.entries);
+
+        patient?.entries.push(newPatientEntry); 
+   
+        closeModal();
+      } catch (e) {
+        console.error(e.response?.data || 'Unknown Error');
+        // setError(e.response?.data?.error || 'Unknown error');
+      }
+    };
+  } 
 
   return (
-    <div className="App"> 
+    <div className="App">
       <Container textAlign="left">
         <h3>{patient?.name}<GenderIcon gender={patient?.gender}></GenderIcon></h3>
         <Divider></Divider>
@@ -152,13 +176,13 @@ const PatientDetailsPage = () => {
       </Container>
       <AddPatientEntryModal
         modalOpen={modalOpen}
-        onSubmit={submitNewPatient}
+        onSubmit={submitNewPatientEntry(patient)}
         error={error}
         onClose={closeModal}
-      /> 
-      <Button  style={{ 
-                "margin-top": "20px"
-              }} onClick={() => openModal()}>Add New Entry</Button> 
+      />
+      <Button style={{
+        "marginTop": "20px"
+      }} onClick={() => openModal()}>Add New Entry</Button>
     </div>
   );
 };

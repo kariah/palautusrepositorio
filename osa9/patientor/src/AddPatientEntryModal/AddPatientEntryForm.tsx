@@ -1,96 +1,92 @@
 import React from "react";
 import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik"; 
-import { TextField, SelectField, GenderOption, DiagnosisSelection } from "./FormField";
-import { Gender, Patient } from "../types";
+import { TextField, 
+  //SelectField, HealthCheckRatingOption, 
+  DiagnosisSelection } from "./FormField";
+import { 
+  //HealthCheckRating, 
+  Entry } from "../types";
 import { useStateValue  } from "../state";
 
 /*
  * use type Patient, but omit id and entries,
  * because those are irrelevant for new patient object.
  */
-export type PatientFormValues = Omit<Patient, "id" | "entries">;
+export type PatientEntryFormValues = Omit<Entry, "id" | "type">;
 
 interface Props {
-  onSubmit: (values: PatientFormValues) => void;
+  onSubmit: (values: PatientEntryFormValues) => void;
   onCancel: () => void;
 }
 
-const genderOptions: GenderOption[] = [
-  { value: Gender.Male, label: "Male" },
-  { value: Gender.Female, label: "Female" },
-  { value: Gender.Other, label: "Other" }
-];
+// const healthCheckRatingOptions: HealthCheckRatingOption[] = [
+//   { value: HealthCheckRating.Healthy, label: "Healthy" },
+//   { value: HealthCheckRating.LowRisk, label: "Low Risk" },
+//   { value: HealthCheckRating.HighRisk, label: "High Risk" },
+//   { value: HealthCheckRating.CriticalRisk, label: "Critical Risk" },
+// ];
  
-export const AddPatientForm = ({ onSubmit, onCancel } : Props ) => {
+export const AddPatientEntryForm = ({ onSubmit, onCancel } : Props ) => {
   const [{ diagnoses }] = useStateValue();
 
-  return (
-    <Formik
-      initialValues={{
-        name: "",
-        ssn: "",
-        dateOfBirth: "",
-        occupation: "",
-        gender: Gender.Other
+  return ( 
+    <Formik 
+      initialValues={{ 
+        type: "HealthCheck",
+        description: "",
+        date: "",
+        specialist: "", 
+        diagnosisCodes: [],
+        healthCheckRating: 0,
       }}
       onSubmit={onSubmit}
       validate={values => {
         const requiredError = "Field is required";
         const errors: { [field: string]: string } = {};
-        if (!values.name) {
-          errors.name = requiredError;
+        if (!values.description) {
+          errors.description = requiredError;
         }
-        if (!values.ssn) {
-          errors.ssn = requiredError;
+        if (!values.date) {
+          errors.date = requiredError;
         }
-        if (!values.dateOfBirth) {
-          errors.dateOfBirth = requiredError;
-        }
-        if (!values.occupation) {
-          errors.occupation = requiredError;
-        }
+        if (!values.specialist) {
+          errors.specialist = requiredError;
+        } 
         return errors;
       }}
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
           <Form className="form ui">
-            {/* <Field
-              label="Name"
-              placeholder="Name"
-              name="name"
-              component={TextField}
-            /> */}
             <Field
-              label="Social Security Number"
-              placeholder="SSN"
-              name="ssn"
+              label="Description"
+              placeholder="Description"
+              name="description"
               component={TextField}
             />
             <Field
-              label="Date Of Birth"
+              label="Date"
               placeholder="YYYY-MM-DD"
-              name="dateOfBirth"
+              name="date"
               component={TextField}
             />
             <Field
-              label="Occupation"
-              placeholder="Occupation"
-              name="occupation"
+              label="Specialist"
+              placeholder="Specialist"
+              name="specialist"
               component={TextField}
-            />
-            <SelectField
-              label="Gender"
-              name="gender"
-              options={genderOptions}
-            />
+            />  
+            {/* <SelectField
+              label="Health Check Rating"
+              name="healthCheckRating"
+              options={healthCheckRatingOptions}
+            /> */}
             <DiagnosisSelection
             setFieldValue={setFieldValue}
             setFieldTouched={setFieldTouched}
             diagnoses={Object.values(diagnoses)}
-            />    
-
+            />     
             <Grid>
               <Grid.Column floated="left" width={5}>
                 <Button type="button" onClick={onCancel} color="red">
@@ -115,4 +111,4 @@ export const AddPatientForm = ({ onSubmit, onCancel } : Props ) => {
   );
 };
 
-export default AddPatientForm;
+export default AddPatientEntryForm;

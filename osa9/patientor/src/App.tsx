@@ -21,9 +21,7 @@ const App = () => {
       try {
         const { data: patientListFromApi } = await axios.get<Patient[]>(
           `${apiBaseUrl}/patients`
-        );
-        // dispatch({ type: "SET_PATIENT_LIST", payload: patientListFromApi });
-        //Muutettu tehtävässä 9.18 -->
+        ); 
         dispatch(setPatientList(patientListFromApi));
       } catch (e) {
         console.error(e);
