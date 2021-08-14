@@ -8,6 +8,7 @@ import {
   //HealthCheckRating, 
   Entry } from "../types";
 import { useStateValue  } from "../state";
+import { isDate } from "../state/utils";
 
 /*
  * use type Patient, but omit id and entries,
@@ -47,7 +48,7 @@ export const AddPatientEntryForm = ({ onSubmit, onCancel } : Props ) => {
         if (!values.description) {
           errors.description = requiredError;
         }
-        if (!values.date) {
+        if (!values.date || !isDate(values.date)) {
           errors.date = requiredError;
         }
         if (!values.specialist) {

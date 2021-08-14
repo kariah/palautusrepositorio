@@ -7,7 +7,9 @@ import axios from "axios";
 import { Patient, Entry, Diagnose } from "../types";
 import { apiBaseUrl } from "../constants";
 import { Container, Divider, Card, Button } from "semantic-ui-react";
-import { useStateValue, setPatient, setDiagnosesList } from "../state";
+import { useStateValue, setPatient, setDiagnosesList,
+  // addPatientEntry 
+  } from "../state";
 import { PatientEntryFormValues } from "../AddPatientEntryModal/AddPatientEntryForm";
 import HealthCheckRatingIcon from "../components/HealthCheckRatingIcon";
 import EntryIcon from "../components/EntryIcon";
@@ -27,13 +29,13 @@ const PatientDetailsPage = () => {
   //     : null;
 
   const { id } = useParams<{ id: string }>();
-  const patientByParameter: Patient | null | undefined = Object.values(patients).find((patient: Patient) => patient.id === id);
-  
+  //const patientByParameter: Patient | null | undefined = Object.values(patients).find((patient: Patient) => patient.id === id);
+  const paramPatient = patients[id]; 
+ 
   React.useEffect(() => {
     const fetchPatient = async () => {
-      try {
-        console.log('patient (state) -> fetch ', patient);
-        console.log('patientFromUrl -> fetch ', patientByParameter);
+      try { 
+        console.log('paramPatient -> fetch ', paramPatient);
 
         const { data: patientFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients//${id}?`
@@ -48,10 +50,8 @@ const PatientDetailsPage = () => {
         console.error(e);
       }
     };
-
-    console.log('fetch?'); 
-    if (patient === null || patientByParameter?.id !== patient?.id) {
-      console.log('fetch!');
+ 
+    if (patient === null || paramPatient?.id !== patient?.id) { 
       void fetchPatient();
     }
   }, [dispatch]);
@@ -122,26 +122,21 @@ const PatientDetailsPage = () => {
   // };
  
   function submitNewPatientEntry (patient: Patient | null | undefined) { 
-    return async (values: PatientEntryFormValues) => {
-      console.log('submit id ', id);
+    return async (values: PatientEntryFormValues) => { 
 
       try {
         //http://localhost:3001/api/patients/d2773c6e-f723-11e9-8f0b-362b9e155667/entries
         const { data: newPatientEntry } = await axios.post<Entry>(
           `${apiBaseUrl}/patients/${id}/entries`,
           values
-        );
+        ); 
+        
+        patient?.entries.push(newPatientEntry);  
 
-        // console.log('submit new patient entry ', newPatientEntry); 
-        // console.log('patient', patient);
-        // console.log('patient.entries 1 ', patient?.entries);
-
-        patient?.entries.push(newPatientEntry); 
-   
         closeModal();
       } catch (e) {
         console.error(e.response?.data || 'Unknown Error');
-        // setError(e.response?.data?.error || 'Unknown error');
+        setError(e.response?.data?.error || 'Unknown error');
       }
     };
   } 
