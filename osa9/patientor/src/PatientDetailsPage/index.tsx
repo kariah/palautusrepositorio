@@ -8,7 +8,6 @@ import { Patient, Entry, Diagnose } from "../types";
 import { apiBaseUrl } from "../constants";
 import { Container, Divider, Card, Button } from "semantic-ui-react";
 import { useStateValue, setPatient, setDiagnosesList,
-  // addPatientEntry 
   } from "../state";
 import { PatientEntryFormValues } from "../AddPatientEntryModal/AddPatientEntryForm";
 import HealthCheckRatingIcon from "../components/HealthCheckRatingIcon";
