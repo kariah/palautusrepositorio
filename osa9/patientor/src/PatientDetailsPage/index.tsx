@@ -8,10 +8,10 @@ import { Patient, Entry, Diagnose} from "../types";
 import { apiBaseUrl } from "../constants";
 import { Container, Divider, Card, Button } from "semantic-ui-react";
 import { useStateValue, setPatient, setDiagnosesList } from "../state";
-import { PatientFormValues } from "../AddPatientDetailsModal/AddPatientDetailsForm";
+import { PatientFormValues } from "../AddPatientEntryModal/AddPatientEntryForm";
 import HealthCheckRatingIcon from "../components/HealthCheckRatingIcon";
 import EntryIcon from "../components/EntryIcon";
-import AddPatientModal from "../AddPatientModal";
+import AddPatientEntryModal from "../AddPatientEntryModal";
 import GenderIcon from "../components/GenderIcon";
 
 const PatientDetailsPage = () => {
@@ -150,7 +150,7 @@ const PatientDetailsPage = () => {
           )}
         </Container>
       </Container>
-      <AddPatientModal
+      <AddPatientEntryModal
         modalOpen={modalOpen}
         onSubmit={submitNewPatient}
         error={error}
@@ -158,7 +158,7 @@ const PatientDetailsPage = () => {
       /> 
       <Button  style={{ 
                 "margin-top": "20px"
-              }} onClick={() => openModal()}>Add New Patient</Button> 
+              }} onClick={() => openModal()}>Add New Entry</Button> 
     </div>
   );
 };
