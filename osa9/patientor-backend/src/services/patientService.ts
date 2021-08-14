@@ -44,6 +44,7 @@ const addEntry = (id: string, entry: NewEntry): NewEntry => {
 
     console.log('patient (with new entry)', patient); 
     console.log('newEntry ', newEntry);
+    
      
     return newEntry; 
 };
