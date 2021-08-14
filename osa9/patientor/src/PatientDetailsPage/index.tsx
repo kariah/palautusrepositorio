@@ -4,17 +4,19 @@ import {
 } from "react-router-dom";
 
 import axios from "axios";
-import { Patient, Entry, Diagnose, HealthCheckRating } from "../types";
+import { Patient, Entry, Diagnose} from "../types";
 import { apiBaseUrl } from "../constants";
-import { Container, Divider, Card } from "semantic-ui-react";
-// import { useStateValue } from "../state";
-// import { MatchParams } from "../types";
+import { Container, Divider, Card, Button } from "semantic-ui-react";
 import { useStateValue, setPatient, setDiagnosesList } from "../state";
+import { PatientFormValues } from "../AddPatientDetailsModal/AddPatientDetailsForm";
+import HealthCheckRatingIcon from "../components/HealthCheckRatingIcon";
+import EntryIcon from "../components/EntryIcon";
+import AddPatientModal from "../AddPatientModal";
+import GenderIcon from "../components/GenderIcon";
 
 const PatientDetailsPage = () => {
   const [{ patients, patient, diagnoses }, dispatch] = useStateValue();
 
-  // console.log("useStateValue (details): ", useStateValue());
   console.log('patient (state) ', patient);
 
   //Testailtu
@@ -26,13 +28,11 @@ const PatientDetailsPage = () => {
   //     : null;
 
   const { id } = useParams<{ id: string }>();
-  // console.log(' patient id ', id); 
   const patientFromUrl: Patient | null | undefined = Object.values(patients).find((patient: Patient) => patient.id === id);
 
   React.useEffect(() => {
     const fetchPatient = async () => {
       try {
-
         console.log('patient (state) -> fetch ', patient);
         console.log('patientFromUrl -> fetch ', patientFromUrl);
 
@@ -44,10 +44,7 @@ const PatientDetailsPage = () => {
           `${apiBaseUrl}/diagnoses/`
         );
         // dispatch({ type: "SET_PATIENT", payload: patientFromApi });  
-        //Muutettu tehtävässä 9.18 --> 
-
-        console.log('diagnosesFromApi ', diagnosesFromApi);
-
+        //Muutettu tehtävässä 9.18 -->  
         dispatch(setPatient(patientFromApi));
         dispatch(setDiagnosesList(diagnosesFromApi));
       } catch (e) {
@@ -58,66 +55,22 @@ const PatientDetailsPage = () => {
     if (patient === null || patientFromUrl?.id !== patient?.id) {
       void fetchPatient();
     }
-  }, [dispatch]); 
- 
-  const DiagnosesList = ({ diagnosisCodes }: { diagnosisCodes?: string[] | undefined }) => ( 
+  }, [dispatch]);
+
+  const DiagnosesList = ({ diagnosisCodes }: { diagnosisCodes?: string[] | undefined }) => (
     <>
-      {
-        console.log('diagnoseCodes ', diagnosisCodes)
-      } 
       <div>
-      <ul>
-      {diagnosisCodes?.map((code: string) => (
-        <li key={code}>
-           {code} {diagnoses[code]?.name}  
-        </li>
-      ))}
-      </ul>
+        <ul>
+          {diagnosisCodes?.map((code: string) => (
+            <li key={code}>
+              {code} {diagnoses[code]?.name}
+            </li>
+          ))}
+        </ul>
       </div>
     </>
   );
  
-  const GenderIcon = () => {
-    switch (patient?.gender) {
-      case 'female':
-        return <i className="venus big icon"></i>;
-      case 'male':
-        return <i className="mars big icon"></i>;
-      default:
-        return <i className="genderless big icon"></i>;
-    }
-  };
-
-  const EntryIcon = ({ entryType }: { entryType: string }) => {
-    switch (entryType) {
-      case 'HealthCheck':
-        return <i className="stethoscope big icon"></i>;
-      case 'OccupationalHealthcare':
-        return <i className="user md big icon"></i>;
-      case 'Hospital':
-        return <i className="hospital outline big icon"></i>;
-      default:
-        return <i className="genderless big icon"></i>;
-    }
-  };
-
-  const HealthCheckRatingIcon = ({ rating }: { rating: HealthCheckRating }) => {
-    switch (rating) {
-      case HealthCheckRating.Healthy:
-        return <i className="heart small green icon"></i>;
-      case HealthCheckRating.LowRisk:
-        return <i className="heart small yellow icon"></i>;
-      case HealthCheckRating.HighRisk:
-        return <i className="heart small blue icon"></i>;
-      case HealthCheckRating.CriticalRisk:
-          return <i className="heart small red icon"></i>;
-      default:
-        return <></>;
-    }
-  };
-
-  //console.log('patient.entries ', patient?.entries); 
-   
   const EntryDetails = ({ entry }: { entry: Entry }) => (
     <>
       {(() => {
@@ -126,26 +79,53 @@ const PatientDetailsPage = () => {
             return <div><HealthCheckRatingIcon rating={entry.healthCheckRating}></HealthCheckRatingIcon></div>;
           case "OccupationalHealthcare":
             return <div>
-                <div>employername: {entry.employerName}</div>
-                <div>sickleave start: {entry.sickLeave.startDate} - end: {entry.sickLeave.endDate}</div>
+              <div>employername: {entry.employerName}</div>
+              <div>sickleave start: {entry.sickLeave.startDate} - end: {entry.sickLeave.endDate}</div>
             </div>;
           case "Hospital":
             return <div>
-             <div>discharge date: {entry.discharge.date} - start: {entry.discharge.criteria}</div>
-             </div>;
+              <div>discharge date: {entry.discharge.date} - start: {entry.discharge.criteria}</div>
+            </div>;
           default:
             return assertNever(entry);
         }
       })()}
-      <DiagnosesList diagnosisCodes={entry.diagnosisCodes}></DiagnosesList> 
+      <DiagnosesList diagnosisCodes={entry.diagnosisCodes}></DiagnosesList>
     </>
   );
 
 
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | undefined>();
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewPatient = async (values: PatientFormValues) => {
+    try {
+      const { data: newPatient } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients`,
+        values
+      );
+
+      console.log('submit new patient ', newPatient);
+      //dispatch(addPatient(newPatient));
+      closeModal();
+    } catch (e) {
+      console.error(e.response?.data || 'Unknown Error');
+      // setError(e.response?.data?.error || 'Unknown error');
+    }
+  };
+
+
   return (
-    <div className="App">
+    <div className="App"> 
       <Container textAlign="left">
-        <h3>{patient?.name}<GenderIcon></GenderIcon></h3>
+        <h3>{patient?.name}<GenderIcon gender={patient?.gender}></GenderIcon></h3>
         <Divider></Divider>
         <div>SSN: {patient?.ssn}</div>
         <div>Date of Birth: {patient?.dateOfBirth}</div>
@@ -161,7 +141,7 @@ const PatientDetailsPage = () => {
                 </div>
                 <div>
                   <i>{entry.description}</i>
-                </div> 
+                </div>
                 <div>
                   <EntryDetails entry={entry} />
                 </div>
@@ -170,6 +150,15 @@ const PatientDetailsPage = () => {
           )}
         </Container>
       </Container>
+      <AddPatientModal
+        modalOpen={modalOpen}
+        onSubmit={submitNewPatient}
+        error={error}
+        onClose={closeModal}
+      /> 
+      <Button  style={{ 
+                "margin-top": "20px"
+              }} onClick={() => openModal()}>Add New Patient</Button> 
     </div>
   );
 };
