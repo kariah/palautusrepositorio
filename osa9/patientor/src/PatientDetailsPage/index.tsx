@@ -7,12 +7,15 @@ import axios from "axios";
 import { Patient, Entry, Diagnose } from "../types";
 import { apiBaseUrl } from "../constants";
 import { Container, Divider, Card, Button } from "semantic-ui-react";
-import { useStateValue, setPatient, setDiagnosesList,
+import { 
+  useStateValue, 
+  setPatient, 
+  setDiagnosesList, 
   } from "../state";
-import { PatientEntryFormValues } from "../AddPatientEntryModal/AddPatientEntryForm";
+import { PatientEntryFormValues } from "../AddPatientEntryModal/AddHealthCheckEntryForm";
 import HealthCheckRatingIcon from "../components/HealthCheckRatingIcon";
 import EntryIcon from "../components/EntryIcon";
-import AddPatientEntryModal from "../AddPatientEntryModal";
+import AddHealthCheckEntryForm from "../AddPatientEntryModal";
 import GenderIcon from "../components/GenderIcon";
 
 const PatientDetailsPage = () => {
@@ -168,7 +171,7 @@ const PatientDetailsPage = () => {
           )}
         </Container>
       </Container>
-      <AddPatientEntryModal
+      <AddHealthCheckEntryForm
         modalOpen={modalOpen}
         onSubmit={submitNewPatientEntry(patient)}
         error={error}
