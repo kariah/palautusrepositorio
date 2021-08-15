@@ -67,3 +67,17 @@ export type Entry =
   | HealthCheckEntry;
 
 
+export type PatientEntryFormValues = Omit<Entry, "id" | "type">;
+
+// export interface PatientEntryProps {
+//     onSubmit: (values: PatientEntryFormValues) => void;
+//     onCancel: () => void;
+// }
+
+// export interface PatientEntryProps {
+//   modalOpen: boolean;
+//   onClose: () => void;
+//   onSubmit: (values: PatientEntryFormValues) => void;
+//   error?: string;
+//   type: string; 
+// }
