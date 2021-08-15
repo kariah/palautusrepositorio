@@ -1,7 +1,6 @@
 import React from "react";
 import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
-import { Dropdown, DropdownProps, Form } from "semantic-ui-react";
-// import { Diagnosis, Gender } from "../types";
+import { Dropdown, DropdownProps, Form } from "semantic-ui-react"; 
 import { Diagnose, HealthCheckRating } from "../types";
 
 // structure of a single option

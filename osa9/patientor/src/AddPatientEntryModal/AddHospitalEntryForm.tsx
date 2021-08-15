@@ -30,7 +30,17 @@ export const AddHospitalEntry = ({ onSubmit, onCancel }: Props) => {
             onSubmit={onSubmit}
             validate={values => {
                 const requiredError = "Field is required";
-                const errors: { [field: string]: string } = {};
+                // const errors: { [field: string]: string } = {};
+                const errors: {
+                    description?: string;
+                    date?: string,
+                    specialist?: string,
+                    diagnosisCodes?: [], 
+                    discharge?: {
+                        date?:string,
+                        criteria?: string
+                    };
+                } = {};  
                 if (!values.description) {
                     errors.description = requiredError;
                 }
@@ -39,12 +49,14 @@ export const AddHospitalEntry = ({ onSubmit, onCancel }: Props) => {
                 }
                 if (!values.specialist) {
                     errors.specialist = requiredError;
-                }
+                } 
                 if (!values.discharge.date || !isDate(values.discharge.date)) {
-                    errors.DischargeDate = requiredError;
+                    errors.discharge = {... errors.discharge}; 
+                    errors.discharge.date = requiredError;
                 }
                 if (!values.discharge.criteria) {
-                    errors.DischargeCriteria = requiredError;
+                    errors.discharge = {... errors.discharge}; 
+                    errors.discharge.criteria = requiredError;
                 }
                 return errors;
             }}

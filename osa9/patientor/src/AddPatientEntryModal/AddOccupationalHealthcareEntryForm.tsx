@@ -31,7 +31,19 @@ export const AddOccupationalHealthcareEntry = ({ onSubmit, onCancel }: Props) =>
             onSubmit={onSubmit}
             validate={values => {
                 const requiredError = "Field is required";
-                const errors: { [field: string]: string } = {};
+                // const errors: { [field: string]: string } = {};  
+                const errors: {
+                    description?: string;
+                    date?: string,
+                    specialist?: string,
+                    diagnosisCodes?: [],
+                    employerName?: string,
+                    sickLeave?: {
+                        startDate?:string,
+                        endDate?: string
+                    };
+                } = {};  
+
                 if (!values.description) {
                     errors.description = requiredError;
                 }
@@ -43,13 +55,15 @@ export const AddOccupationalHealthcareEntry = ({ onSubmit, onCancel }: Props) =>
                 }
                 if (!values.employerName) {
                     errors.employerName = requiredError;
-                }
+                } 
                 if (!values.sickLeave.startDate || !isDate(values.sickLeave.startDate))
-                {  
-                    errors.sickLeave = requiredError; 
+                {     
+                    errors.sickLeave = {... errors.sickLeave}; 
+                    errors.sickLeave.startDate = requiredError;
                 }
-                if (!values.sickLeave.endDate || !isDate(values.sickLeave.endDate)) {
-                    errors.sickLeave = requiredError;
+                if (!values.sickLeave.endDate || !isDate(values.sickLeave.endDate)) { 
+                    errors.sickLeave = {... errors.sickLeave}; 
+                    errors.sickLeave.endDate = requiredError;
                 } 
 
                 console.log('errors ', errors);
@@ -89,7 +103,7 @@ export const AddOccupationalHealthcareEntry = ({ onSubmit, onCancel }: Props) =>
                         <Field
                             label="Sickleave: Start Date"
                             placeholder="YYYY-MM-DD"
-                            name="sickLeave.startDate"
+                            name="sickLeave.startDate"  
                             component={TextField}
                         />
                         <Field
