@@ -67,17 +67,9 @@ export type Entry =
   | HealthCheckEntry;
 
 
+/*
+ * use type Patient, but omit id and entries,
+ * because those are irrelevant for new patient object.
+ */
 export type PatientEntryFormValues = Omit<Entry, "id" | "type">;
-
-// export interface PatientEntryProps {
-//     onSubmit: (values: PatientEntryFormValues) => void;
-//     onCancel: () => void;
-// }
-
-// export interface PatientEntryProps {
-//   modalOpen: boolean;
-//   onClose: () => void;
-//   onSubmit: (values: PatientEntryFormValues) => void;
-//   error?: string;
-//   type: string; 
-// }
+ 

@@ -33,8 +33,7 @@ const AddPatientEntryModal = ({ modalOpen, onClose, onSubmit, error, type }: Pro
   </Modal>
 );  
 
-const AddEntryForm = ({ type, onClose, onSubmit }: PropsToForm) => {   
-  // console.log('type ', type); 
+const AddEntryForm = ({ type, onClose, onSubmit }: PropsToForm) => {  
   switch (type) {
     case 'HealthCheck': 
       return (

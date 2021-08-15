@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Button } from "semantic-ui-react";
+import { Grid, Button, Label } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik"; 
 import { TextField, 
   SelectField, 
@@ -9,13 +9,7 @@ import {
   HealthCheckRating, 
   PatientEntryFormValues } from "../types";
 import { useStateValue  } from "../state";
-import { isDate } from "../state/utils";
-
-/*
- * use type Patient, but omit id and entries,
- * because those are irrelevant for new patient object.
- */
-// export type PatientEntryFormValues = Omit<Entry, "id" | "type">;
+import { isDate } from "../state/utils"; 
 
 interface Props {
   onSubmit: (values: PatientEntryFormValues) => void;
@@ -55,13 +49,16 @@ export const AddHealthCheckEntryForm = ({ onSubmit, onCancel } : Props ) => {
         if (!values.specialist) {
           errors.specialist = requiredError;
         } 
+        if (values.healthCheckRating < 0) {
+          errors.healthCheckRating = requiredError;
+        } 
         return errors;
       }}
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
-          <Form className="form ui">
-            <h3>Health Check</h3>
+          <Form className="form ui"> 
+            <Label style={{"marginBottom": "10px"}} >Health Check</Label> 
             <Field
               label="Description"
               placeholder="Description"

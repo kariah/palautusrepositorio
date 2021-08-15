@@ -1,32 +1,15 @@
 import React from "react";
-import { Grid, Button } from "semantic-ui-react";
+import { Grid, Button, Label } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik"; 
-import { TextField, 
-  //SelectField, HealthCheckRatingOption, 
-  DiagnosisSelection } from "./FormField";
-import { 
-  //HealthCheckRating, 
-  Entry } from "../types";
+import { TextField, DiagnosisSelection } from "./FormField";  
+import { PatientEntryFormValues } from "../types";
 import { useStateValue  } from "../state";
 import { isDate } from "../state/utils";
-
-/*
- * use type Patient, but omit id and entries,
- * because those are irrelevant for new patient object.
- */
-export type PatientEntryFormValues = Omit<Entry, "id" | "type">;
-
+ 
 interface Props {
   onSubmit: (values: PatientEntryFormValues) => void;
   onCancel: () => void;
 }
-
-// const healthCheckRatingOptions: HealthCheckRatingOption[] = [
-//   { value: HealthCheckRating.Healthy, label: "Healthy" },
-//   { value: HealthCheckRating.LowRisk, label: "Low Risk" },
-//   { value: HealthCheckRating.HighRisk, label: "High Risk" },
-//   { value: HealthCheckRating.CriticalRisk, label: "Critical Risk" },
-// ];
  
 export const AddHospitalEntry = ({ onSubmit, onCancel } : Props ) => {
   const [{ diagnoses }] = useStateValue();
@@ -34,12 +17,15 @@ export const AddHospitalEntry = ({ onSubmit, onCancel } : Props ) => {
   return ( 
     <Formik 
       initialValues={{ 
-        type: "OccupationalHealthcare",
+        type: "Hospital",
         description: "",
         date: "",
         specialist: "", 
         diagnosisCodes: [],
-        healthCheckRating: 0,
+        discharge: {
+            date: "",
+            criteria: ""
+        }
       }}
       onSubmit={onSubmit}
       validate={values => {
@@ -60,7 +46,7 @@ export const AddHospitalEntry = ({ onSubmit, onCancel } : Props ) => {
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
           <Form className="form ui">
-            <h3>Hospital entry</h3>
+             <Label>Hospital entry</Label>
             <Field
               label="Description"
               placeholder="Description"
@@ -79,11 +65,18 @@ export const AddHospitalEntry = ({ onSubmit, onCancel } : Props ) => {
               name="specialist"
               component={TextField}
             />  
-            {/* <SelectField
-              label="Health Check Rating"
-              name="healthCheckRating"
-              options={healthCheckRatingOptions}
-            /> */}
+             <Field
+              label="Discharge: Date"
+              placeholder="YYYY-MM-DD"
+              name="startDate"
+              component={TextField}
+            />
+            <Field
+              label="Discharge: Criteria"
+              placeholder="Criteria"
+              name="criteria"
+              component={TextField}
+            />  
             <DiagnosisSelection
             setFieldValue={setFieldValue}
             setFieldTouched={setFieldTouched}

@@ -1,32 +1,15 @@
 import React from "react";
-import { Grid, Button } from "semantic-ui-react";
+import { Grid, Button, Label} from "semantic-ui-react";
 import { Field, Formik, Form } from "formik"; 
-import { TextField, 
-  //SelectField, HealthCheckRatingOption, 
-  DiagnosisSelection } from "./FormField";
-import { 
-  //HealthCheckRating, 
-  Entry } from "../types";
+import { TextField, DiagnosisSelection } from "./FormField";  
+import { PatientEntryFormValues } from "../types";
 import { useStateValue  } from "../state";
-import { isDate } from "../state/utils";
-
-/*
- * use type Patient, but omit id and entries,
- * because those are irrelevant for new patient object.
- */
-export type PatientEntryFormValues = Omit<Entry, "id" | "type">;
+import { isDate } from "../state/utils"; 
 
 interface Props {
   onSubmit: (values: PatientEntryFormValues) => void;
   onCancel: () => void;
-}
-
-// const healthCheckRatingOptions: HealthCheckRatingOption[] = [
-//   { value: HealthCheckRating.Healthy, label: "Healthy" },
-//   { value: HealthCheckRating.LowRisk, label: "Low Risk" },
-//   { value: HealthCheckRating.HighRisk, label: "High Risk" },
-//   { value: HealthCheckRating.CriticalRisk, label: "Critical Risk" },
-// ];
+} 
  
 export const AddOccupationalHealthcareEntry = ({ onSubmit, onCancel } : Props ) => {
   const [{ diagnoses }] = useStateValue();
@@ -39,7 +22,11 @@ export const AddOccupationalHealthcareEntry = ({ onSubmit, onCancel } : Props ) 
         date: "",
         specialist: "", 
         diagnosisCodes: [],
-        healthCheckRating: 0,
+        employerName: "", 
+        sickLeave: {
+            startDate: "",
+            endDate: ""
+        }
       }}
       onSubmit={onSubmit}
       validate={values => {
@@ -54,13 +41,19 @@ export const AddOccupationalHealthcareEntry = ({ onSubmit, onCancel } : Props ) 
         if (!values.specialist) {
           errors.specialist = requiredError;
         } 
+        if (!values.employerName) {
+            errors.employerName = requiredError;
+        } 
+        // if (!values.sickLeave.startDate) {
+        //      errors.sickLeave = requiredError;
+        // } 
         return errors;
       }}
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
           <Form className="form ui">
-            <h3>Occupational Healthcare</h3>
+             <Label style={{"marginBottom": "10px"}} >Occupational Healthcare</Label>
             <Field
               label="Description"
               placeholder="Description"
@@ -79,11 +72,24 @@ export const AddOccupationalHealthcareEntry = ({ onSubmit, onCancel } : Props ) 
               name="specialist"
               component={TextField}
             />  
-            {/* <SelectField
-              label="Health Check Rating"
-              name="healthCheckRating"
-              options={healthCheckRatingOptions}
-            /> */}
+            <Field
+              label="Employer Name"
+              placeholder="Employer Name"
+              name="employerName"
+              component={TextField}
+            />    
+            <Field
+              label="Sickleave: Start Date"
+              placeholder="YYYY-MM-DD"
+              name="startDate"
+              component={TextField}
+            />
+            <Field
+              label="Sickleave: End Date"
+              placeholder="YYYY-MM-DD"
+              name="endDate"
+              component={TextField}
+            />
             <DiagnosisSelection
             setFieldValue={setFieldValue}
             setFieldTouched={setFieldTouched}
