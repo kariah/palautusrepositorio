@@ -1,38 +1,41 @@
 import React from "react";
 import { Grid, Button, Label } from "semantic-ui-react";
-import { Field, Formik, Form } from "formik"; 
-import { TextField, 
-  SelectField, 
-  HealthCheckRatingOption, 
-  DiagnosisSelection } from "./FormField";
-import { 
-  HealthCheckRating, 
-  PatientEntryFormValues } from "../types";
-import { useStateValue  } from "../state";
-import { isDate } from "../state/utils"; 
+import { Field, Formik, Form } from "formik";
+import {
+  TextField,
+  SelectField,
+  HealthCheckRatingOption,
+  DiagnosisSelection
+} from "./FormField";
+import {
+  HealthCheckRating,
+  PatientEntryFormValues
+} from "../types";
+import { useStateValue } from "../state";
+import { isDate } from "../state/utils";
 
 interface Props {
   onSubmit: (values: PatientEntryFormValues) => void;
   onCancel: () => void;
 }
 
-const healthCheckRatingOptions: HealthCheckRatingOption[] = [
+const healthCheckRatingOptions: HealthCheckRatingOption[] = [ 
   { value: HealthCheckRating.Healthy, label: "Healthy" },
   { value: HealthCheckRating.LowRisk, label: "Low Risk" },
   { value: HealthCheckRating.HighRisk, label: "High Risk" },
   { value: HealthCheckRating.CriticalRisk, label: "Critical Risk" },
 ];
- 
-export const AddHealthCheckEntryForm = ({ onSubmit, onCancel } : Props ) => {
+
+export const AddHealthCheckEntryForm = ({ onSubmit, onCancel }: Props) => {
   const [{ diagnoses }] = useStateValue();
 
-  return ( 
-    <Formik 
-      initialValues={{ 
+  return (
+    <Formik
+      initialValues={{
         type: "HealthCheck",
         description: "",
         date: "",
-        specialist: "", 
+        specialist: "",
         diagnosisCodes: [],
         healthCheckRating: -1,
       }}
@@ -48,8 +51,8 @@ export const AddHealthCheckEntryForm = ({ onSubmit, onCancel } : Props ) => {
         }
         if (!values.specialist) {
           errors.specialist = requiredError;
-        } 
-        if (values.healthCheckRating < 0) {
+        }
+        if (!values.healthCheckRating) { 
           errors.healthCheckRating = requiredError;
         } 
         return errors;
@@ -57,8 +60,8 @@ export const AddHealthCheckEntryForm = ({ onSubmit, onCancel } : Props ) => {
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
-          <Form className="form ui"> 
-            <Label style={{"marginBottom": "10px"}} >Health Check</Label> 
+          <Form className="form ui">
+            <Label style={{ "marginBottom": "10px" }} >Health Check</Label>
             <Field
               label="Description"
               placeholder="Description"
@@ -76,17 +79,17 @@ export const AddHealthCheckEntryForm = ({ onSubmit, onCancel } : Props ) => {
               placeholder="Specialist"
               name="specialist"
               component={TextField}
-            />  
+            />
             <SelectField
               label="Health Check Rating"
-              name="healthCheckRating"
+              name="healthCheckRating" 
               options={healthCheckRatingOptions}
-            /> 
+            />
             <DiagnosisSelection
-            setFieldValue={setFieldValue}
-            setFieldTouched={setFieldTouched}
-            diagnoses={Object.values(diagnoses)}
-            />     
+              setFieldValue={setFieldValue}
+              setFieldTouched={setFieldTouched}
+              diagnoses={Object.values(diagnoses)}
+            />
             <Grid>
               <Grid.Column floated="left" width={5}>
                 <Button type="button" onClick={onCancel} color="red">
